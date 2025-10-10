@@ -31,18 +31,19 @@ const UserLogin = () => {
     }
 
     setLoading(true);
-    const loginSuccess = true
 
     try {
-      const response = await loginCandidate(formData);
-      
-      if (response.status === 200||loginSuccess) {
+      const response = await loginCandidate(
+        formData.username,
+        formData.password
+      );
+
+      if (response.status === 200) {
         toast.success("Login successful!");
-        
-        // Store token or user data in localStorage
-        if (response?.data?.token) {
+
+        if (response?.status === 200) {
           localStorage.setItem("token", response?.data.token);
-          localStorage.setItem("user", JSON.stringify(response?.data.user));
+          localStorage.setItem("userId", response?.data.user?._id);
         }
 
         // Reset form
@@ -56,11 +57,13 @@ const UserLogin = () => {
         setTimeout(() => {
           navigate("/");
         }, 1000);
+      } else {
+        toast.error(response?.response?.data?.message);
       }
     } catch (err) {
-      const errorMessage = 
-        err.response?.data?.message || 
-        err.message || 
+      const errorMessage =
+        err.response?.data?.message ||
+        err.message ||
         "Invalid credentials. Please try again.";
       toast.error(errorMessage);
     } finally {
@@ -119,7 +122,7 @@ const UserLogin = () => {
                                   htmlFor="usernameInput"
                                   className="form-label"
                                 >
-                                  Username
+                                  Email
                                 </label>
                                 <input
                                   type="text"
@@ -128,7 +131,7 @@ const UserLogin = () => {
                                   name="username"
                                   value={formData.username}
                                   onChange={handleChange}
-                                  placeholder="Enter your username"
+                                  placeholder="Enter your email"
                                   disabled={loading}
                                 />
                               </div>
@@ -218,11 +221,7 @@ const UserLogin = () => {
       </div>
       {/* end main content*/}
 
-      <div
-        id="style-switcher"
-        onClick={() => {}}
-        style={{ left: "-165px" }}
-      >
+      <div id="style-switcher" onClick={() => {}} style={{ left: "-165px" }}>
         <div>
           <h6>Select your color</h6>
           <ul className="pattern list-unstyled mb-0">

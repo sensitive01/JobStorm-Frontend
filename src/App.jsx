@@ -28,6 +28,7 @@ import ManageJobsPage from "./Components/Employer/managejobs/ManageJobsPage";
 import SavedCandidate from "./Components/Employer/bookmark/SavedCandidate";
 import CandidateDetailsPage from "./Components/Employer/candidate/CandidateDetailsPage";
 import SearchCandidate from "./Components/Employer/candidate/SearchCandidate";
+import ChangePassword from "./Components/User/resetpassword/ChangePassword";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
         <Route path="/candidate-signup" element={<SignUpPage />} />
         <Route path="/candidate-logout" element={<LogoutPage />} />
         <Route path="/candidate-reset-password" element={<ResetPassword />} />
+        <Route path="/candidate-change-password" element={<ChangePassword />} />
 
         <Route path="/employer-login" element={<UserLogin />} />
         <Route path="/employer-signup" element={<SignUpPage />} />

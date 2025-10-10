@@ -1,16 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { resetPassword } from "../../../api/service/axiosService";
+import { resetPassword, verifyOTP } from "../../../api/service/axiosService";
 
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
+  const [step, setStep] = useState(1); // 1: Email, 2: OTP
+  const [timer, setTimer] = useState(120); // 2 minutes in seconds
+  const [isTimerActive, setIsTimerActive] = useState(false);
 
-  const handleChange = (e) => {
+  // Timer countdown effect
+  useEffect(() => {
+    let interval = null;
+
+    if (isTimerActive && timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      setIsTimerActive(false);
+      toast.warning("OTP expired. Please request a new one.");
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isTimerActive, timer]);
+
+  // Format timer display (MM:SS)
+  const formatTimer = () => {
+    const minutes = Math.floor(timer / 60);
+    const seconds = timer % 60;
+    return `${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
+  };
+
+  const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
 
-  const handleSubmit = async (e) => {
+  const handleOtpChange = (e) => {
+    const value = e.target.value.replace(/\D/g, ""); // Only allow digits
+    if (value.length <= 4) {
+      setOtp(value);
+    }
+  };
+
+  const handleEmailSubmit = async (e) => {
     e.preventDefault();
 
     // Validation
@@ -27,31 +65,102 @@ const ResetPassword = () => {
     }
 
     setLoading(true);
-    const handleSuccess = true;
+    let handleSuccess = true;
 
     try {
       const response = await resetPassword(email);
 
       if (response.status === 200 || handleSuccess) {
-        toast.success(
-          "Password reset instructions have been sent to your email!"
-        );
-
-        setEmail("");
-
-        setTimeout(() => {
-          window.location.href = "/candidate-login";
-        }, 1500);
+        toast.success("OTP has been sent to your email!");
+        setStep(2);
+        setTimer(120); // Reset timer to 2 minutes
+        setIsTimerActive(true);
       }
     } catch (err) {
       const errorMessage =
         err.response?.data?.message ||
         err.message ||
-        "Failed to send reset instructions. Please try again.";
+        "Failed to send OTP. Please try again.";
       toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleOtpSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validation
+    if (!otp) {
+      toast.error("Please enter the OTP");
+      return;
+    }
+
+    if (otp.length !== 4) {
+      toast.error("OTP must be 4 digits");
+      return;
+    }
+
+    setLoading(true);
+    const handleSuccess = true
+
+    try {
+      const response = await verifyOTP( email, otp);
+
+      if (response.status === 200 || handleSuccess) {
+        toast.success("OTP verified successfully!");
+        setIsTimerActive(false);
+
+        // Navigate to change password page after a short delay
+        setTimeout(() => {
+          window.location.href = "/candidate-change-password";
+        }, 1000);
+      }
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message ||
+        err.message ||
+        "Invalid OTP. Please try again.";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (timer > 0) {
+      toast.info("Please wait for the timer to expire before resending");
+      return;
+    }
+
+    setLoading(true);
+    const handleSuccess = true
+
+    try {
+      const response = await resetPassword(email);
+
+      if (response.status === 200 || handleSuccess) {
+        toast.success("OTP has been resent to your email!");
+        setTimer(120); // Reset timer to 2 minutes
+        setIsTimerActive(true);
+        setOtp(""); // Clear previous OTP
+      }
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message ||
+        err.message ||
+        "Failed to resend OTP. Please try again.";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleBackToEmail = () => {
+    setStep(1);
+    setOtp("");
+    setTimer(120);
+    setIsTimerActive(false);
   };
 
   return (
@@ -94,48 +203,141 @@ const ResetPassword = () => {
                         {/*end col*/}
                         <div className="col-lg-6">
                           <div className="auth-content card-body p-5 h-100 text-white">
-                            <div className="text-center mb-4">
-                              <h5>Reset Password</h5>
-                              <p className="text-white-50">
-                                Reset your password with JobsStorm.
-                              </p>
-                            </div>
-                            <form
-                              onSubmit={handleSubmit}
-                              className="auth-form text-white"
-                            >
-                              <div
-                                className="alert alert-warning text-center mb-4"
-                                role="alert"
-                              >
-                                Enter your Email and instructions will be sent
-                                to you!
-                              </div>
-                              <div className="mb-4">
-                                <label className="form-label" htmlFor="email">
-                                  Username/Email
-                                </label>
-                                <input
-                                  type="email"
-                                  className="form-control"
-                                  id="email"
-                                  name="email"
-                                  value={email}
-                                  onChange={handleChange}
-                                  placeholder="Enter username or email"
-                                  disabled={loading}
-                                />
-                              </div>
-                              <div className="mt-3">
-                                <button
-                                  type="submit"
-                                  className="btn btn-white w-100"
-                                  disabled={loading}
+                            {/* STEP 1: Email Input */}
+                            {step === 1 && (
+                              <>
+                                <div className="text-center mb-4">
+                                  <h5>Reset Password</h5>
+                                  <p className="text-white-50">
+                                    Reset your password with JobsStorm.
+                                  </p>
+                                </div>
+                                <form
+                                  onSubmit={handleEmailSubmit}
+                                  className="auth-form text-white"
                                 >
-                                  {loading ? "Sending..." : "Send Request"}
-                                </button>
-                              </div>
-                            </form>
+                                  <div
+                                    className="alert alert-warning text-center mb-4"
+                                    role="alert"
+                                  >
+                                    Enter your Email and OTP will be sent to
+                                    you!
+                                  </div>
+                                  <div className="mb-4">
+                                    <label
+                                      className="form-label"
+                                      htmlFor="email"
+                                    >
+                                      Username/Email
+                                    </label>
+                                    <input
+                                      type="email"
+                                      className="form-control"
+                                      id="email"
+                                      name="email"
+                                      value={email}
+                                      onChange={handleEmailChange}
+                                      placeholder="Enter username or email"
+                                      disabled={loading}
+                                    />
+                                  </div>
+                                  <div className="mt-3">
+                                    <button
+                                      type="submit"
+                                      className="btn btn-white w-100"
+                                      disabled={loading}
+                                    >
+                                      {loading ? "Sending..." : "Send OTP"}
+                                    </button>
+                                  </div>
+                                </form>
+                              </>
+                            )}
+
+                            {/* STEP 2: OTP Verification */}
+                            {step === 2 && (
+                              <>
+                                <div className="text-center mb-4">
+                                  <h5>Verify OTP</h5>
+                                  <p className="text-white-50">
+                                    Enter the 4-digit OTP sent to {email}
+                                  </p>
+                                </div>
+                                <form
+                                  onSubmit={handleOtpSubmit}
+                                  className="auth-form text-white"
+                                >
+                                  <div
+                                    className="alert alert-info text-center mb-4"
+                                    role="alert"
+                                  >
+                                    <div className="mb-2">
+                                      Time remaining:{" "}
+                                      <strong>{formatTimer()}</strong>
+                                    </div>
+                                    {timer === 0 && (
+                                      <small className="text-danger">
+                                        OTP expired!
+                                      </small>
+                                    )}
+                                  </div>
+                                  <div className="mb-4">
+                                    <label className="form-label" htmlFor="otp">
+                                      Enter OTP
+                                    </label>
+                                    <input
+                                      type="text"
+                                      className="form-control text-center"
+                                      id="otp"
+                                      name="otp"
+                                      value={otp}
+                                      onChange={handleOtpChange}
+                                      placeholder="Enter 4-digit OTP"
+                                      disabled={loading || timer === 0}
+                                      maxLength={4}
+                                      style={{
+                                        fontSize: "24px",
+                                        letterSpacing: "10px",
+                                      }}
+                                    />
+                                  </div>
+                                  <div className="mt-3">
+                                    <button
+                                      type="submit"
+                                      className="btn btn-white w-100"
+                                      disabled={
+                                        loading ||
+                                        timer === 0 ||
+                                        otp.length !== 4
+                                      }
+                                    >
+                                      {loading ? "Verifying..." : "Verify OTP"}
+                                    </button>
+                                  </div>
+                                  <div className="mt-3 text-center">
+                                    <button
+                                      type="button"
+                                      className="btn btn-outline-light w-100 mb-2"
+                                      onClick={handleResendOtp}
+                                      disabled={loading || timer > 0}
+                                    >
+                                      {timer > 0
+                                        ? `Resend OTP (${formatTimer()})`
+                                        : "Resend OTP"}
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="btn btn-link text-white text-decoration-underline"
+                                      onClick={handleBackToEmail}
+                                      disabled={loading}
+                                    >
+                                      Change Email Address
+                                    </button>
+                                  </div>
+                                </form>
+                              </>
+                            )}
+
                             {/* end form */}
                             <div className="mt-5 text-center text-white-50">
                               <p>

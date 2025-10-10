@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import Loader from "../../Loader/Loader";
 import { registerCandidate } from "../../../api/service/axiosService";
+import { toast } from "react-toastify";
 
 const SignUpPage = () => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
+    mobile: "",
     agreeToTerms: false,
   });
 
@@ -28,37 +30,49 @@ const SignUpPage = () => {
     setSuccess(false);
 
     // Validation
-    if (!formData.username || !formData.email || !formData.password) {
+    if (
+      !formData.username ||
+      !formData.email ||
+      !formData.password ||
+      !formData.mobile
+    ) {
       setError("Please fill in all fields");
       return;
     }
 
-    if (!formData.agreeToTerms) {
-      setError("Please agree to the terms and conditions");
-      return;
-    }
+    // if (!formData.agreeToTerms) {
+    //   setError("Please agree to the terms and conditions");
+    //   return;
+    // }
 
     setLoading(true);
-    let navigate = true
 
     try {
-      const response = await registerCandidate(formData);
-      if (response.status === 200||navigate) {
+      const response = await registerCandidate(
+        formData.username,
+        formData.email,
+        formData.password,
+        formData.mobile
+      );
+      console.log("response",response)
+      if (response.status === 201) {
         setSuccess(true);
         setFormData({
           username: "",
           email: "",
           password: "",
+          mobile: "",
           agreeToTerms: false,
         });
+        setTimeout(() => {
+          window.location.href = "/candidate-login";
+        }, 2000);
+      }else{
+        toast.error(response.response.data.message)
       }
-
-   
-      setTimeout(() => {
-        window.location.href = "/candidate-login";
-      }, 2000);
     } catch (err) {
-      setError(err.message || "Something went wrong. Please try again.");
+      console.log("--->",err);
+      setError(err.response || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -166,6 +180,24 @@ const SignUpPage = () => {
                                     value={formData.email}
                                     onChange={handleChange}
                                     placeholder="Enter your email"
+                                    disabled={loading}
+                                  />
+                                </div>
+                                <div className="mb-3">
+                                  <label
+                                    htmlFor="mobileInput"
+                                    className="form-label"
+                                  >
+                                    Mobile
+                                  </label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    id="mobileInput"
+                                    name="mobile"
+                                    value={formData.mobile}
+                                    onChange={handleChange}
+                                    placeholder="Enter your mobile number"
                                     disabled={loading}
                                   />
                                 </div>

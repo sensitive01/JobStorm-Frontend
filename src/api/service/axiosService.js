@@ -1,9 +1,17 @@
 import { axiosInstance } from "../axiosInstance/axiosInstance";
 
-export const registerCandidate = async (formData) => {
+export const registerCandidate = async (
+  userName,
+  userEmail,
+  userPassword,
+  userMobile
+) => {
   try {
-    const response = await axiosInstance.post(`/candidate-signup`, {
-      formData,
+    const response = await axiosInstance.post(`/signup`, {
+      userName,
+      userEmail,
+      userPassword,
+      userMobile,
     });
     return response;
   } catch (err) {
@@ -11,10 +19,22 @@ export const registerCandidate = async (formData) => {
   }
 };
 
-export const loginCandidate = async (formData) => {
+export const loginCandidate = async (userEmail, userPassword) => {
   try {
-    const response = await axiosInstance.post(`/candidate-login`, {
-      formData,
+    const response = await axiosInstance.post(`/login`, {
+      userEmail,
+      userPassword,
+    });
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const resetPassword = async (userEmail) => {
+  try {
+    const response = await axiosInstance.post(`/sendemailotp`, {
+      userEmail,
     });
     return response;
   } catch (err) {
@@ -23,10 +43,22 @@ export const loginCandidate = async (formData) => {
 };
 
 
-export const resetPassword = async (email) => {
+export const verifyOTP = async (userEmail,otp) => {
   try {
-    const response = await axiosInstance.post(`/candidate-reset-passowrd`, {
-      email,
+    const response = await axiosInstance.post(`/verifyemailotp`, {
+      userEmail,otp
+    });
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+
+export const changePassword = async (userEmail,otp) => {
+  try {
+    const response = await axiosInstance.post(`/verifyemailotp`, {
+      userEmail,otp
     });
     return response;
   } catch (err) {
