@@ -29,6 +29,11 @@ import SavedCandidate from "./Components/Employer/bookmark/SavedCandidate";
 import CandidateDetailsPage from "./Components/Employer/candidate/CandidateDetailsPage";
 import SearchCandidate from "./Components/Employer/candidate/SearchCandidate";
 import ChangePassword from "./Components/User/resetpassword/ChangePassword";
+import EmployerSignUpPage from "./Components/Employer/register/EmployerSignUpPage";
+import EmployerLogin from "./Components/Employer/login/EmployerLogin";
+import EmployeerResetPassword from "./Components/User/resetpassword/ResetPassword";
+import EmployeerChangePassword from "./Components/Employer/resetpassword/EmployeerChangePassword";
+import MainLayoutAdmin from "./Components/admin/layout/MainLayoutAdmin";
 
 function App() {
   return (
@@ -41,10 +46,17 @@ function App() {
         <Route path="/candidate-reset-password" element={<ResetPassword />} />
         <Route path="/candidate-change-password" element={<ChangePassword />} />
 
-        <Route path="/employer-login" element={<UserLogin />} />
-        <Route path="/employer-signup" element={<SignUpPage />} />
+        <Route path="/employer-login" element={<EmployerLogin />} />
+        <Route path="/employer-signup" element={<EmployerSignUpPage />} />
         <Route path="/employer-logout" element={<LogoutPage />} />
-        <Route path="/employer-reset-password" element={<ResetPassword />} />
+        <Route
+          path="/employer-reset-password"
+          element={<EmployeerResetPassword />}
+        />
+        <Route
+          path="/employer-change-password"
+          element={<EmployeerChangePassword />}
+        />
 
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Homepage />} /> {/* Default route */}
@@ -78,6 +90,8 @@ function App() {
           />
           <Route path="/search-candidate-page" element={<SearchCandidate />} />
         </Route>
+
+        <Route path="/admin" element={<MainLayoutAdmin />}></Route>
       </Routes>
       <ToastContainer
         position="top-right"

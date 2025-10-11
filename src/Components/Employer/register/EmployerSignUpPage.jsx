@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { registerCandidate } from "../../../api/service/axiosService";
+import { registerEmployer } from "../../../api/service/employerService";
 
-const SignUpPage = () => {
+const EmployerSignUpPage = () => {
   const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
+    companyName: "",
+    contactPerson: "",
+    contactEmail: "",
     mobile: "",
     countryCode: "",
+    password: "",
     agreeToTerms: false,
   });
 
@@ -45,10 +46,11 @@ const SignUpPage = () => {
 
     // Validation
     if (
-      !formData.username ||
-      !formData.email ||
-      !formData.password ||
-      !formData.mobile
+      !formData.companyName ||
+      !formData.contactPerson ||
+      !formData.contactEmail ||
+      !formData.mobile ||
+      !formData.password
     ) {
       setError("Please fill in all fields");
       return;
@@ -59,17 +61,23 @@ const SignUpPage = () => {
       return;
     }
 
+    if (!formData.agreeToTerms) {
+      setError("Please agree to the terms and conditions");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      // You can send separately or combined
+      // Combine country code and mobile number
       const fullMobile = formData.countryCode + formData.mobile;
 
-      const response = await registerCandidate(
-        formData.username,
-        formData.email,
-        formData.password,
-        fullMobile
+      const response = await registerEmployer(
+        formData.companyName,
+        formData.contactPerson,
+        formData.contactEmail,
+        fullMobile,
+        formData.password
       );
 
       console.log("response", response);
@@ -81,15 +89,16 @@ const SignUpPage = () => {
         setSuccess(true);
         toast.success("Registration successful!");
         setFormData({
-          username: "",
-          email: "",
-          password: "",
+          companyName: "",
+          contactPerson: "",
+          contactEmail: "",
           mobile: "",
           countryCode: "",
+          password: "",
           agreeToTerms: false,
         });
         setTimeout(() => {
-          window.location.href = "/candidate-login";
+          window.location.href = "/employer-login";
         }, 2000);
       } else {
         toast.error(response.response.data.message);
@@ -312,37 +321,55 @@ const SignUpPage = () => {
                               >
                                 <div className="mb-3">
                                   <label
-                                    htmlFor="usernameInput"
+                                    htmlFor="companyNameInput"
                                     className="form-label"
                                   >
-                                    Username
+                                    Company Name
                                   </label>
                                   <input
                                     type="text"
                                     className="form-control"
-                                    id="usernameInput"
-                                    name="username"
-                                    value={formData.username}
+                                    id="companyNameInput"
+                                    name="companyName"
+                                    value={formData.companyName}
                                     onChange={handleChange}
-                                    placeholder="Enter your username"
+                                    placeholder="Enter company name"
                                     disabled={loading}
                                   />
                                 </div>
                                 <div className="mb-3">
                                   <label
-                                    htmlFor="emailInput"
+                                    htmlFor="contactPersonInput"
                                     className="form-label"
                                   >
-                                    Email
+                                    Contact Person
+                                  </label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    id="contactPersonInput"
+                                    name="contactPerson"
+                                    value={formData.contactPerson}
+                                    onChange={handleChange}
+                                    placeholder="Enter contact person name"
+                                    disabled={loading}
+                                  />
+                                </div>
+                                <div className="mb-3">
+                                  <label
+                                    htmlFor="contactEmailInput"
+                                    className="form-label"
+                                  >
+                                    Contact Email
                                   </label>
                                   <input
                                     type="email"
                                     className="form-control"
-                                    id="emailInput"
-                                    name="email"
-                                    value={formData.email}
+                                    id="contactEmailInput"
+                                    name="contactEmail"
+                                    value={formData.contactEmail}
                                     onChange={handleChange}
-                                    placeholder="Enter your email"
+                                    placeholder="Enter contact email"
                                     disabled={loading}
                                   />
                                 </div>
@@ -436,7 +463,7 @@ const SignUpPage = () => {
                                 <p className="mb-0">
                                   Already a member ?{" "}
                                   <a
-                                    href="/candidate-login"
+                                    href="/employer-login"
                                     className="fw-medium text-white text-decoration-underline"
                                   >
                                     {" "}
@@ -506,4 +533,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default EmployerSignUpPage;

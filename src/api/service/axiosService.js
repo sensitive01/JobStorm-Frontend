@@ -55,10 +55,10 @@ export const verifyOTP = async (userEmail,otp) => {
 };
 
 
-export const changePassword = async (userEmail,otp) => {
+export const changePassword = async (userEmail,password,confirmPassword) => {
   try {
-    const response = await axiosInstance.post(`/verifyemailotp`, {
-      userEmail,otp
+    const response = await axiosInstance.post(`/change-password`, {
+      userEmail,password,confirmPassword
     });
     return response;
   } catch (err) {

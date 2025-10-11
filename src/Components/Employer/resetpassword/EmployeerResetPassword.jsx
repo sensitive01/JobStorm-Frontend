@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { resetPassword, verifyOTP } from "../../../api/service/axiosService";
 
-const ResetPassword = () => {
+const EmployeerResetPassword = () => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
@@ -406,4 +406,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default EmployeerResetPassword;

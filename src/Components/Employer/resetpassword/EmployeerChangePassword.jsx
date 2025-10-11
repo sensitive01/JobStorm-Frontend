@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { changePassword } from "../../../api/service/axiosService";
 import { useSearchParams } from "react-router-dom";
 
-const ChangePassword = () => {
+const EmployeerChangePassword = () => {
   const [searchParams] = useSearchParams();
   const [email, setEmail] = useState("");
   const [formData, setFormData] = useState({
@@ -343,4 +343,4 @@ const ChangePassword = () => {
   );
 };
 
-export default ChangePassword;
+export default EmployeerChangePassword;

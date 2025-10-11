@@ -3,21 +3,7 @@ import React from "react";
 const JobDetailsPage = () => {
   return (
     <>
-      {/*start page Loader */}
-      {/* <div id="preloader">
-        <div id="status">
-          <ul>
-            <li />
-            <li />
-            <li />
-            <li />
-            <li />
-            <li />
-          </ul>
-        </div>
-      </div> */}
-      {/*end page Loader */}
-      {/* Begin page */}
+     
       <div>
         {/* START TOP-BAR */}
         <div className="top-bar">
