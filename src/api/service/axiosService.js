@@ -65,3 +65,12 @@ export const changePassword = async (userEmail,password,confirmPassword) => {
     return err;
   }
 };
+
+export const getMyName = async (userId) => {
+  try {
+    const response = await axiosInstance.get(`/get-my-name/${userId}`);
+    return response;
+  } catch (err) {
+    return err;
+  }
+};

@@ -4,7 +4,7 @@ import Loader from "../../Loader/Loader";
 const SearchCandidate = () => {
   return (
     <>
-      <Loader />
+      {/* <Loader /> */}
 
       <div>
         {/* START TOP-BAR */}

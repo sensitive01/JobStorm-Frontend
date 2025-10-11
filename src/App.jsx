@@ -91,7 +91,7 @@ function App() {
           <Route path="/search-candidate-page" element={<SearchCandidate />} />
         </Route>
 
-        <Route path="/admin" element={<MainLayoutAdmin />}></Route>
+        {/* <Route path="/admin" element={<MainLayoutAdmin />}></Route> */}
       </Routes>
       <ToastContainer
         position="top-right"

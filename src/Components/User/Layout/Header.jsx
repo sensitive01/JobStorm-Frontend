@@ -1,221 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import TopHeader from "./TopHeader";
+import { getMyName } from "../../../api/service/axiosService";
+import accountImage from "../../../../public/assets/images/account.jpg"
 
 const Header = () => {
   const userId = localStorage.getItem("userId");
-  
+  const [name, setName] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getMyName(userId);
+      if (response.status === 200) {
+        setName(response.data.userName);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <div>
       <>
         <div>
           {/* START TOP-BAR */}
-          <div className="top-bar bg-primary">
-            <div className="container-fluid custom-container">
-              <div className="row g-0 align-items-center">
-                <div className="col-md-3">
-                  <ul className="list-inline mb-0 text-center text-white text-md-start">
-                    <li className="list-inline-item">
-                      <p className="fs-13 mb-0">
-                        {" "}
-                        <i className="mdi mdi-map-marker" /> Your Location:{" "}
-                        <a href="#" className="text-white">
-                          Loading...
-                        </a>
-                      </p>
-                    </li>
-                    <li className="list-inline-item">
-                      <ul className="topbar-social-menu list-inline mb-0">
-                        <li className="list-inline-item">
-                          <a
-                            href="#"
-                            className="social-link text-white"
-                          >
-                            <i className="uil uil-whatsapp" />
-                          </a>
-                        </li>
-                        <li className="list-inline-item">
-                          <a
-                            href="#"
-                            className="social-link text-white"
-                          >
-                            <i className="uil uil-facebook-messenger-alt" />
-                          </a>
-                        </li>
-                        <li className="list-inline-item">
-                          <a
-                            href="#"
-                            className="social-link text-white"
-                          >
-                            <i className="uil uil-instagram" />
-                          </a>
-                        </li>
-                        <li className="list-inline-item">
-                          <a
-                            href="#"
-                            className="social-link text-white"
-                          >
-                            <i className="uil uil-envelope" />
-                          </a>
-                        </li>
-                        <li className="list-inline-item">
-                          <a
-                            href="#"
-                            className="social-link text-white"
-                          >
-                            <i className="uil uil-twitter-alt" />
-                          </a>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
-                {/*end col*/}
-                <div className="col-md-9">
-                  <ul className="list-inline mb-0 text-center text-md-end">
-                    <li className="list-inline-item py-2 me-2 align-middle">
-                      <a
-                        href="/"
-                        className="btn btn-warning fw-bold fs-13 py-1"
-                      >
-                        <i className="uil uil-lock" />
-                        Middle East Jobs
-                      </a>
-                    </li>
-                    <li className="list-inline-item py-2 me-2 align-middle">
-                      <a
-                        href="post-jobs.php"
-                        className="btn btn-warning text-primary fw-bold fs-13 py-1"
-                      >
-                        <i className="uil uil-lock" />
-                        Europe Jobs
-                      </a>
-                    </li>
-                    <li className="list-inline-item py-2 me-2 align-middle">
-                      <a
-                        href="post-jobs.php"
-                        className="btn btn-warning fw-bold fs-13 py-1"
-                      >
-                        <i className="uil uil-lock" />
-                        Asia Jobs
-                      </a>
-                    </li>{" "}
-                    &nbsp; <span className="text-white">|</span> &nbsp; &nbsp;
-                    <li className="list-inline-item py-2 me-2 align-middle">
-                      <a
-                        href="post-jobs.php"
-                        className="btn btn-white text-primary fw-bold fs-13 py-1"
-                      >
-                        <i className="uil uil-lock" />
-                        Post Jobs FREE
-                      </a>
-                    </li>
-                    <li className="list-inline-item py-2 me-2 align-middle">
-                      <a
-                        href="#signupModal"
-                        className="btn btn-white fw-bold fs-13 py-1"
-                        data-bs-toggle="modal"
-                      >
-                        <i className="uil uil-lock" />
-                        Book FREE Demo
-                      </a>
-                    </li>
-                    <li className="list-inline-item align-middle">
-                      <div className="dropdown d-inline-block language-switch">
-                        <button
-                          type="button"
-                          className="btn"
-                          data-bs-toggle="dropdown"
-                          aria-haspopup="true"
-                          aria-expanded="false"
-                        >
-                          <img
-                            id="header-lang-img"
-                            src="assets/images/flags/us.jpg"
-                            alt="Header Language"
-                            height={16}
-                          />
-                        </button>
-                        <div className="dropdown-menu dropdown-menu-end">
-                          {/* item*/}
-                          <a
-                            href="#"
-                            className="dropdown-item notify-item language"
-                            data-lang="eng"
-                          >
-                            <img
-                              src="assets/images/flags/us.jpg"
-                              alt="user-image"
-                              className="me-1"
-                              height={12}
-                            />
-                            <span className="align-middle">English</span>
-                          </a>
-                          {/* item*/}
-                          <a
-                            href="#"
-                            className="dropdown-item notify-item language"
-                            data-lang="sp"
-                          >
-                            <img
-                              src="assets/images/flags/uae.webp"
-                              alt="user-image"
-                              className="me-1"
-                              height={12}
-                            />
-                            <span className="align-middle">Arabic</span>
-                          </a>
-                          {/* item*/}
-                          <a
-                            href="#"
-                            className="dropdown-item notify-item language"
-                            data-lang="gr"
-                          >
-                            <img
-                              src="assets/images/flags/germany.jpg"
-                              alt="user-image"
-                              className="me-1"
-                              height={12}
-                            />
-                            <span className="align-middle">German</span>
-                          </a>
-                          {/* item*/}
-                          <a
-                            href="#"
-                            className="dropdown-item notify-item language"
-                            data-lang="it"
-                          >
-                            <img
-                              src="assets/images/flags/italy.jpg"
-                              alt="user-image"
-                              className="me-1"
-                              height={12}
-                            />
-                            <span className="align-middle">Italian</span>
-                          </a>
-                          {/* item*/}
-                          <a
-                            href="#"
-                            className="dropdown-item notify-item language"
-                            data-lang="ru"
-                          >
-                            <img
-                              src="assets/images/flags/russia.jpg"
-                              alt="user-image"
-                              className="me-1"
-                              height={12}
-                            />
-                            <span className="align-middle">Russian</span>
-                          </a>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                {/*end col*/}
-              </div>
-              {/*end row*/}
-            </div>
-            {/*end container*/}
-          </div>
+          <TopHeader />
           {/* END TOP-BAR */}
           {/*Navbar Start*/}
           <nav className="navbar navbar-expand-lg fixed-top sticky" id="navbar">
@@ -334,10 +141,16 @@ const Header = () => {
                             <a className="dropdown-item" href="job-grid-2.html">
                               Sales &amp; Marketing
                             </a>
-                            <a className="dropdown-item" href="job-details.html">
+                            <a
+                              className="dropdown-item"
+                              href="job-details.html"
+                            >
                               Admin &amp; Operations
                             </a>
-                            <a className="dropdown-item" href="job-categories.html">
+                            <a
+                              className="dropdown-item"
+                              href="job-categories.html"
+                            >
                               All Other Jobs
                             </a>
                           </div>
@@ -349,10 +162,16 @@ const Header = () => {
                           </span>
                           <hr />
                           <div>
-                            <a className="dropdown-item" href="candidate-list.html">
+                            <a
+                              className="dropdown-item"
+                              href="candidate-list.html"
+                            >
                               India
                             </a>
-                            <a className="dropdown-item" href="candidate-grid.html">
+                            <a
+                              className="dropdown-item"
+                              href="candidate-grid.html"
+                            >
                               Middle East
                             </a>
                             <a
@@ -361,10 +180,16 @@ const Header = () => {
                             >
                               UAE
                             </a>
-                            <a className="dropdown-item" href="company-list.html">
+                            <a
+                              className="dropdown-item"
+                              href="company-list.html"
+                            >
                               Singapore
                             </a>
-                            <a className="dropdown-item" href="company-list.html">
+                            <a
+                              className="dropdown-item"
+                              href="company-list.html"
+                            >
                               Explore Locations
                             </a>
                           </div>
@@ -385,10 +210,16 @@ const Header = () => {
                             <a className="dropdown-item" href="sign-out.html">
                               2 to 5 Years
                             </a>
-                            <a className="dropdown-item" href="reset-password.html">
+                            <a
+                              className="dropdown-item"
+                              href="reset-password.html"
+                            >
                               5 to 10 Years
                             </a>
-                            <a className="dropdown-item" href="coming-soon.html">
+                            <a
+                              className="dropdown-item"
+                              href="coming-soon.html"
+                            >
                               10 to 15 Years
                             </a>
                             <a className="dropdown-item" href="404-error.html">
@@ -401,7 +232,7 @@ const Header = () => {
                     </div>
                   </li>
                   {/*end dropdown*/}
-                  
+
                   {/* Conditionally render Employers dropdown - only show if userId is NOT present */}
                   {!userId && (
                     <li className="nav-item dropdown dropdown-hover">
@@ -426,12 +257,18 @@ const Header = () => {
                           </a>
                         </li>
                         <li>
-                          <a className="dropdown-item" href="/associated-company-list">
+                          <a
+                            className="dropdown-item"
+                            href="/associated-company-list"
+                          >
                             Assocated Companies
                           </a>
                         </li>
                         <li>
-                          <a className="dropdown-item" href="/saved-candidate-page">
+                          <a
+                            className="dropdown-item"
+                            href="/saved-candidate-page"
+                          >
                             Search Candidates
                           </a>
                         </li>
@@ -439,7 +276,7 @@ const Header = () => {
                     </li>
                   )}
                   {/*end dropdown*/}
-                  
+
                   <li className="nav-item">
                     <a href="/contact-us" className="nav-link">
                       Events &amp; Ads
@@ -454,7 +291,7 @@ const Header = () => {
                 {/*end navbar-nav*/}
               </div>
               {/*end navabar-collapse*/}
-              
+
               {/* Conditionally render header menu based on userId */}
               {userId ? (
                 // Show notifications and user profile when logged in
@@ -584,7 +421,9 @@ const Header = () => {
                               />
                             </div>
                             <div className="flex-grow-1">
-                              <h6 className="mt-0 mb-1 fs-15">Creative Agency</h6>
+                              <h6 className="mt-0 mb-1 fs-15">
+                                Creative Agency
+                              </h6>
                               <p className="text-muted mb-0 fs-12">
                                 <i className="mdi mdi-clock-outline" />{" "}
                                 <span>2 hour ago</span>
@@ -612,14 +451,14 @@ const Header = () => {
                       aria-expanded="false"
                     >
                       <img
-                        src="assets/images/profile.jpg"
+                        src={accountImage}
                         alt="mdo"
                         width={35}
                         height={35}
                         className="rounded-circle me-1"
                       />{" "}
                       <span className="d-none d-md-inline-block fw-medium">
-                        Hi, Jansh
+                        Hi, {name}
                       </span>
                     </a>
                     <ul
@@ -627,23 +466,23 @@ const Header = () => {
                       aria-labelledby="userdropdown"
                     >
                       <li>
-                        <a className="dropdown-item" href="manage-jobs.html">
+                        <a className="dropdown-item" href="/manage-jobs-page">
                           Manage Jobs
                         </a>
                       </li>
                       <li>
-                        <a className="dropdown-item" href="bookmark-jobs.html">
+                        <a className="dropdown-item" href="/saved-candidate-page">
                           Bookmarks Jobs
                         </a>
                       </li>
                       <li>
-                        <a className="dropdown-item" href="my-profile.php">
+                        <a className="dropdown-item" href="/my-profile">
                           My Profile
                         </a>
                       </li>
                       <li>
-                        <a 
-                          className="dropdown-item" 
+                        <a
+                          className="dropdown-item"
                           href="#"
                           onClick={(e) => {
                             e.preventDefault();
@@ -663,8 +502,8 @@ const Header = () => {
                 // Show login/signup buttons when not logged in
                 <ul className="header-menu list-inline d-flex align-items-center mb-0">
                   <li className="list-inline-item">
-                    <a 
-                      href="/candidate-login" 
+                    <a
+                      href="/candidate-login"
                       className="btn btn-primary btn-sm me-2"
                     >
                       <i className="uil uil-sign-in-alt me-1" />
@@ -672,8 +511,8 @@ const Header = () => {
                     </a>
                   </li>
                   <li className="list-inline-item">
-                    <a 
-                      href="/candidate-signup" 
+                    <a
+                      href="/candidate-signup"
                       className="btn btn-outline-primary btn-sm"
                     >
                       <i className="uil uil-user-plus me-1" />
@@ -719,7 +558,8 @@ const Header = () => {
                       <div className="text-center mb-4">
                         <h5>Sign Up</h5>
                         <p className="text-muted">
-                          Sign Up and get access to all the features of JobsStorm
+                          Sign Up and get access to all the features of
+                          JobsStorm
                         </p>
                       </div>
                       <form action="#" className="auth-form">
@@ -778,7 +618,10 @@ const Header = () => {
                           </div>
                         </div>
                         <div className="text-center">
-                          <button type="submit" className="btn btn-primary w-100">
+                          <button
+                            type="submit"
+                            className="btn btn-primary w-100"
+                          >
                             Sign Up
                           </button>
                         </div>
