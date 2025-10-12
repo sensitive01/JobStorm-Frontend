@@ -143,7 +143,7 @@ const EmployerSignUpPage = () => {
         setStep(3);
       } else {
         const errorMsg = response.data?.message || "Invalid OTP";
-        setError(errorMsg);
+        // setError(errorMsg);
         toast.error(errorMsg, { autoClose: 3000 });
       }
     } catch (err) {
