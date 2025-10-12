@@ -813,7 +813,7 @@ body[data-bs-theme="dark"] .page-title-box {
     border-radius: 0 8px 8px 0;
   }
   .registration-form .form-control {
-    border-radius: 8px 0 0 8px;
+    border-radius: 0px 0 0 0px;
   }
   .registration-form .choices[data-type*="select-one"] .choices__inner {
     border-radius: 0;

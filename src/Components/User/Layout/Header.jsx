@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import TopHeader from "./TopHeader";
 import { getMyName } from "../../../api/service/axiosService";
-import accountImage from "../../../../public/assets/images/account.jpg"
+import accountImage from "../../../../public/assets/images/account.jpg";
+import HeaderAuthButtons from "./HeaderAuthButtons";
 
 const Header = () => {
   const userId = localStorage.getItem("userId");
@@ -29,7 +30,7 @@ const Header = () => {
             <div className="container-fluid custom-container">
               <a
                 className="navbar-brand text-dark fw-bold me-auto"
-                href="index-2.html"
+                href="/"
               >
                 <img
                   src="assets/images/logo-dark.png"
@@ -129,27 +130,27 @@ const Header = () => {
                           </span>
                           <hr />
                           <div>
-                            <a className="dropdown-item" href="job-list.html">
+                            <a className="dropdown-item" href="#">
                               IT Jobs
                             </a>
-                            <a className="dropdown-item" href="job-list-2.html">
+                            <a className="dropdown-item" href="#">
                               Accounting &amp; Banking
                             </a>
-                            <a className="dropdown-item" href="job-grid.html">
+                            <a className="dropdown-item" href="#">
                               Tele-Calling
                             </a>
-                            <a className="dropdown-item" href="job-grid-2.html">
+                            <a className="dropdown-item" href="#">
                               Sales &amp; Marketing
                             </a>
                             <a
                               className="dropdown-item"
-                              href="job-details.html"
+                              href="#"
                             >
                               Admin &amp; Operations
                             </a>
                             <a
                               className="dropdown-item"
-                              href="job-categories.html"
+                             href="#"
                             >
                               All Other Jobs
                             </a>
@@ -164,31 +165,31 @@ const Header = () => {
                           <div>
                             <a
                               className="dropdown-item"
-                              href="candidate-list.html"
+                              href="#"
                             >
                               India
                             </a>
                             <a
                               className="dropdown-item"
-                              href="candidate-grid.html"
+                              href="#"
                             >
                               Middle East
                             </a>
                             <a
                               className="dropdown-item"
-                              href="candidate-details.html"
+                              href="#"
                             >
                               UAE
                             </a>
                             <a
                               className="dropdown-item"
-                              href="company-list.html"
+                              href="#"
                             >
                               Singapore
                             </a>
                             <a
                               className="dropdown-item"
-                              href="company-list.html"
+                              href="#"
                             >
                               Explore Locations
                             </a>
@@ -201,28 +202,28 @@ const Header = () => {
                           </span>
                           <hr />
                           <div>
-                            <a className="dropdown-item" href="sign-up.html">
+                            <a className="dropdown-item" href="#">
                               Fresher
                             </a>
-                            <a className="dropdown-item" href="sign-in.html">
+                            <a className="dropdown-item" href="#">
                               0 to 2 Years
                             </a>
-                            <a className="dropdown-item" href="sign-out.html">
+                            <a className="dropdown-item" href="#">
                               2 to 5 Years
                             </a>
                             <a
                               className="dropdown-item"
-                              href="reset-password.html"
+                              href="#"
                             >
                               5 to 10 Years
                             </a>
                             <a
                               className="dropdown-item"
-                              href="coming-soon.html"
+                              href="#"
                             >
                               10 to 15 Years
                             </a>
-                            <a className="dropdown-item" href="404-error.html">
+                            <a className="dropdown-item" href="#">
                               15+ Years
                             </a>
                           </div>
@@ -471,7 +472,10 @@ const Header = () => {
                         </a>
                       </li>
                       <li>
-                        <a className="dropdown-item" href="/saved-candidate-page">
+                        <a
+                          className="dropdown-item"
+                          href="/saved-candidate-page"
+                        >
                           Bookmarks Jobs
                         </a>
                       </li>
@@ -500,26 +504,7 @@ const Header = () => {
                 </ul>
               ) : (
                 // Show login/signup buttons when not logged in
-                <ul className="header-menu list-inline d-flex align-items-center mb-0">
-                  <li className="list-inline-item">
-                    <a
-                      href="/candidate-login"
-                      className="btn btn-primary btn-sm me-2"
-                    >
-                      <i className="uil uil-sign-in-alt me-1" />
-                      Login
-                    </a>
-                  </li>
-                  <li className="list-inline-item">
-                    <a
-                      href="/candidate-signup"
-                      className="btn btn-outline-primary btn-sm"
-                    >
-                      <i className="uil uil-user-plus me-1" />
-                      Sign Up
-                    </a>
-                  </li>
-                </ul>
+                <HeaderAuthButtons />
               )}
               {/*end header-menu*/}
             </div>
@@ -630,7 +615,7 @@ const Header = () => {
                         <p className="mb-0">
                           Already a member ?{" "}
                           <a
-                            href="sign-in.html"
+                            href="/candidate-signup"
                             className="form-text text-primary text-decoration-underline"
                           >
                             {" "}
