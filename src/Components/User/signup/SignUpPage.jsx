@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { toast } from "react-toastify";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { registerCandidate } from "../../../api/service/axiosService";
+import {
+  registerCandidate,
+  resetPassword,
+} from "../../../api/service/axiosService";
+
+// import { sendVerificationOtp, verifyOtpCandidate } from "../../../api/service/candidateService";
 
 const SignUpPage = () => {
+  const [step, setStep] = useState(1); // 1: Basic Info + Email, 2: OTP Verification, 3: Complete Registration
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -14,20 +20,23 @@ const SignUpPage = () => {
     agreeToTerms: false,
   });
 
+  const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [resendTimer, setResendTimer] = useState(0);
 
-  const handleChange = (e) => {
+  const abortControllerRef = useRef(null);
+
+  const handleChange = useCallback((e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
-  };
+  }, []);
 
-  const handlePhoneChange = (value, country) => {
-    // Extract country code and phone number
+  const handlePhoneChange = useCallback((value, country) => {
     const countryDialCode = country.dialCode;
     const phoneNumber = value.slice(countryDialCode.length);
 
@@ -36,21 +45,178 @@ const SignUpPage = () => {
       mobile: phoneNumber,
       countryCode: "+" + countryDialCode,
     }));
+  }, []);
+
+  // Start resend timer
+  const startResendTimer = useCallback(() => {
+    setResendTimer(60);
+    const interval = setInterval(() => {
+      setResendTimer((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }, []);
+
+  // Send OTP API call
+  const handleSendOTP = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!formData.username?.trim() || !formData.email?.trim()) {
+      setError("Please enter username and email");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    setLoading(true);
+
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    try {
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Request timeout")), 15000)
+      );
+
+      // TODO: Replace with your actual OTP API
+      const apiPromise = resetPassword(
+        formData.email.trim(),
+        formData.username.trim()
+      );
+
+      const response = await Promise.race([apiPromise, timeoutPromise]);
+
+      if (response.status === 200) {
+        toast.success("OTP sent to your email!", { autoClose: 2000 });
+        setStep(2);
+        startResendTimer();
+      } else {
+        const errorMsg = response.data?.message || "Failed to send OTP";
+        setError(errorMsg);
+        toast.error(errorMsg, { autoClose: 3000 });
+      }
+    } catch (err) {
+      console.error("Send OTP error:", err);
+      const errorMsg =
+        err.message === "Request timeout"
+          ? "Request timed out. Please check your connection and try again."
+          : err.response?.data?.message ||
+            "Failed to send OTP. Please try again.";
+      setError(errorMsg);
+      toast.error(errorMsg, { autoClose: 3000 });
+    } finally {
+      setLoading(false);
+    }
   };
 
+  // Verify OTP API call
+  const handleVerifyOTP = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (otp.length !== 6) {
+      setError("Please enter a valid 6-digit OTP");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Request timeout")), 15000)
+      );
+
+      // TODO: Replace with your actual OTP verification API
+      // const apiPromise = verifyOtpCandidate(formData.email, otp);
+
+      // TEMPORARY: Mock API call - REMOVE THIS and uncomment above line
+      const apiPromise = new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ status: 200, data: { message: "OTP verified" } });
+        }, 1000);
+      });
+
+      const response = await Promise.race([apiPromise, timeoutPromise]);
+
+      if (response.status === 200) {
+        toast.success("Email verified!", { autoClose: 1500 });
+        setStep(3);
+      } else {
+        const errorMsg = response.data?.message || "Invalid OTP";
+        setError(errorMsg);
+        toast.error(errorMsg, { autoClose: 3000 });
+      }
+    } catch (err) {
+      console.error("Verify OTP error:", err);
+      const errorMsg =
+        err.message === "Request timeout"
+          ? "Request timed out. Please try again."
+          : err.response?.data?.message || "Invalid OTP. Please try again.";
+      setError(errorMsg);
+      toast.error(errorMsg, { autoClose: 3000 });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Resend OTP
+  const handleResendOTP = async () => {
+    if (resendTimer > 0) return;
+
+    setError("");
+    setOtp("");
+    setLoading(true);
+
+    try {
+      // TODO: Replace with your actual OTP API
+      // const response = await sendVerificationOtp(formData.email, formData.username);
+
+      // TEMPORARY: Mock API call
+      const response = await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ status: 200 });
+        }, 1000);
+      });
+
+      if (response.status === 200) {
+        toast.success("OTP resent!", { autoClose: 2000 });
+        startResendTimer();
+      } else {
+        toast.error("Failed to resend OTP", { autoClose: 3000 });
+      }
+    } catch (err) {
+      console.error("Resend OTP error:", err);
+      toast.error(err.response?.data?.message || "Failed to resend OTP", {
+        autoClose: 3000,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Final registration
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess(false);
 
-    // Validation
-    if (
-      !formData.username ||
-      !formData.email ||
-      !formData.password ||
-      !formData.mobile
-    ) {
+    if (!formData.password || !formData.mobile) {
       setError("Please fill in all fields");
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters");
       return;
     }
 
@@ -59,18 +225,28 @@ const SignUpPage = () => {
       return;
     }
 
+    if (!formData.agreeToTerms) {
+      setError("Please agree to the terms and conditions");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      // You can send separately or combined
       const fullMobile = formData.countryCode + formData.mobile;
 
-      const response = await registerCandidate(
-        formData.username,
-        formData.email,
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Request timeout")), 20000)
+      );
+
+      const apiPromise = registerCandidate(
+        formData.username.trim(),
+        formData.email.trim(),
         formData.password,
         fullMobile
       );
+
+      const response = await Promise.race([apiPromise, timeoutPromise]);
 
       console.log("response", response);
       console.log("Country Code:", formData.countryCode);
@@ -79,27 +255,24 @@ const SignUpPage = () => {
 
       if (response.status === 201) {
         setSuccess(true);
-        toast.success("Registration successful!");
-        setFormData({
-          username: "",
-          email: "",
-          password: "",
-          mobile: "",
-          countryCode: "",
-          agreeToTerms: false,
-        });
+        toast.success("Registration successful!", { autoClose: 2000 });
         setTimeout(() => {
           window.location.href = "/candidate-login";
-        }, 2000);
+        }, 1500);
       } else {
-        toast.error(response.response.data.message);
+        const errorMsg =
+          response.response?.data?.message || "Registration failed";
+        toast.error(errorMsg, { autoClose: 3000 });
       }
     } catch (err) {
       console.log("--->", err);
-      setError(
-        err.response?.data?.message || "Something went wrong. Please try again."
-      );
-      toast.error(err.response?.data?.message || "Registration failed");
+      const errorMsg =
+        err.message === "Request timeout"
+          ? "Request timed out. Please check your connection and try again."
+          : err.response?.data?.message ||
+            "Something went wrong. Please try again.";
+      setError(errorMsg);
+      toast.error(errorMsg, { autoClose: 3000 });
     } finally {
       setLoading(false);
     }
@@ -108,7 +281,6 @@ const SignUpPage = () => {
   return (
     <>
       <style>{`
-        /* Custom styling for phone input to match dark theme */
         .phone-input-container {
           width: 100%;
         }
@@ -211,7 +383,6 @@ const SignUpPage = () => {
           color: rgba(255, 255, 255, 0.7) !important;
         }
 
-        /* Scrollbar styling for country list */
         .phone-input-container .country-list::-webkit-scrollbar {
           width: 8px;
         }
@@ -230,7 +401,6 @@ const SignUpPage = () => {
           background: rgba(255, 255, 255, 0.3);
         }
 
-        /* Disabled state */
         .phone-input-container .form-control:disabled {
           background-color: rgba(255, 255, 255, 0.05) !important;
           cursor: not-allowed;
@@ -241,6 +411,70 @@ const SignUpPage = () => {
           cursor: not-allowed;
           opacity: 0.6;
         }
+
+        .spinner-border-sm {
+          width: 1rem;
+          height: 1rem;
+          border-width: 0.15em;
+        }
+
+        .otp-input {
+          width: 100%;
+          text-align: center;
+          letter-spacing: 10px;
+          font-size: 24px;
+          font-weight: 600;
+        }
+
+        .step-indicator {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 30px;
+          gap: 10px;
+        }
+
+        .step-dot {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background-color: rgba(255, 255, 255, 0.3);
+          transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+          background-color: white;
+          width: 30px;
+          border-radius: 6px;
+        }
+           .close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+    font-size: 20px;
+    line-height: 1;
+    padding: 0;
+  }
+
+  .close-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+  }
+
+  .close-button:active {
+    transform: rotate(90deg) scale(0.95);
+  }
       `}</style>
 
       <div>
@@ -251,7 +485,7 @@ const SignUpPage = () => {
                 <div className="row justify-content-center">
                   <div className="col-xl-10 col-lg-12">
                     <div className="card auth-box">
-                      <div className="row align-items-center">
+                      <div className="row">
                         <div className="col-lg-6 text-center">
                           <div className="card-body p-4">
                             <a href="index.php">
@@ -276,15 +510,49 @@ const SignUpPage = () => {
                             </div>
                           </div>
                         </div>
-                        {/*end col*/}
                         <div className="col-lg-6">
                           <div className="auth-content card-body p-5 text-white">
                             <div className="w-100">
+                              <button
+                                type="button"
+                                className="close-button"
+                                onClick={() => (window.location.href = "/")}
+                                aria-label="Close"
+                              >
+                                ×
+                              </button>
+                              {/* Step Indicator */}
+                              <div className="step-indicator">
+                                <div
+                                  className={`step-dot ${
+                                    step >= 1 ? "active" : ""
+                                  }`}
+                                ></div>
+                                <div
+                                  className={`step-dot ${
+                                    step >= 2 ? "active" : ""
+                                  }`}
+                                ></div>
+                                <div
+                                  className={`step-dot ${
+                                    step >= 3 ? "active" : ""
+                                  }`}
+                                ></div>
+                              </div>
+
                               <div className="text-center">
-                                <h5>Let's Get Started</h5>
+                                <h5>
+                                  {step === 1 && "Let's Get Started"}
+                                  {step === 2 && "Verify Your Email"}
+                                  {step === 3 && "Complete Registration"}
+                                </h5>
                                 <p className="text-white-70">
-                                  Sign Up and get access to all the features of
-                                  JobsStorm
+                                  {step === 1 &&
+                                    "Enter your details to get started"}
+                                  {step === 2 &&
+                                    "We've sent a 6-digit OTP to your email"}
+                                  {step === 3 &&
+                                    "Just a few more details to complete"}
                                 </p>
                               </div>
 
@@ -306,132 +574,267 @@ const SignUpPage = () => {
                                 </div>
                               )}
 
-                              <form
-                                onSubmit={handleSubmit}
-                                className="auth-form"
-                              >
-                                <div className="mb-3">
-                                  <label
-                                    htmlFor="usernameInput"
-                                    className="form-label"
-                                  >
-                                    Username
-                                  </label>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    id="usernameInput"
-                                    name="username"
-                                    value={formData.username}
-                                    onChange={handleChange}
-                                    placeholder="Enter your username"
-                                    disabled={loading}
-                                  />
-                                </div>
-                                <div className="mb-3">
-                                  <label
-                                    htmlFor="emailInput"
-                                    className="form-label"
-                                  >
-                                    Email
-                                  </label>
-                                  <input
-                                    type="email"
-                                    className="form-control"
-                                    id="emailInput"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    placeholder="Enter your email"
-                                    disabled={loading}
-                                  />
-                                </div>
-                                <div className="mb-3">
-                                  <label
-                                    htmlFor="mobileInput"
-                                    className="form-label"
-                                  >
-                                    Mobile Number
-                                  </label>
-                                  <PhoneInput
-                                    country={"in"}
-                                    value={
-                                      formData.countryCode.replace("+", "") +
-                                      formData.mobile
-                                    }
-                                    onChange={handlePhoneChange}
-                                    disabled={loading}
-                                    inputProps={{
-                                      name: "mobile",
-                                      required: true,
-                                    }}
-                                    containerClass="phone-input-container"
-                                    enableSearch={true}
-                                    searchPlaceholder="Search country"
-                                    countryCodeEditable={false}
-                                    disableSearchIcon={true}
-                                    placeholder="Enter phone number"
-                                  />
-                                  {formData.countryCode && formData.mobile && (
-                                    <small className="text-white-50 mt-1 d-block">
-                                      Full number: {formData.countryCode}{" "}
-                                      {formData.mobile}
-                                    </small>
-                                  )}
-                                </div>
-                                <div className="mb-3">
-                                  <label
-                                    htmlFor="passwordInput"
-                                    className="form-label"
-                                  >
-                                    Password
-                                  </label>
-                                  <input
-                                    type="password"
-                                    className="form-control"
-                                    id="passwordInput"
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    placeholder="Enter your password"
-                                    disabled={loading}
-                                  />
-                                </div>
-                                <div className="mb-4">
-                                  <div className="form-check">
-                                    <input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      id="flexCheckDefault"
-                                      name="agreeToTerms"
-                                      checked={formData.agreeToTerms}
-                                      onChange={handleChange}
-                                      disabled={loading}
-                                    />
+                              {/* Step 1: Username and Email Entry */}
+                              {step === 1 && (
+                                <form
+                                  onSubmit={handleSendOTP}
+                                  className="auth-form"
+                                >
+                                  <div className="mb-3">
                                     <label
-                                      className="form-check-label"
-                                      htmlFor="flexCheckDefault"
+                                      htmlFor="usernameInput"
+                                      className="form-label"
                                     >
-                                      I agree to the{" "}
-                                      <a
-                                        href="#"
-                                        className="text-white text-decoration-underline"
-                                      >
-                                        Terms and conditions
-                                      </a>
+                                      Username
                                     </label>
+                                    <input
+                                      type="text"
+                                      className="form-control"
+                                      id="usernameInput"
+                                      name="username"
+                                      value={formData.username}
+                                      onChange={handleChange}
+                                      placeholder="Enter your username"
+                                      disabled={loading}
+                                      required
+                                    />
                                   </div>
-                                </div>
-                                <div className="text-center">
-                                  <button
-                                    type="submit"
-                                    className="btn btn-white btn-hover w-100"
-                                    disabled={loading}
-                                  >
-                                    {loading ? "Signing Up..." : "Sign Up"}
-                                  </button>
-                                </div>
-                              </form>
+                                  <div className="mb-3">
+                                    <label
+                                      htmlFor="emailInput"
+                                      className="form-label"
+                                    >
+                                      Email
+                                    </label>
+                                    <input
+                                      type="email"
+                                      className="form-control"
+                                      id="emailInput"
+                                      name="email"
+                                      value={formData.email}
+                                      onChange={handleChange}
+                                      placeholder="Enter your email"
+                                      disabled={loading}
+                                      required
+                                    />
+                                  </div>
+                                  <div className="text-center mt-4">
+                                    <button
+                                      type="submit"
+                                      className="btn btn-white btn-hover w-100"
+                                      disabled={loading}
+                                    >
+                                      {loading ? (
+                                        <>
+                                          <span
+                                            className="spinner-border spinner-border-sm me-2"
+                                            role="status"
+                                            aria-hidden="true"
+                                          ></span>
+                                          Sending...
+                                        </>
+                                      ) : (
+                                        "Send OTP"
+                                      )}
+                                    </button>
+                                  </div>
+                                </form>
+                              )}
+
+                              {/* Step 2: OTP Verification */}
+                              {step === 2 && (
+                                <form
+                                  onSubmit={handleVerifyOTP}
+                                  className="auth-form"
+                                >
+                                  <div className="mb-4">
+                                    <label
+                                      htmlFor="otpInput"
+                                      className="form-label text-center d-block"
+                                    >
+                                      Enter 6-Digit OTP
+                                    </label>
+                                    <input
+                                      type="text"
+                                      className="form-control otp-input"
+                                      id="otpInput"
+                                      value={otp}
+                                      onChange={(e) => {
+                                        const value = e.target.value.replace(
+                                          /\D/g,
+                                          ""
+                                        );
+                                        if (value.length <= 6) setOtp(value);
+                                      }}
+                                      placeholder="000000"
+                                      disabled={loading}
+                                      maxLength={6}
+                                      required
+                                      autoFocus
+                                    />
+                                    <small className="text-white-70 d-block text-center mt-2">
+                                      Sent to {formData.email}
+                                    </small>
+                                  </div>
+                                  <div className="text-center mb-3">
+                                    {resendTimer > 0 ? (
+                                      <p className="text-white-70 mb-0">
+                                        Resend OTP in {resendTimer}s
+                                      </p>
+                                    ) : (
+                                      <button
+                                        type="button"
+                                        className="btn btn-link text-white text-decoration-underline p-0"
+                                        onClick={handleResendOTP}
+                                        disabled={loading}
+                                      >
+                                        Resend OTP
+                                      </button>
+                                    )}
+                                  </div>
+                                  <div className="text-center">
+                                    <button
+                                      type="submit"
+                                      className="btn btn-white btn-hover w-100 mb-2"
+                                      disabled={loading || otp.length !== 6}
+                                    >
+                                      {loading ? (
+                                        <>
+                                          <span
+                                            className="spinner-border spinner-border-sm me-2"
+                                            role="status"
+                                            aria-hidden="true"
+                                          ></span>
+                                          Verifying...
+                                        </>
+                                      ) : (
+                                        "Verify OTP"
+                                      )}
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="btn btn-outline-light w-100"
+                                      onClick={() => {
+                                        setStep(1);
+                                        setOtp("");
+                                        setError("");
+                                      }}
+                                      disabled={loading}
+                                    >
+                                      Change Email
+                                    </button>
+                                  </div>
+                                </form>
+                              )}
+
+                              {/* Step 3: Complete Registration */}
+                              {step === 3 && (
+                                <form
+                                  onSubmit={handleSubmit}
+                                  className="auth-form"
+                                >
+                                  <div className="mb-3">
+                                    <label
+                                      htmlFor="mobileInput"
+                                      className="form-label"
+                                    >
+                                      Mobile Number
+                                    </label>
+                                    <PhoneInput
+                                      country={"in"}
+                                      value={
+                                        formData.countryCode.replace("+", "") +
+                                        formData.mobile
+                                      }
+                                      onChange={handlePhoneChange}
+                                      disabled={loading}
+                                      inputProps={{
+                                        name: "mobile",
+                                        required: true,
+                                      }}
+                                      containerClass="phone-input-container"
+                                      enableSearch={true}
+                                      searchPlaceholder="Search country"
+                                      countryCodeEditable={false}
+                                      disableSearchIcon={true}
+                                      placeholder="Enter phone number"
+                                    />
+                                    {formData.countryCode &&
+                                      formData.mobile && (
+                                        <small className="text-white-50 mt-1 d-block">
+                                          Full number: {formData.countryCode}{" "}
+                                          {formData.mobile}
+                                        </small>
+                                      )}
+                                  </div>
+                                  <div className="mb-3">
+                                    <label
+                                      htmlFor="passwordInput"
+                                      className="form-label"
+                                    >
+                                      Password
+                                    </label>
+                                    <input
+                                      type="password"
+                                      className="form-control"
+                                      id="passwordInput"
+                                      name="password"
+                                      value={formData.password}
+                                      onChange={handleChange}
+                                      placeholder="Enter your password"
+                                      disabled={loading}
+                                      required
+                                    />
+                                  </div>
+                                  <div className="mb-4">
+                                    <div className="form-check">
+                                      <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        id="flexCheckDefault"
+                                        name="agreeToTerms"
+                                        checked={formData.agreeToTerms}
+                                        onChange={handleChange}
+                                        disabled={loading}
+                                        required
+                                      />
+                                      <label
+                                        className="form-check-label"
+                                        htmlFor="flexCheckDefault"
+                                      >
+                                        I agree to the{" "}
+                                        <a
+                                          href="#"
+                                          className="text-white text-decoration-underline"
+                                        >
+                                          Terms and conditions
+                                        </a>
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <div className="text-center">
+                                    <button
+                                      type="submit"
+                                      className="btn btn-white btn-hover w-100"
+                                      disabled={loading}
+                                    >
+                                      {loading ? (
+                                        <>
+                                          <span
+                                            className="spinner-border spinner-border-sm me-2"
+                                            role="status"
+                                            aria-hidden="true"
+                                          ></span>
+                                          Completing...
+                                        </>
+                                      ) : (
+                                        "Complete Registration"
+                                      )}
+                                    </button>
+                                  </div>
+                                </form>
+                              )}
+
                               <div className="mt-3 text-center">
                                 <p className="mb-0">
                                   Already a member ?{" "}

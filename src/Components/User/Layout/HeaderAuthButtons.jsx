@@ -168,7 +168,7 @@ const HeaderAuthButtons = () => {
               e.target.style.boxShadow = "none";
             }}
           >
-            <i className="uil uil-sign-in-alt" style={iconStyle} />
+            <i className="uil uil-lock-access" style={iconStyle} />
             Login
           </button>
         </li>
@@ -208,7 +208,23 @@ const HeaderAuthButtons = () => {
             </button>
 
             <h2 style={modalTitleStyle}>
-              {modalType === "login" ? "Login" : "Sign Up"}
+              {modalType === "login" ? (
+                <>
+                  <i
+                    className="uil uil-lock-access"
+                    style={{ marginRight: "10px" }}
+                  />
+                  Login
+                </>
+              ) : (
+                <>
+                  <i
+                    className="uil uil-user-plus"
+                    style={{ marginRight: "10px" }}
+                  />
+                  Sign Up
+                </>
+              )}
             </h2>
             <p style={modalSubtitleStyle}>Choose how you want to continue</p>
 

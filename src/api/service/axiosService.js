@@ -74,3 +74,12 @@ export const getMyName = async (userId) => {
     return err;
   }
 };
+
+export const bookDemoShedule = async (formData) => {
+  try {
+    const response = await axiosInstance.post(`/book-my-demo`,{formData});
+    return response;
+  } catch (err) {
+    return err;
+  }
+};

@@ -136,7 +136,7 @@ const Footer = () => {
           <div className="footer-item mt-4 mt-lg-0 me-lg-5">
             <a
               className="navbar-brand text-dark fw-bold me-auto"
-              href="index-2.html"
+              href="#"
             >
               <img
                 src="assets/images/logo-light.png"
@@ -168,32 +168,32 @@ const Footer = () => {
             <hr />
             <ul className="list-unstyled footer-list mb-0">
               <li>
-                <a href="about.html">
+                <a href="/about-us">
                   <i className="mdi mdi-chevron-right" /> About Us
                 </a>
               </li>
               <li>
-                <a href="contact.html">
+                <a href="/contact-us">
                   <i className="mdi mdi-chevron-right" /> Contact Us
                 </a>
               </li>
               <li>
-                <a href="services.html">
+                <a href="#">
                   <i className="mdi mdi-chevron-right" /> Services
                 </a>
               </li>
               <li>
-                <a href="blog.html">
+                <a href="/blogs-page">
                   <i className="mdi mdi-chevron-right" /> Blog
                 </a>
               </li>
               <li>
-                <a href="team.html">
+                <a href="#">
                   <i className="mdi mdi-chevron-right" /> Team
                 </a>
               </li>
               <li>
-                <a href="pricing.html">
+                <a href="/price-page">
                   <i className="mdi mdi-chevron-right" /> Pricing
                 </a>
               </li>
@@ -207,22 +207,22 @@ const Footer = () => {
             <hr />
             <ul className="list-unstyled footer-list mb-0">
               <li>
-                <a href="job-categories.html">
+                <a href="#">
                   <i className="mdi mdi-chevron-right" /> Browser Categories
                 </a>
               </li>
               <li>
-                <a href="job-list.html">
+                <a href="/jobs-list-view">
                   <i className="mdi mdi-chevron-right" /> Browser Jobs
                 </a>
               </li>
               <li>
-                <a href="job-details.html">
+                <a href="/jobs-list-view">
                   <i className="mdi mdi-chevron-right" /> Job Details
                 </a>
               </li>
               <li>
-                <a href="bookmark-jobs.html">
+                <a href="/saved-candidate-page">
                   <i className="mdi mdi-chevron-right" /> Bookmark Jobs
                 </a>
               </li>
@@ -236,17 +236,17 @@ const Footer = () => {
             <hr />
             <ul className="list-unstyled footer-list mb-0">
               <li>
-                <a href="candidate-list.html">
+                <a href="/saved-candidate-page">
                   <i className="mdi mdi-chevron-right" /> Candidate List
                 </a>
               </li>
               <li>
-                <a href="candidate-grid.html">
+                <a href="/saved-candidate-page">
                   <i className="mdi mdi-chevron-right" /> Candidate Grid
                 </a>
               </li>
               <li>
-                <a href="candidate-details.html">
+                <a href="/saved-candidate-page">
                   <i className="mdi mdi-chevron-right" /> Candidate Details
                 </a>
               </li>
@@ -260,17 +260,17 @@ const Footer = () => {
             <hr />
             <ul className="list-unstyled footer-list mb-0">
               <li>
-                <a href="contact.html">
+                <a href="/contact-us">
                   <i className="mdi mdi-chevron-right" /> Help Center
                 </a>
               </li>
               <li>
-                <a href="faqs.html">
+                <a href="/faq-pages">
                   <i className="mdi mdi-chevron-right" /> FAQ'S
                 </a>
               </li>
               <li>
-                <a href="privacy-policy.html">
+                <a href="#">
                   <i className="mdi mdi-chevron-right" /> Privacy Policy
                 </a>
               </li>

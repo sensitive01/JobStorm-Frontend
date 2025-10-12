@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import BookDemoModal from "./BookDemoModal";
 
 const TopHeader = () => {
   const [userId, setUserId] = useState(null);
-  const [location, setLocation] = useState('Loading...');
+  const [location, setLocation] = useState("Loading...");
   const [locationError, setLocationError] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   // Load userId from localStorage on mount
   useEffect(() => {
@@ -15,57 +17,51 @@ const TopHeader = () => {
 
   // Get user's location
   useEffect(() => {
-    // Check if geolocation is supported
     if (!navigator.geolocation) {
-      setLocation('Location not supported');
+      setLocation("Location not supported");
       setLocationError(true);
       return;
     }
 
-    // Get current position
     navigator.geolocation.getCurrentPosition(
-      // Success callback
       async (position) => {
         const { latitude, longitude } = position.coords;
-        
+
         try {
-          // Use reverse geocoding API to get location name
           const response = await fetch(
             `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
           );
           const data = await response.json();
-          
-          // Format location (City, Country)
-          const locationName = `${data.city || data.locality || 'Unknown'}, ${data.countryName || 'Unknown'}`;
+
+          const locationName = `${data.city || data.locality || "Unknown"}, ${
+            data.countryName || "Unknown"
+          }`;
           setLocation(locationName);
         } catch (error) {
-          // If reverse geocoding fails, show coordinates
           setLocation(`${latitude.toFixed(2)}°, ${longitude.toFixed(2)}°`);
         }
       },
-      // Error callback
       (error) => {
-        console.error('Geolocation error:', error);
-        switch(error.code) {
+        console.error("Geolocation error:", error);
+        switch (error.code) {
           case error.PERMISSION_DENIED:
-            setLocation('Location access denied');
+            setLocation("Location access denied");
             break;
           case error.POSITION_UNAVAILABLE:
-            setLocation('Location unavailable');
+            setLocation("Location unavailable");
             break;
           case error.TIMEOUT:
-            setLocation('Location timeout');
+            setLocation("Location timeout");
             break;
           default:
-            setLocation('Location error');
+            setLocation("Location error");
         }
         setLocationError(true);
       },
-      // Options
       {
         enableHighAccuracy: true,
         timeout: 10000,
-        maximumAge: 300000 // Cache for 5 minutes
+        maximumAge: 300000,
       }
     );
   }, []);
@@ -90,9 +86,11 @@ const TopHeader = () => {
                 <li className="list-inline-item">
                   <p className="fs-13 mb-0">
                     <i className="mdi mdi-map-marker" /> Your Location:{" "}
-                    <a 
-                      href="#" 
-                      className={`text-white ${locationError ? 'text-decoration-line-through' : ''}`}
+                    <a
+                      href="#"
+                      className={`text-white ${
+                        locationError ? "text-decoration-line-through" : ""
+                      }`}
                       onClick={(e) => e.preventDefault()}
                     >
                       {location}
@@ -102,28 +100,53 @@ const TopHeader = () => {
                 <li className="list-inline-item">
                   <ul className="topbar-social-menu list-inline mb-0">
                     <li className="list-inline-item">
-                      <a href="#" className="social-link text-white">
-                        <i className="uil uil-whatsapp" />
-                      </a>
-                    </li>
-                    <li className="list-inline-item">
-                      <a href="#" className="social-link text-white">
-                        <i className="uil uil-facebook-messenger-alt" />
-                      </a>
-                    </li>
-                    <li className="list-inline-item">
-                      <a href="#" className="social-link text-white">
+                      <a
+                        href="https://instagram.com/jobsstorm"
+                        className="social-link text-white"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         <i className="uil uil-instagram" />
                       </a>
                     </li>
                     <li className="list-inline-item">
-                      <a href="#" className="social-link text-white">
-                        <i className="uil uil-envelope" />
+                      <a
+                        href="https://facebook.com/jobsstorm"
+                        className="social-link text-white"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <i className="uil uil-facebook-f" />
                       </a>
                     </li>
                     <li className="list-inline-item">
-                      <a href="#" className="social-link text-white">
+                      <a
+                        href="https://x.com/jobsstorm"
+                        className="social-link text-white"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         <i className="uil uil-twitter-alt" />
+                      </a>
+                    </li>
+                    <li className="list-inline-item">
+                      <a
+                        href="https://youtube.com/@jobsstorm"
+                        className="social-link text-white"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <i className="uil uil-youtube" />
+                      </a>
+                    </li>
+                    <li className="list-inline-item">
+                      <a
+                        href="https://linkedin.com/company/jobsstorm"
+                        className="social-link text-white"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <i className="uil uil-linkedin" />
                       </a>
                     </li>
                   </ul>
@@ -139,46 +162,79 @@ const TopHeader = () => {
                   </a>
                 </li>
                 <li className="list-inline-item py-2 me-2 align-middle">
-                  <a href="post-jobs.php" className="btn btn-info text-primary fw-bold fs-13 py-1">
+                  <a
+                    href="#"
+                    className="btn btn-info text-primary fw-bold fs-13 py-1"
+                  >
                     <i className="uil uil-lock" />
                     Europe Jobs
                   </a>
                 </li>
                 <li className="list-inline-item py-2 me-2 align-middle">
-                  <a href="post-jobs.php" className="btn btn-success fw-bold fs-13 py-1">
+                  <a href="#" className="btn btn-success fw-bold fs-13 py-1">
                     <i className="uil uil-lock" />
                     Asia Jobs
                   </a>
                 </li>
                 &nbsp; <span className="text-white">|</span> &nbsp; &nbsp;
                 <li className="list-inline-item py-2 me-2 align-middle">
-                  <a href="post-jobs.php" className="btn btn-white text-primary fw-bold fs-13 py-1">
+                  <a
+                    href="#"
+                    className="btn btn-white text-primary fw-bold fs-13 py-1"
+                  >
                     <i className="uil uil-lock" />
                     Post Jobs FREE
                   </a>
                 </li>
-                <li className="list-inline-item py-2 me-2 align-middle">
-                  <a href="#signupModal" className="btn btn-white fw-bold fs-13 py-1" data-bs-toggle="modal">
-                    <i className="uil uil-lock" />
-                    Book FREE Demo
-                  </a>
-                </li>
                 <li className="list-inline-item align-middle">
                   <div className="dropdown d-inline-block language-switch">
-                    <button type="button" className="btn" data-bs-toggle="dropdown">
-                      <img id="header-lang-img" src="assets/images/flags/us.jpg" alt="Header Language" height={16} />
+                    <button
+                      type="button"
+                      className="btn"
+                      data-bs-toggle="dropdown"
+                    >
+                      <img
+                        id="header-lang-img"
+                        src="assets/images/flags/us.jpg"
+                        alt="Header Language"
+                        height={16}
+                      />
                     </button>
                     <div className="dropdown-menu dropdown-menu-end">
-                      <a href="#" className="dropdown-item notify-item language">
-                        <img src="assets/images/flags/us.jpg" alt="user-image" className="me-1" height={12} />
+                      <a
+                        href="#"
+                        className="dropdown-item notify-item language"
+                      >
+                        <img
+                          src="assets/images/flags/us.jpg"
+                          alt="user-image"
+                          className="me-1"
+                          height={12}
+                        />
                         <span className="align-middle">English</span>
                       </a>
-                      <a href="#" className="dropdown-item notify-item language">
-                        <img src="assets/images/flags/uae.webp" alt="user-image" className="me-1" height={12} />
+                      <a
+                        href="#"
+                        className="dropdown-item notify-item language"
+                      >
+                        <img
+                          src="assets/images/flags/uae.webp"
+                          alt="user-image"
+                          className="me-1"
+                          height={12}
+                        />
                         <span className="align-middle">Arabic</span>
                       </a>
-                      <a href="#" className="dropdown-item notify-item language">
-                        <img src="assets/images/flags/germany.jpg" alt="user-image" className="me-1" height={12} />
+                      <a
+                        href="#"
+                        className="dropdown-item notify-item language"
+                      >
+                        <img
+                          src="assets/images/flags/germany.jpg"
+                          alt="user-image"
+                          className="me-1"
+                          height={12}
+                        />
                         <span className="align-middle">German</span>
                       </a>
                     </div>
@@ -191,7 +247,36 @@ const TopHeader = () => {
       </div>
       {/* END TOP-BAR */}
 
-   
+      {/* Fixed Side Button for Book Demo */}
+      <button
+        onClick={() => setShowModal(true)}
+        className="btn btn-primary text-white fw-bold position-fixed d-flex align-items-center justify-content-center"
+        style={{
+          right: "-35px",
+          top: "50%",
+          transform: "translateY(-50%) rotate(-90deg)",
+          transformOrigin: "center center",
+          padding: "8px 15px",
+          borderRadius: "5px 5px 0 0",
+          zIndex: 1030,
+          boxShadow: "-2px 2px 10px rgba(0,0,0,0.3)",
+          fontSize: "13px",
+          letterSpacing: "1.5px",
+          whiteSpace: "nowrap",
+          border: "none",
+          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          minWidth: "auto",
+        }}
+      >
+        <i
+          className="uil uil-calendar-alt"
+          style={{ marginRight: "6px", fontSize: "16px" }}
+        ></i>
+        BOOK A DEMO
+      </button>
+
+      {/* Book Demo Modal */}
+      <BookDemoModal showModal={showModal} setShowModal={setShowModal} />
     </div>
   );
 };

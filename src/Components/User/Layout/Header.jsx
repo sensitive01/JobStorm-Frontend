@@ -28,10 +28,7 @@ const Header = () => {
           {/*Navbar Start*/}
           <nav className="navbar navbar-expand-lg fixed-top sticky" id="navbar">
             <div className="container-fluid custom-container">
-              <a
-                className="navbar-brand text-dark fw-bold me-auto"
-                href="/"
-              >
+              <a className="navbar-brand text-dark fw-bold me-auto" href="/">
                 <img
                   src="assets/images/logo-dark.png"
                   height={60}
@@ -98,12 +95,19 @@ const Header = () => {
                           Plans &amp; Pricing
                         </a>
                       </li>
-                      <a className="dropdown-item" href="#">
-                        Priacy &amp; Policy
-                      </a>
+                      <li>
+                        <a className="dropdown-item" href="#">
+                          Privacy &amp; Policy
+                        </a>
+                      </li>
                       <li>
                         <a className="dropdown-item" href="/faq-pages">
                           Faqs
+                        </a>
+                      </li>
+                      <li>
+                        <a className="dropdown-item" href="/contact-us">
+                          Contact Us
                         </a>
                       </li>
                     </ul>
@@ -142,16 +146,10 @@ const Header = () => {
                             <a className="dropdown-item" href="#">
                               Sales &amp; Marketing
                             </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                            >
+                            <a className="dropdown-item" href="#">
                               Admin &amp; Operations
                             </a>
-                            <a
-                              className="dropdown-item"
-                             href="#"
-                            >
+                            <a className="dropdown-item" href="#">
                               All Other Jobs
                             </a>
                           </div>
@@ -163,34 +161,19 @@ const Header = () => {
                           </span>
                           <hr />
                           <div>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                            >
+                            <a className="dropdown-item" href="#">
                               India
                             </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                            >
+                            <a className="dropdown-item" href="#">
                               Middle East
                             </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                            >
+                            <a className="dropdown-item" href="#">
                               UAE
                             </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                            >
+                            <a className="dropdown-item" href="#">
                               Singapore
                             </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                            >
+                            <a className="dropdown-item" href="#">
                               Explore Locations
                             </a>
                           </div>
@@ -211,16 +194,10 @@ const Header = () => {
                             <a className="dropdown-item" href="#">
                               2 to 5 Years
                             </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                            >
+                            <a className="dropdown-item" href="#">
                               5 to 10 Years
                             </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                            >
+                            <a className="dropdown-item" href="#">
                               10 to 15 Years
                             </a>
                             <a className="dropdown-item" href="#">
@@ -262,7 +239,7 @@ const Header = () => {
                             className="dropdown-item"
                             href="/associated-company-list"
                           >
-                            Assocated Companies
+                            Associated Companies
                           </a>
                         </li>
                         <li>
@@ -279,13 +256,18 @@ const Header = () => {
                   {/*end dropdown*/}
 
                   <li className="nav-item">
-                    <a href="/contact-us" className="nav-link">
-                      Events &amp; Ads
+                    <a href="#" className="nav-link">
+                      Freelance Corner
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a href="#" className="nav-link">
+                      Hiring Assist
                     </a>
                   </li>
                   <li className="nav-item">
                     <a href="/contact-us" className="nav-link">
-                      Contact Us
+                      Events &amp; Ads
                     </a>
                   </li>
                 </ul>
