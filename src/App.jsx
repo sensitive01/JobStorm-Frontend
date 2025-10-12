@@ -34,6 +34,7 @@ import EmployerLogin from "./Components/Employer/login/EmployerLogin";
 import EmployeerResetPassword from "./Components/User/resetpassword/ResetPassword";
 import EmployeerChangePassword from "./Components/Employer/resetpassword/EmployeerChangePassword";
 import MainLayoutAdmin from "./Components/admin/layout/MainLayoutAdmin";
+import AddNewJobs from "./Components/jobs/AddNewJobs";
 
 function App() {
   return (
@@ -89,6 +90,7 @@ function App() {
             element={<CandidateDetailsPage />}
           />
           <Route path="/search-candidate-page" element={<SearchCandidate />} />
+                 <Route path="/post-new-job" element={<AddNewJobs />} />
         </Route>
 
         {/* <Route path="/admin" element={<MainLayoutAdmin />}></Route> */}

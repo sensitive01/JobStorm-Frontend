@@ -43,6 +43,7 @@ const EmployerLogin = () => {
         if (response?.status === 200) {
           localStorage.setItem("token", response?.data.token);
           localStorage.setItem("userId", response?.data.user?._id);
+          localStorage.setItem("role", "employer");
         }
 
         setFormData({

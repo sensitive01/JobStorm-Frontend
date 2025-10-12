@@ -139,12 +139,12 @@ const EmployerSignUpPage = () => {
       const response = await Promise.race([apiPromise, timeoutPromise]);
 
       if (response.status === 200) {
-        toast.success("Email verified!", { autoClose: 1500 });
+        // toast.success("Email verified!", { autoClose: 1500 });
         setStep(3);
       } else {
         const errorMsg = response.data?.message || "Invalid OTP";
-        // setError(errorMsg);
-        toast.error(errorMsg, { autoClose: 3000 });
+        setError(errorMsg);
+        // toast.error(errorMsg, { autoClose: 3000 });
       }
     } catch (err) {
       console.error("Verify OTP error:", err);

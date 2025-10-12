@@ -1,0 +1,41 @@
+.simple-message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding: 20px;
+}
+
+.simple-message-box {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+}
+
+.simple-message-box h2 {
+  font-size: 18px;
+  color: #333;
+  margin: 0 0 25px 0;
+  font-weight: 600;
+}
+
+.simple-login-btn {
+  background: #5b4fb8;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+  width: 100%;
+}
+
+.simple-login-btn:hover {
+  background: #4a3fa3;
+}

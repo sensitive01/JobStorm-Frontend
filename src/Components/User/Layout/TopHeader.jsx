@@ -179,7 +179,7 @@ const TopHeader = () => {
                 &nbsp; <span className="text-white">|</span> &nbsp; &nbsp;
                 <li className="list-inline-item py-2 me-2 align-middle">
                   <a
-                    href="#"
+                    href="/post-new-job"
                     className="btn btn-white text-primary fw-bold fs-13 py-1"
                   >
                     <i className="uil uil-lock" />

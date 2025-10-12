@@ -472,10 +472,8 @@ const Header = () => {
                           href="#"
                           onClick={(e) => {
                             e.preventDefault();
-                            localStorage.removeItem("userId");
-                            localStorage.removeItem("token");
-                            localStorage.removeItem("user");
-                            window.location.href = "/candidate-login";
+                            localStorage.clear();
+                            window.location.href = "/";
                           }}
                         >
                           Logout
