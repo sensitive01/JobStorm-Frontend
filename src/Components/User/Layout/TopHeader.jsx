@@ -139,13 +139,13 @@ const TopHeader = () => {
                   </a>
                 </li>
                 <li className="list-inline-item py-2 me-2 align-middle">
-                  <a href="post-jobs.php" className="btn btn-warning text-primary fw-bold fs-13 py-1">
+                  <a href="post-jobs.php" className="btn btn-info text-primary fw-bold fs-13 py-1">
                     <i className="uil uil-lock" />
                     Europe Jobs
                   </a>
                 </li>
                 <li className="list-inline-item py-2 me-2 align-middle">
-                  <a href="post-jobs.php" className="btn btn-warning fw-bold fs-13 py-1">
+                  <a href="post-jobs.php" className="btn btn-success fw-bold fs-13 py-1">
                     <i className="uil uil-lock" />
                     Asia Jobs
                   </a>
