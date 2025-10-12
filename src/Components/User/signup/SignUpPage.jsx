@@ -5,9 +5,8 @@ import "react-phone-input-2/lib/style.css";
 import {
   registerCandidate,
   resetPassword,
+  verifyOTP,
 } from "../../../api/service/axiosService";
-
-// import { sendVerificationOtp, verifyOtpCandidate } from "../../../api/service/candidateService";
 
 const SignUpPage = () => {
   const [step, setStep] = useState(1); // 1: Basic Info + Email, 2: OTP Verification, 3: Complete Registration
@@ -89,10 +88,7 @@ const SignUpPage = () => {
       );
 
       // TODO: Replace with your actual OTP API
-      const apiPromise = resetPassword(
-        formData.email.trim(),
-        formData.username.trim()
-      );
+      const apiPromise = resetPassword(formData.email.trim());
 
       const response = await Promise.race([apiPromise, timeoutPromise]);
 
@@ -137,14 +133,7 @@ const SignUpPage = () => {
       );
 
       // TODO: Replace with your actual OTP verification API
-      // const apiPromise = verifyOtpCandidate(formData.email, otp);
-
-      // TEMPORARY: Mock API call - REMOVE THIS and uncomment above line
-      const apiPromise = new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({ status: 200, data: { message: "OTP verified" } });
-        }, 1000);
-      });
+      const apiPromise = verifyOTP(formData.email, otp);
 
       const response = await Promise.race([apiPromise, timeoutPromise]);
 
@@ -178,15 +167,7 @@ const SignUpPage = () => {
     setLoading(true);
 
     try {
-      // TODO: Replace with your actual OTP API
-      // const response = await sendVerificationOtp(formData.email, formData.username);
-
-      // TEMPORARY: Mock API call
-      const response = await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({ status: 200 });
-        }, 1000);
-      });
+      const response = await resetPassword(formData.email);
 
       if (response.status === 200) {
         toast.success("OTP resent!", { autoClose: 2000 });
