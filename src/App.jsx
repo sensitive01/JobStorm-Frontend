@@ -50,11 +50,11 @@ function App() {
         <Route path="/employer-signup" element={<EmployerSignUpPage />} />
         <Route path="/employer-logout" element={<LogoutPage />} />
         <Route
-          path="/employer-reset-password"
+          path="/employer/reset-password"
           element={<EmployeerResetPassword />}
         />
         <Route
-          path="/employer-change-password"
+          path="/employer/change-password"
           element={<EmployeerChangePassword />}
         />
 
