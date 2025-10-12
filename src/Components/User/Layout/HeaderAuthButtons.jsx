@@ -251,8 +251,8 @@ const HeaderAuthButtons = () => {
                 onClick={() =>
                   handleNavigation(
                     modalType === "login"
-                      ? "/employer/login"
-                      : "/employer/signup"
+                      ? "/employer-login"
+                      : "/employer-signup"
                   )
                 }
                 onMouseEnter={(e) => {
