@@ -46,9 +46,9 @@ function App() {
         <Route path="/candidate-reset-password" element={<ResetPassword />} />
         <Route path="/candidate-change-password" element={<ChangePassword />} />
 
-        {/* <Route path="/employer-login" element={<EmployerLogin />} />
+        <Route path="/employer-login" element={<EmployerLogin />} />
         <Route path="/employer-signup" element={<EmployerSignUpPage />} />
-        <Route path="/employer-logout" element={<LogoutPage />} /> */}
+        <Route path="/employer-logout" element={<LogoutPage />} />
         <Route
           path="/employer/reset-password"
           element={<EmployeerResetPassword />}
