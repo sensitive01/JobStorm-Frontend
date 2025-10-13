@@ -18,44 +18,328 @@ const Header = () => {
     fetchData();
   }, []);
 
+  // Set body padding based on user login status and screen size
+  useEffect(() => {
+    const updateBodyPadding = () => {
+      if (userId) {
+        // Logged in user - add class and set padding
+        document.body.classList.add("user-logged-in");
+        if (window.innerWidth <= 991) {
+          document.body.style.paddingTop = "0px";
+        } else {
+          document.body.style.paddingTop = "0px";
+        }
+      } else {
+        // Not logged in - remove class
+        document.body.classList.remove("user-logged-in");
+        if (window.innerWidth <= 991) {
+          document.body.style.paddingTop = "130px";
+        } else {
+          document.body.style.paddingTop = "0px";
+        }
+      }
+    };
+
+    updateBodyPadding();
+    window.addEventListener("resize", updateBodyPadding);
+
+    return () => {
+      window.removeEventListener("resize", updateBodyPadding);
+    };
+  }, [userId]);
+
   return (
     <div>
+      <style>{`
+        /* Top Mobile Bar */
+        .mobile-top-bar {
+          display: none;
+          background: #f8f9fa;
+          border-bottom: 2px solid #6366f1;
+          padding: 8px 0;
+        }
+
+        .mobile-top-bar-content {
+          display: flex;
+          gap: 6px;
+          justify-content: center;
+          align-items: center;
+          flex-wrap: wrap;
+        }
+
+        .mobile-top-bar .btn {
+          font-size: 11px !important;
+          padding: 5px 14px !important;
+          line-height: 1.3 !important;
+          white-space: nowrap !important;
+          font-weight: 600 !important;
+          border-radius: 4px !important;
+        }
+
+        @media (max-width: 991px) {
+          .mobile-top-bar {
+            display: block;
+          }
+        }
+
+        @media (max-width: 575px) {
+          .mobile-top-bar .btn {
+            font-size: 10px !important;
+            padding: 4px 10px !important;
+          }
+
+          .mobile-top-bar-content {
+            gap: 4px;
+            padding: 0 10px;
+          }
+        }
+
+        /* Responsive logo sizing */
+        .navbar-brand img.logo-dark {
+          height: 45px;
+          transition: height 0.3s ease;
+        }
+        
+        .navbar-brand img.logo-light {
+          height: 18px;
+        }
+        
+        @media (max-width: 991px) {
+          .navbar-brand img.logo-dark {
+            height: 38px;
+          }
+          .navbar-brand img.logo-light {
+            height: 16px;
+          }
+        }
+        
+        @media (max-width: 767px) {
+          .navbar-brand img.logo-dark {
+            height: 32px;
+          }
+          .navbar-brand img.logo-light {
+            height: 14px;
+          }
+        }
+        
+        @media (max-width: 575px) {
+          .navbar-brand img.logo-dark {
+            height: 28px;
+          }
+          .navbar-brand img.logo-light {
+            height: 12px;
+          }
+        }
+
+        /* Navbar adjustments */
+        .navbar {
+          padding: 0.5rem 0;
+          z-index: 1050;
+        }
+
+        .navbar-brand {
+          flex-shrink: 0;
+        }
+
+        .navbar-toggler {
+          padding: 0.25rem 0.5rem;
+          font-size: 1.25rem;
+          border: 1px solid rgba(0,0,0,.1);
+        }
+
+        /* Add padding to body to account for fixed navbar */
+        body {
+          padding-top: 0;
+          transition: padding-top 0.3s ease;
+        }
+
+        @media (max-width: 991px) {
+          body {
+            padding-top: 0;
+          }
+        }
+
+        /* Desktop: Auth buttons on the right */
+        @media (min-width: 992px) {
+          .navbar-nav {
+            margin-left: auto;
+            margin-right: auto;
+          }
+        }
+
+        /* Mobile: Flexbox layout for header */
+        @media (max-width: 991px) {
+          .custom-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+          }
+          
+          .navbar-brand {
+            flex-shrink: 0;
+            margin: 0;
+          }
+          
+          .mobile-auth-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-shrink: 0;
+            margin-left: auto;
+          }
+
+          .mobile-job-buttons {
+            display: none;
+          }
+
+          .mobile-job-buttons-bar {
+            display: flex !important;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f5f5f5;
+            border-bottom: 3px solid #6366f1;
+            flex-wrap: wrap;
+            margin-top: 0;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 1049;
+          }
+
+          body.user-logged-in .mobile-job-buttons-bar {
+            top: 80px;
+          }
+
+          .mobile-job-buttons-bar .btn {
+            font-size: 11px !important;
+            padding: 8px 16px !important;
+            line-height: 1.4 !important;
+            white-space: nowrap !important;
+            font-weight: 600 !important;
+            flex-shrink: 0;
+            border: none !important;
+            cursor: pointer;
+          }
+
+          .mobile-job-buttons-bar .btn-warning {
+            background-color: #F5D547 !important;
+            color: #333 !important;
+          }
+
+          .mobile-job-buttons-bar .btn-info {
+            background-color: #5CB3E8 !important;
+            color: white !important;
+          }
+
+          .mobile-job-buttons-bar .btn-success {
+            background-color: #2D9B6F !important;
+            color: white !important;
+          }
+
+          .header-menu {
+            margin: 0 !important;
+            gap: 0.5rem !important;
+          }
+
+          .header-menu .list-inline-item {
+            margin: 0 !important;
+          }
+
+          .navbar-collapse {
+            position: absolute;
+            top: 130px;
+            left: 0;
+            right: 0;
+            width: 100%;
+          }
+
+          /* After login - dropdown positioned lower */
+          body.user-logged-in .navbar-collapse {
+            top: 150px;
+          }
+        }
+
+        @media (max-width: 575px) {
+          .mobile-job-buttons-bar .btn {
+            font-size: 10px !important;
+            padding: 6px 12px !important;
+          }
+
+          .mobile-auth-section {
+            gap: 0.3rem;
+          }
+        }
+
+        /* Notification badge */
+        .count {
+          top: -5px;
+          right: -5px;
+          background: #ef4444;
+          color: white;
+          font-size: 10px;
+          padding: 2px 5px;
+          border-radius: 10px;
+          min-width: 18px;
+          text-align: center;
+        }
+
+        /* Responsive spacing */
+        @media (max-width: 767px) {
+          .header-menu .fs-22 {
+            font-size: 18px !important;
+          }
+          
+          .header-item img {
+            width: 30px !important;
+            height: 30px !important;
+          }
+        }
+
+        /* Dropdown animations */
+        .dropdown-menu {
+          animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+
       <>
         <div>
           {/* START TOP-BAR */}
           <TopHeader />
           {/* END TOP-BAR */}
+
           {/*Navbar Start*/}
           <nav className="navbar navbar-expand-lg fixed-top sticky" id="navbar">
             <div className="container-fluid custom-container">
-              <a className="navbar-brand text-dark fw-bold me-auto" href="/">
+              <a className="navbar-brand text-dark fw-bold" href="/">
                 <img
                   src="assets/images/logo-dark.png"
-                  height={60}
                   alt=""
                   className="logo-dark"
                 />
                 <img
                   src="assets/images/logo-light.png"
-                  height={22}
                   alt=""
                   className="logo-light"
                 />
               </a>
-              <div>
-                <button
-                  className="navbar-toggler me-3"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#navbarCollapse"
-                  aria-controls="navbarCollapse"
-                  aria-label="Toggle navigation"
-                >
-                  <i className="mdi mdi-menu" />
-                </button>
-              </div>
+
               <div className="collapse navbar-collapse" id="navbarCollapse">
-                <ul className="navbar-nav mx-auto navbar-center">
+                <ul className="navbar-nav navbar-center">
                   <li className="nav-item">
                     <a href="/" className="nav-link">
                       Home
@@ -154,7 +438,6 @@ const Header = () => {
                             </a>
                           </div>
                         </div>
-                        {/*end col*/}
                         <div className="col-lg-4">
                           <span className="dropdown-header text-primary fw-bold">
                             Jobs by Location
@@ -178,7 +461,6 @@ const Header = () => {
                             </a>
                           </div>
                         </div>
-                        {/*end col*/}
                         <div className="col-lg-4">
                           <span className="dropdown-header text-primary fw-bold">
                             Jobs by Experience
@@ -205,13 +487,10 @@ const Header = () => {
                             </a>
                           </div>
                         </div>
-                        {/*end col*/}
                       </div>
                     </div>
                   </li>
-                  {/*end dropdown*/}
 
-                  {/* Conditionally render Employers dropdown - only show if userId is NOT present */}
                   {!userId && (
                     <li className="nav-item dropdown dropdown-hover">
                       <a
@@ -253,7 +532,6 @@ const Header = () => {
                       </ul>
                     </li>
                   )}
-                  {/*end dropdown*/}
 
                   <li className="nav-item">
                     <a href="#" className="nav-link">
@@ -271,226 +549,198 @@ const Header = () => {
                     </a>
                   </li>
                 </ul>
-                {/*end navbar-nav*/}
-              </div>
-              {/*end navabar-collapse*/}
 
-              {/* Conditionally render header menu based on userId */}
-              {userId ? (
-                // Show notifications and user profile when logged in
-                <ul className="header-menu list-inline d-flex align-items-center mb-0">
-                  <li className="list-inline-item dropdown me-4">
-                    <a
-                      href="#"
-                      className="header-item noti-icon position-relative"
-                      id="notification"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <i className="mdi mdi-bell fs-22" />
-                      <div className="count position-absolute">3</div>
-                    </a>
-                    <div
-                      className="dropdown-menu dropdown-menu-sm dropdown-menu-end p-0"
-                      aria-labelledby="notification"
-                    >
-                      <div className="notification-header border-bottom bg-light">
-                        <h6 className="mb-1"> Notification </h6>
-                        <p className="text-muted fs-13 mb-0">
-                          You have 4 unread Notification
-                        </p>
-                      </div>
-                      <div className="notification-wrapper dropdown-scroll">
+                {/* Desktop Auth Buttons - Inside collapse */}
+                <div className="ms-auto d-none d-lg-block">
+                  {userId ? (
+                    <ul className="header-menu list-inline d-flex align-items-center mb-0">
+                      <li className="list-inline-item dropdown me-3">
                         <a
                           href="#"
-                          className="text-dark notification-item d-block active"
+                          className="header-item noti-icon position-relative"
+                          id="notification"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
                         >
-                          <div className="d-flex align-items-center">
-                            <div className="flex-shrink-0 me-3">
-                              <div className="avatar-xs bg-primary text-white rounded-circle text-center">
-                                <i className="uil uil-user-check" />
-                              </div>
-                            </div>
-                            <div className="flex-grow-1">
-                              <h6 className="mt-0 mb-1 fs-14">
-                                22 verified registrations
-                              </h6>
-                              <p className="mb-0 fs-12 text-muted">
-                                <i className="mdi mdi-clock-outline" />{" "}
-                                <span>3 min ago</span>
-                              </p>
-                            </div>
-                          </div>
+                          <i className="mdi mdi-bell fs-22" />
+                          <div className="count position-absolute">3</div>
                         </a>
-                        {/*end notification-item*/}
-                        <a
-                          href="#"
-                          className="text-dark notification-item d-block"
+                        <div
+                          className="dropdown-menu dropdown-menu-sm dropdown-menu-end p-0"
+                          aria-labelledby="notification"
                         >
-                          <div className="d-flex align-items-center">
-                            <div className="flex-shrink-0 me-3">
-                              <img
-                                src="assets/images/user/img-02.jpg"
-                                className="rounded-circle avatar-xs"
-                                alt="user-pic"
-                              />
-                            </div>
-                            <div className="flex-grow-1">
-                              <h6 className="mt-0 mb-1 fs-14">James Lemire</h6>
-                              <p className="text-muted fs-12 mb-0">
-                                <i className="mdi mdi-clock-outline" />{" "}
-                                <span>15 min ago</span>
-                              </p>
-                            </div>
+                          <div className="notification-header border-bottom bg-light">
+                            <h6 className="mb-1">Notification</h6>
+                            <p className="text-muted fs-13 mb-0">
+                              You have 3 unread notifications
+                            </p>
                           </div>
-                        </a>
-                        {/*end notification-item*/}
-                        <a
-                          href="#"
-                          className="text-dark notification-item d-block"
-                        >
-                          <div className="d-flex align-items-center">
-                            <div className="flex-shrink-0 me-3">
-                              <img
-                                src="assets/images/featured-job/img-04.png"
-                                className="rounded-circle avatar-xs"
-                                alt="user-pic"
-                              />
-                            </div>
-                            <div className="flex-grow-1">
-                              <h6 className="mt-0 mb-1 fs-14">
-                                Applications has been approved
-                              </h6>
-                              <p className="text-muted mb-0 fs-12">
-                                <i className="mdi mdi-clock-outline" />{" "}
-                                <span>45 min ago</span>
-                              </p>
-                            </div>
-                          </div>
-                        </a>
-                        {/*end notification-item*/}
-                        <a
-                          href="#"
-                          className="text-dark notification-item d-block"
-                        >
-                          <div className="d-flex align-items-center">
-                            <div className="flex-shrink-0 me-3">
-                              <img
-                                src="assets/images/user/img-01.jpg"
-                                className="rounded-circle avatar-xs"
-                                alt="user-pic"
-                              />
-                            </div>
-                            <div className="flex-grow-1">
-                              <h6 className="mt-0 mb-1 fs-14">Kevin Stewart</h6>
-                              <p className="text-muted mb-0 fs-12">
-                                <i className="mdi mdi-clock-outline" />{" "}
-                                <span>1 hour ago</span>
-                              </p>
-                            </div>
-                          </div>
-                        </a>
-                        {/*end notification-item*/}
-                        <a
-                          href="#"
-                          className="text-dark notification-item d-block"
-                        >
-                          <div className="d-flex align-items-center">
-                            <div className="flex-shrink-0 me-3">
-                              <img
-                                src="assets/images/featured-job/img-01.png"
-                                className="rounded-circle avatar-xs"
-                                alt="user-pic"
-                              />
-                            </div>
-                            <div className="flex-grow-1">
-                              <h6 className="mt-0 mb-1 fs-15">
-                                Creative Agency
-                              </h6>
-                              <p className="text-muted mb-0 fs-12">
-                                <i className="mdi mdi-clock-outline" />{" "}
-                                <span>2 hour ago</span>
-                              </p>
-                            </div>
-                          </div>
-                        </a>
-                        {/*end notification-item*/}
-                      </div>
-                      {/*end notification-wrapper*/}
-                      <div className="notification-footer border-top text-center">
-                        <a className="primary-link fs-13" href="#">
-                          <i className="mdi mdi-arrow-right-circle me-1" />{" "}
-                          <span>View More..</span>
-                        </a>
-                      </div>
-                    </div>
-                  </li>
-                  <li className="list-inline-item dropdown">
-                    <a
-                      href="#"
-                      className="header-item"
-                      id="userdropdown"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <img
-                        src={accountImage}
-                        alt="mdo"
-                        width={35}
-                        height={35}
-                        className="rounded-circle me-1"
-                      />{" "}
-                      <span className="d-none d-md-inline-block fw-medium">
-                        Hi, {name}
-                      </span>
-                    </a>
-                    <ul
-                      className="dropdown-menu dropdown-menu-end"
-                      aria-labelledby="userdropdown"
-                    >
-                      <li>
-                        <a className="dropdown-item" href="/manage-jobs-page">
-                          Manage Jobs
-                        </a>
+                        </div>
                       </li>
-                      <li>
+                      <li className="list-inline-item dropdown">
                         <a
-                          className="dropdown-item"
-                          href="/saved-candidate-page"
-                        >
-                          Bookmarks Jobs
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="/my-profile">
-                          My Profile
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          className="dropdown-item"
                           href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            localStorage.clear();
-                            window.location.href = "/";
-                          }}
+                          className="header-item"
+                          id="userdropdown"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
                         >
-                          Logout
+                          <img
+                            src={accountImage}
+                            alt="user"
+                            width={35}
+                            height={35}
+                            className="rounded-circle me-1"
+                          />
+                          <span className="d-none d-xl-inline-block fw-medium">
+                            Hi, {name}
+                          </span>
                         </a>
+                        <ul
+                          className="dropdown-menu dropdown-menu-end"
+                          aria-labelledby="userdropdown"
+                        >
+                          <li>
+                            <a
+                              className="dropdown-item"
+                              href="/manage-jobs-page"
+                            >
+                              Manage Jobs
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              className="dropdown-item"
+                              href="/saved-candidate-page"
+                            >
+                              Bookmarks Jobs
+                            </a>
+                          </li>
+                          <li>
+                            <a className="dropdown-item" href="/my-profile">
+                              My Profile
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                localStorage.clear();
+                                window.location.href = "/";
+                              }}
+                            >
+                              Logout
+                            </a>
+                          </li>
+                        </ul>
                       </li>
                     </ul>
-                  </li>
-                </ul>
-              ) : (
-                // Show login/signup buttons when not logged in
-                <HeaderAuthButtons />
-              )}
-              {/*end header-menu*/}
+                  ) : (
+                    <HeaderAuthButtons />
+                  )}
+                </div>
+              </div>
+
+              {/* Mobile Auth Section */}
+              <div className="d-lg-none mobile-auth-section">
+                {userId ? (
+                  <>
+                    <ul className="header-menu list-inline d-flex align-items-center mb-0">
+                      <li className="list-inline-item dropdown">
+                        <a
+                          href="#"
+                          className="header-item"
+                          id="userdropdownMobile"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          <img
+                            src={accountImage}
+                            alt="user"
+                            width={30}
+                            height={30}
+                            className="rounded-circle"
+                          />
+                        </a>
+                        <ul
+                          className="dropdown-menu dropdown-menu-end"
+                          aria-labelledby="userdropdownMobile"
+                        >
+                          <li>
+                            <a
+                              className="dropdown-item"
+                              href="/manage-jobs-page"
+                            >
+                              Manage Jobs
+                            </a>
+                          </li>
+                          <li>
+                            <a className="dropdown-item" href="/my-profile">
+                              My Profile
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                localStorage.clear();
+                                window.location.href = "/";
+                              }}
+                            >
+                              Logout
+                            </a>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                    <button
+                      className="navbar-toggler"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#navbarCollapse"
+                      aria-controls="navbarCollapse"
+                      aria-label="Toggle navigation"
+                    >
+                      <i className="mdi mdi-menu" />
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <HeaderAuthButtons />
+                    <button
+                      className="navbar-toggler"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#navbarCollapse"
+                      aria-controls="navbarCollapse"
+                      aria-label="Toggle navigation"
+                    >
+                      <i className="mdi mdi-menu" />
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
-            {/*end container*/}
           </nav>
           {/* Navbar End */}
+
+          {/* Mobile Job Buttons Bar - Only visible on mobile devices */}
+          <div className="d-lg-none mobile-job-buttons-bar ">
+            <a href="/" className="btn btn-warning">
+              Middle East Jobs
+            </a>
+            <a href="#" className="btn btn-info">
+              Europe Jobs
+            </a>
+            <a href="#" className="btn btn-success">
+              Asia Jobs
+            </a>
+          </div>
+
           {/* START SIGN-UP MODAL */}
           <div
             className="modal fade"
@@ -598,19 +848,15 @@ const Header = () => {
                             href="/candidate-signup"
                             className="form-text text-primary text-decoration-underline"
                           >
-                            {" "}
-                            <b>Login</b>{" "}
+                            <b>Login</b>
                           </a>
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
-                {/*end modal-body*/}
               </div>
-              {/*end modal-content*/}
             </div>
-            {/*end modal-dialog*/}
           </div>
           {/* END SIGN-UP MODAL */}
         </div>

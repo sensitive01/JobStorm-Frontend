@@ -469,7 +469,7 @@ const SignUpPage = () => {
                       <div className="row">
                         <div className="col-lg-6 text-center">
                           <div className="card-body p-4">
-                            <a href="index.php">
+                            <a href="/">
                               <img
                                 src="assets/images/logo-light.png"
                                 alt=""

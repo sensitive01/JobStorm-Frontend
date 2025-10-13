@@ -1,5 +1,6 @@
 import React from "react";
 import SearchBar from "./SearchBar";
+import BrowseJobCatagories from "./BrowseJobCatagories";
 
 const Homepage = () => {
   return (
@@ -99,128 +100,9 @@ const Homepage = () => {
             </div>
             {/*end row*/}
             <div className="row">
-              <div className="col-lg-3 col-md-6 mt-4 pt-2">
-                <div className="popu-category-box rounded text-center">
-                  <div className="popu-category-icon icons-md">
-                    <i className="uim uim-layers-alt" />
-                  </div>
-                  <div className="popu-category-content mt-4">
-                    <a
-                      href="javascript:void(0)"
-                      className="text-dark stretched-link"
-                    >
-                      <h5 className="fs-18">IT &amp; Software</h5>
-                    </a>
-                    <p className="text-muted mb-0">2024 Jobs</p>
-                  </div>
-                </div>
-                {/*end popu-category-box*/}
-              </div>
+              <BrowseJobCatagories />
               {/*end col*/}
-              <div className="col-lg-3 col-md-6 mt-4 pt-2">
-                <div className="popu-category-box rounded text-center">
-                  <div className="popu-category-icon icons-md">
-                    <i className="uim uim-airplay" />
-                  </div>
-                  <div className="popu-category-content mt-4">
-                    <a href="#" className="text-dark stretched-link">
-                      <h5 className="fs-18">Technology</h5>
-                    </a>
-                    <p className="text-muted mb-0">1250 Jobs</p>
-                  </div>
-                </div>
-                {/*end popu-category-box*/}
-              </div>
-              {/*end col*/}
-              <div className="col-lg-3 col-md-6 mt-4 pt-2">
-                <div className="popu-category-box rounded text-center">
-                  <div className="popu-category-icon icons-md">
-                    <i className="uim uim-bag" />
-                  </div>
-                  <div className="popu-category-content mt-4">
-                    <a href="#" className="text-dark stretched-link">
-                      <h5 className="fs-18">Government</h5>
-                    </a>
-                    <p className="text-muted mb-0">802 Jobs</p>
-                  </div>
-                </div>
-                {/*end popu-category-box*/}
-              </div>
-              {/*end col*/}
-              <div className="col-lg-3 col-md-6 mt-4 pt-2">
-                <div className="popu-category-box rounded text-center">
-                  <div className="popu-category-icon icons-md">
-                    <i className="uim uim-user-md" />
-                  </div>
-                  <div className="popu-category-content mt-4">
-                    <a href="#" className="text-dark stretched-link">
-                      <h5 className="fs-18">Accounting / Finance</h5>
-                    </a>
-                    <p className="text-muted mb-0">577 Jobs</p>
-                  </div>
-                </div>
-                {/*end popu-category-box*/}
-              </div>
-              {/*end col*/}
-              <div className="col-lg-3 col-md-6 mt-4 pt-2">
-                <div className="popu-category-box rounded text-center">
-                  <div className="popu-category-icon icons-md">
-                    <i className="uim uim-hospital" />
-                  </div>
-                  <div className="popu-category-content mt-4">
-                    <a href="#" className="text-dark stretched-link">
-                      <h5 className="fs-18">Construction / Facilities</h5>
-                    </a>
-                    <p className="text-muted mb-0">285 Jobs</p>
-                  </div>
-                </div>
-                {/*end popu-category-box*/}
-              </div>
-              {/*end col*/}
-              <div className="col-lg-3 col-md-6 mt-4 pt-2">
-                <div className="popu-category-box rounded text-center">
-                  <div className="popu-category-icon icons-md">
-                    <i className="uim uim-telegram-alt" />
-                  </div>
-                  <div className="popu-category-content mt-4">
-                    <a href="#" className="text-dark stretched-link">
-                      <h5 className="fs-18">Tele-communications</h5>
-                    </a>
-                    <p className="text-muted mb-0">495 Jobs</p>
-                  </div>
-                </div>
-                {/*end popu-category-box*/}
-              </div>
-              {/*end col*/}
-              <div className="col-lg-3 col-md-6 mt-4 pt-2">
-                <div className="popu-category-box rounded text-center">
-                  <div className="popu-category-icon icons-md">
-                    <i className="uim uim-scenery" />
-                  </div>
-                  <div className="popu-category-content mt-4">
-                    <a href="#" className="text-dark stretched-link">
-                      <h5 className="fs-18">Design &amp; Multimedia</h5>
-                    </a>
-                    <p className="text-muted mb-0">1045 Jobs</p>
-                  </div>
-                </div>
-                {/*end popu-category-box*/}
-              </div>
-              {/*end col*/}
-              <div className="col-lg-3 col-md-6 mt-4 pt-2">
-                <div className="popu-category-box rounded text-center">
-                  <div className="popu-category-icon icons-md">
-                    <i className="uim uim-android-alt" />
-                  </div>
-                  <div className="popu-category-content mt-4">
-                    <a href="#" className="text-dark stretched-link">
-                      <h5 className="fs-18">Human Resource</h5>
-                    </a>
-                    <p className="text-muted mb-0">1516 Jobs</p>
-                  </div>
-                </div>
-                {/*end popu-category-box*/}
-              </div>
+             
               {/*end col*/}
             </div>
             {/*end row*/}
@@ -590,10 +472,7 @@ const Homepage = () => {
                           <div className="col-md-3">
                             <div className="mb-2 mb-md-0">
                               <h5 className="fs-18 mb-1">
-                                <a
-                                 href="#"
-                                  className="text-dark"
-                                >
+                                <a href="#" className="text-dark">
                                   Digital Marketing Manager
                                 </a>
                               </h5>
@@ -700,10 +579,7 @@ const Homepage = () => {
                           <div className="col-md-3">
                             <div className="mb-2 mb-md-0">
                               <h5 className="fs-18 mb-1">
-                                <a
-                                 href="#"
-                                  className="text-dark"
-                                >
+                                <a href="#" className="text-dark">
                                   Product Director
                                 </a>
                               </h5>
@@ -820,10 +696,7 @@ const Homepage = () => {
                           <div className="col-md-3">
                             <div className="mb-2 mb-md-0">
                               <h5 className="fs-18 mb-1">
-                                <a
-                                  href="#"
-                                  className="text-dark"
-                                >
+                                <a href="#" className="text-dark">
                                   Web Developer
                                 </a>
                               </h5>
@@ -934,10 +807,7 @@ const Homepage = () => {
                           <div className="col-md-3">
                             <div className="mb-2 mb-md-0">
                               <h5 className="fs-18 mb-1">
-                                <a
-                                  href="#"
-                                  className="text-dark"
-                                >
+                                <a href="#" className="text-dark">
                                   Business Associate
                                 </a>
                               </h5>
@@ -1042,10 +912,7 @@ const Homepage = () => {
                           <div className="col-md-3">
                             <div className="mb-2 mb-md-0">
                               <h5 className="fs-18 mb-1">
-                                <a
-                                href="#"
-                                  className="text-dark"
-                                >
+                                <a href="#" className="text-dark">
                                   Digital Marketing Manager
                                 </a>
                               </h5>
@@ -1141,10 +1008,7 @@ const Homepage = () => {
                           <div className="col-md-3">
                             <div className="mb-2 mb-md-0">
                               <h5 className="fs-18 mb-1">
-                                <a
-                                 href="#"
-                                  className="text-dark"
-                                >
+                                <a href="#" className="text-dark">
                                   Product Director
                                 </a>
                               </h5>
@@ -1253,10 +1117,7 @@ const Homepage = () => {
                           <div className="col-md-3">
                             <div className="mb-2 mb-md-0">
                               <h5 className="fs-18 mb-1">
-                                <a
-                                  href="#"
-                                  className="text-dark"
-                                >
+                                <a href="#" className="text-dark">
                                   Web Developer
                                 </a>
                               </h5>
@@ -1361,10 +1222,7 @@ const Homepage = () => {
                           <div className="col-md-3">
                             <div className="mb-2 mb-md-0">
                               <h5 className="fs-18 mb-1">
-                                <a
-                                  href="#"
-                                  className="text-dark"
-                                >
+                                <a href="#" className="text-dark">
                                   Business Associate
                                 </a>
                               </h5>
@@ -1469,10 +1327,7 @@ const Homepage = () => {
                           <div className="col-md-3">
                             <div className="mb-2 mb-md-0">
                               <h5 className="fs-18 mb-1">
-                                <a
-                                  href="#"
-                                  className="text-dark"
-                                >
+                                <a href="#" className="text-dark">
                                   Digital Marketing Manager
                                 </a>
                               </h5>
@@ -1568,10 +1423,7 @@ const Homepage = () => {
                           <div className="col-md-3">
                             <div className="mb-2 mb-md-0">
                               <h5 className="fs-18 mb-1">
-                                <a
-                                href="#"
-                                  className="text-dark"
-                                >
+                                <a href="#" className="text-dark">
                                   Product Director
                                 </a>
                               </h5>
@@ -1680,10 +1532,7 @@ const Homepage = () => {
                           <div className="col-md-3">
                             <div className="mb-2 mb-md-0">
                               <h5 className="fs-18 mb-1">
-                                <a
-                                 href="#"
-                                  className="text-dark"
-                                >
+                                <a href="#" className="text-dark">
                                   Web Developer
                                 </a>
                               </h5>
@@ -1788,10 +1637,7 @@ const Homepage = () => {
                           <div className="col-md-3">
                             <div className="mb-2 mb-md-0">
                               <h5 className="fs-18 mb-1">
-                                <a
-                                href="#"
-                                  className="text-dark"
-                                >
+                                <a href="#" className="text-dark">
                                   Business Associate
                                 </a>
                               </h5>
@@ -1896,10 +1742,7 @@ const Homepage = () => {
                           <div className="col-md-3">
                             <div className="mb-2 mb-md-0">
                               <h5 className="fs-18 mb-1">
-                                <a
-                                 href="#"
-                                  className="text-dark"
-                                >
+                                <a href="#" className="text-dark">
                                   Digital Marketing Manager
                                 </a>
                               </h5>
@@ -1996,10 +1839,7 @@ const Homepage = () => {
                           <div className="col-md-3">
                             <div className="mb-2 mb-md-0">
                               <h5 className="fs-18 mb-1">
-                                <a
-                                  href="#"
-                                  className="text-dark"
-                                >
+                                <a href="#" className="text-dark">
                                   Product Director
                                 </a>
                               </h5>
@@ -2108,10 +1948,7 @@ const Homepage = () => {
                           <div className="col-md-3">
                             <div className="mb-2 mb-md-0">
                               <h5 className="fs-18 mb-1">
-                                <a
-                                 href="#"
-                                  className="text-dark"
-                                >
+                                <a href="#" className="text-dark">
                                   Web Developer
                                 </a>
                               </h5>
@@ -2216,10 +2053,7 @@ const Homepage = () => {
                           <div className="col-md-3">
                             <div className="mb-2 mb-md-0">
                               <h5 className="fs-18 mb-1">
-                                <a
-                                  href="#"
-                                  className="text-dark"
-                                >
+                                <a href="#" className="text-dark">
                                   Business Associate
                                 </a>
                               </h5>
@@ -2324,10 +2158,7 @@ const Homepage = () => {
                           <div className="col-md-3">
                             <div className="mb-2 mb-md-0">
                               <h5 className="fs-18 mb-1">
-                                <a
-                                  href="#"
-                                  className="text-dark"
-                                >
+                                <a href="#" className="text-dark">
                                   Digital Marketing Manager
                                 </a>
                               </h5>
@@ -2423,10 +2254,7 @@ const Homepage = () => {
                           <div className="col-md-3">
                             <div className="mb-2 mb-md-0">
                               <h5 className="fs-18 mb-1">
-                                <a
-                                 href="#"
-                                  className="text-dark"
-                                >
+                                <a href="#" className="text-dark">
                                   Product Director
                                 </a>
                               </h5>
@@ -2836,10 +2664,7 @@ const Homepage = () => {
                       have Internet tend been in use by typesetters since
                       century.
                     </p>
-                    <a
-                      href="#"
-                      className="form-text text-primary"
-                    >
+                    <a href="#" className="form-text text-primary">
                       Read more{" "}
                       <i className="mdi mdi-chevron-right align-middle" />
                     </a>
@@ -2896,10 +2721,7 @@ const Homepage = () => {
                       Due to its widespread use as filler text for layouts,
                       non-readability is of great importance: human perception.
                     </p>
-                    <a
-                      href="#"
-                      className="form-text text-primary"
-                    >
+                    <a href="#" className="form-text text-primary">
                       Read more{" "}
                       <i className="mdi mdi-chevron-right align-middle" />
                     </a>
@@ -2956,10 +2778,7 @@ const Homepage = () => {
                       One disadvantage of Lorum Ipsum is that in Latin certain
                       letters appear more frequently than others.
                     </p>
-                    <a
-                      href="#"
-                      className="form-text text-primary"
-                    >
+                    <a href="#" className="form-text text-primary">
                       Read more{" "}
                       <i className="mdi mdi-chevron-right align-middle" />
                     </a>
