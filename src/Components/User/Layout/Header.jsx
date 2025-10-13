@@ -18,25 +18,17 @@ const Header = () => {
     fetchData();
   }, []);
 
-  // Set body padding based on user login status and screen size
+// Set body padding based on user login status and screen size
   useEffect(() => {
     const updateBodyPadding = () => {
       if (userId) {
         // Logged in user - add class and set padding
         document.body.classList.add("user-logged-in");
-        if (window.innerWidth <= 991) {
-          document.body.style.paddingTop = "0px";
-        } else {
-          document.body.style.paddingTop = "0px";
-        }
+        document.body.style.paddingTop = "0px";
       } else {
-        // Not logged in - remove class
+        // Not logged in - remove class and set padding
         document.body.classList.remove("user-logged-in");
-        if (window.innerWidth <= 991) {
-          document.body.style.paddingTop = "130px";
-        } else {
-          document.body.style.paddingTop = "0px";
-        }
+        document.body.style.paddingTop = "0px";
       }
     };
 
@@ -203,7 +195,7 @@ const Header = () => {
             flex-wrap: wrap;
             margin-top: 0;
             position: fixed;
-            top: 60px;
+            top: 50px;
             left: 0;
             right: 0;
             width: 100%;
@@ -251,7 +243,7 @@ const Header = () => {
 
           .navbar-collapse {
             position: absolute;
-            top: 130px;
+            top: 90px;
             left: 0;
             right: 0;
             width: 100%;
@@ -259,7 +251,7 @@ const Header = () => {
 
           /* After login - dropdown positioned lower */
           body.user-logged-in .navbar-collapse {
-            top: 150px;
+            top: 120px;
           }
         }
 
