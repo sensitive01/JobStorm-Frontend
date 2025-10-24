@@ -42,11 +42,11 @@ export const resetPassword = async (userEmail) => {
   }
 };
 
-
-export const verifyOTP = async (userEmail,otp) => {
+export const verifyOTP = async (userEmail, otp) => {
   try {
     const response = await axiosInstance.post(`/verifyemailotp`, {
-      userEmail,otp
+      userEmail,
+      otp,
     });
     return response;
   } catch (err) {
@@ -54,11 +54,12 @@ export const verifyOTP = async (userEmail,otp) => {
   }
 };
 
-
-export const changePassword = async (userEmail,password,confirmPassword) => {
+export const changePassword = async (userEmail, password, confirmPassword) => {
   try {
     const response = await axiosInstance.post(`/change-password`, {
-      userEmail,password,confirmPassword
+      userEmail,
+      password,
+      confirmPassword,
     });
     return response;
   } catch (err) {
@@ -77,7 +78,33 @@ export const getMyName = async (userId) => {
 
 export const bookDemoShedule = async (formData) => {
   try {
-    const response = await axiosInstance.post(`/book-my-demo`,{formData});
+    const response = await axiosInstance.post(`/book-my-demo`, { formData });
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const editUserData = async (userId, formData) => {
+  try {
+    const response = await axiosInstance.post(
+      `/edit-form-data/${userId}`,
+       formData ,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data", // important for files
+        },
+      }
+    );
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const getUserDetails = async (userId) => {
+  try {
+    const response = await axiosInstance.get(`/get-user-data/${userId}`);
     return response;
   } catch (err) {
     return err;
