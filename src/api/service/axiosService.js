@@ -119,3 +119,12 @@ export const getAllJobs = async () => {
     return err;
   }
 };
+
+export const submitEasyApply = async (uploadedFileUrl, jobId,coverLetter,candidateId) => {
+  try {
+    const response = await axiosInstance.post(`/apply-job/${jobId}/${candidateId}`,{uploadedFileUrl,coverLetter});
+    return response;
+  } catch (err) {
+    return err;
+  }
+};

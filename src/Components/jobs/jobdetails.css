@@ -4,10 +4,11 @@
    =========================== */
 
 .job-details-page {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f8f9fa;
   min-height: 100vh;
   padding-bottom: 40px;
+  margin-top: 130px;
 }
 
 .job-details-page * {
@@ -189,7 +190,7 @@
 }
 
 .job-details-page .section-list li:before {
-  content: '✓';
+  content: "✓";
   position: absolute;
   left: 0;
   color: #667eea;
@@ -332,8 +333,13 @@
 }
 
 @keyframes pulse-job-details {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 /* ===========================
@@ -397,6 +403,419 @@
 }
 
 /* ===========================
+   APPLICATION MODAL STYLES
+   =========================== */
+
+/* Modal Overlay */
+.job-details-page .application-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  animation: fadeIn-modal 0.3s ease;
+}
+
+@keyframes fadeIn-modal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Modal Container */
+.job-details-page .application-modal {
+  background: white;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  animation: slideUp-modal 0.3s ease;
+}
+
+@keyframes slideUp-modal {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Modal Header */
+.job-details-page .modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px 25px;
+  position: relative;
+}
+
+.job-details-page .modal-header h2 {
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  padding-right: 40px;
+}
+
+.job-details-page .modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 22px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  line-height: 1;
+}
+
+.job-details-page .modal-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+/* Modal Body */
+.job-details-page .modal-body {
+  padding: 25px 25px;
+}
+
+.job-details-page .modal-intro {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.job-details-page .modal-intro p {
+  font-size: 14px;
+  color: #555;
+  margin: 0 0 5px 0;
+  line-height: 1.5;
+}
+
+.job-details-page .modal-intro .job-title-modal {
+  font-weight: 600;
+  color: #667eea;
+}
+
+/* Application Options */
+.job-details-page .application-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.job-details-page .application-option {
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.job-details-page .application-option:hover {
+  border-color: #667eea;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+  transform: translateY(-2px);
+}
+
+.job-details-page .option-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.job-details-page .option-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.job-details-page .option-icon.easy-apply-icon {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.job-details-page .option-icon.manual-apply-icon {
+  background: #f0f0f0;
+  color: #667eea;
+}
+
+.job-details-page .option-content h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 4px 0;
+}
+
+.job-details-page .option-content .option-badge {
+  display: inline-block;
+  background: #d4edda;
+  color: #155724;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.job-details-page .option-description {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Easy Apply Form */
+.job-details-page .easy-apply-form {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid #f0f0f0;
+}
+
+.job-details-page .form-group {
+  margin-bottom: 18px;
+}
+
+.job-details-page .form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.job-details-page .form-group label .required {
+  color: #ff4444;
+  margin-left: 2px;
+}
+
+.job-details-page .file-upload-area {
+  border: 2px dashed #d0d0d0;
+  border-radius: 10px;
+  padding: 25px 20px;
+  text-align: center;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.job-details-page .file-upload-area:hover {
+  border-color: #667eea;
+  background: #f0f2ff;
+}
+
+.job-details-page .file-upload-area.drag-over {
+  border-color: #667eea;
+  background: #e6eaff;
+}
+
+.job-details-page .upload-icon {
+  font-size: 40px;
+  color: #667eea;
+  margin-bottom: 10px;
+}
+
+.job-details-page .file-upload-area p {
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 6px 0;
+}
+
+.job-details-page .file-upload-area .file-types {
+  font-size: 11px;
+  color: #999;
+  margin: 0;
+}
+
+.job-details-page .file-upload-area input[type="file"] {
+  display: none;
+}
+
+.job-details-page .uploaded-file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: #f0f2ff;
+  border: 1px solid #d0d7ff;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.job-details-page .uploaded-file-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.job-details-page .file-icon {
+  font-size: 22px;
+  color: #667eea;
+}
+
+.job-details-page .file-details {
+  flex: 1;
+}
+
+.job-details-page .file-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  margin: 0 0 2px 0;
+}
+
+.job-details-page .file-size {
+  font-size: 11px;
+  color: #666;
+  margin: 0;
+}
+
+.job-details-page .remove-file {
+  background: none;
+  border: none;
+  color: #ff4444;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 5px;
+  transition: all 0.3s ease;
+}
+
+.job-details-page .remove-file:hover {
+  transform: scale(1.2);
+}
+
+.job-details-page .form-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  resize: vertical;
+  transition: all 0.3s ease;
+}
+
+.job-details-page .form-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.job-details-page .char-count {
+  text-align: right;
+  font-size: 12px;
+  color: #999;
+  margin-top: 5px;
+}
+
+/* Modal Footer */
+.job-details-page .modal-footer {
+  padding: 15px 25px;
+  background: #f8f9fa;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.job-details-page .btn-cancel {
+  background: white;
+  color: #666;
+  border: 2px solid #d0d0d0;
+}
+
+.job-details-page .btn-cancel:hover {
+  background: #f8f9fa;
+  border-color: #999;
+}
+
+.job-details-page .btn-submit {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 10px 28px;
+}
+
+.job-details-page .btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.job-details-page .btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Success State */
+.job-details-page .success-message {
+  text-align: center;
+  padding: 35px 25px;
+}
+
+.job-details-page .success-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 18px;
+  font-size: 36px;
+  color: white;
+  animation: scaleIn 0.5s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.job-details-page .success-message h3 {
+  font-size: 22px;
+  color: #1a1a1a;
+  margin: 0 0 10px 0;
+}
+
+.job-details-page .success-message p {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 22px 0;
+  line-height: 1.6;
+}
+
+/* ===========================
    Loading & Error States
    =========================== */
 .job-details-page .loading-container,
@@ -421,8 +840,12 @@
 }
 
 @keyframes spin-job-details {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .job-details-page .loading-container p {
@@ -492,6 +915,37 @@
   .job-details-page .details-section h2 {
     font-size: 20px;
   }
+
+  /* Modal Responsive */
+  .job-details-page .application-modal {
+    max-width: 100%;
+    margin: 10px;
+  }
+
+  .job-details-page .modal-header {
+    padding: 20px;
+  }
+
+  .job-details-page .modal-header h2 {
+    font-size: 20px;
+  }
+
+  .job-details-page .modal-body {
+    padding: 25px 20px;
+  }
+
+  .job-details-page .application-option {
+    padding: 20px;
+  }
+
+  .job-details-page .modal-footer {
+    flex-direction: column-reverse;
+    padding: 15px 20px;
+  }
+
+  .job-details-page .modal-footer .btn {
+    width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -518,6 +972,25 @@
   .job-details-page .meta-item {
     font-size: 14px;
   }
+
+  /* Modal Mobile */
+  .job-details-page .application-modal-overlay {
+    padding: 10px;
+  }
+
+  .job-details-page .modal-header h2 {
+    font-size: 18px;
+  }
+
+  .job-details-page .option-content h3 {
+    font-size: 16px;
+  }
+
+  .job-details-page .option-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
 }
 
 /* ===========================
@@ -527,7 +1000,8 @@
   .job-details-page .job-details-header,
   .job-details-page .back-button,
   .job-details-page .job-header-actions,
-  .job-details-page .job-details-sidebar {
+  .job-details-page .job-details-sidebar,
+  .job-details-page .application-modal-overlay {
     display: none;
   }
 

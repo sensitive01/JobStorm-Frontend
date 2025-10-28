@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './jobportal.css';
-import { getAllJobs } from '../../api/service/axiosService';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./jobportal.css";
+import { getAllJobs } from "../../api/service/axiosService";
 
 // API Configuration
-const API_BASE_URL = import.meta.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL =
+  import.meta.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
 const getAuthToken = () => {
-  return localStorage.getItem('authToken');
+  return localStorage.getItem("userId");
 };
 
 const AllJobList = () => {
@@ -17,14 +18,16 @@ const AllJobList = () => {
   const [loading, setLoading] = useState(true);
   const [appliedJobs, setAppliedJobs] = useState(new Set());
   const [savedJobs, setSavedJobs] = useState(new Set());
-  const [sortBy, setSortBy] = useState('newest');
-  const [filterType, setFilterType] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState("newest");
+  const [filterType, setFilterType] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [error, setError] = useState(null);
 
   // Fetch jobs on component mount and when filters change
   useEffect(() => {
     fetchJobs();
+    fetchAppliedJobs();
+    fetchSavedJobs();
   }, [sortBy, filterType, searchQuery]);
 
   // Helper function to calculate time ago
@@ -33,9 +36,9 @@ const AllJobList = () => {
     const now = new Date();
     const diffTime = Math.abs(now - date);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 0) return 'today';
-    if (diffDays === 1) return '1 day ago';
+
+    if (diffDays === 0) return "today";
+    if (diffDays === 1) return "1 day ago";
     if (diffDays < 7) return `${diffDays} days ago`;
     if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
     return `${Math.floor(diffDays / 30)} months ago`;
@@ -47,69 +50,105 @@ const AllJobList = () => {
       setLoading(true);
       setError(null);
 
+      const candidateId = getAuthToken(); // Get current user ID
+
       const response = await getAllJobs();
-      console.log('API Response:', response);
-      
-      if (response.status===200) {
+      console.log("API Response:", response);
+
+      if (response.status === 200) {
         // Map API data to component format
-        let mappedJobs = response.data.map(job => ({
-          ...job,
-          // Map API fields to component fields
-          id: job._id,
-          title: job.jobTitle,
-          companyLogo: `https://ui-avatars.com/api/?name=${encodeURIComponent(job.companyName)}&background=4A90E2&color=fff&size=128&bold=true`,
-          salary: job.salaryFrom && job.salaryTo 
-            ? `₹${job.salaryFrom.toLocaleString()} - ₹${job.salaryTo.toLocaleString()}/${job.salaryType}`
-            : null,
-          experience: job.experienceLevel,
-          type: job.jobType,
-          description: job.jobDescription,
-          tags: job.skills || [],
-          postedDate: getTimeAgo(job.createdAt),
-          urgent: job.status === 'urgent' || false
-        }));
+        let mappedJobs = response.data.map((job) => {
+          // Check if current user has applied to this job
+          const hasApplied =
+            candidateId &&
+            job.applications?.some(
+              (application) => application?.applicantId === candidateId
+            );
+
+          return {
+            ...job,
+            // Map API fields to component fields
+            id: job._id,
+            title: job.jobTitle,
+            companyLogo: `https://ui-avatars.com/api/?name=${encodeURIComponent(
+              job.companyName
+            )}&background=4A90E2&color=fff&size=128&bold=true`,
+            salary:
+              job.salaryFrom && job.salaryTo
+                ? `₹${job.salaryFrom.toLocaleString()} - ₹${job.salaryTo.toLocaleString()}/${
+                    job.salaryType
+                  }`
+                : null,
+            experience: job.experienceLevel,
+            type: job.jobType,
+            description: job.jobDescription,
+            tags: job.skills || [],
+            postedDate: getTimeAgo(job.createdAt),
+            urgent: job.status === "urgent" || false,
+            isApplied: hasApplied || false, // Track if user has applied
+          };
+        });
 
         // Apply search filter
         if (searchQuery) {
-          mappedJobs = mappedJobs.filter(job =>
-            job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            job.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (job.tags && job.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
+          mappedJobs = mappedJobs.filter(
+            (job) =>
+              job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              job.companyName
+                .toLowerCase()
+                .includes(searchQuery.toLowerCase()) ||
+              (job.tags &&
+                job.tags.some((tag) =>
+                  tag.toLowerCase().includes(searchQuery.toLowerCase())
+                ))
           );
         }
 
         // Apply type filter
-        if (filterType !== 'all') {
-          mappedJobs = mappedJobs.filter(job => 
-            job.type && job.type.toLowerCase() === filterType.toLowerCase()
+        if (filterType !== "all") {
+          mappedJobs = mappedJobs.filter(
+            (job) =>
+              job.type && job.type.toLowerCase() === filterType.toLowerCase()
           );
         }
 
         // Apply sorting
         switch (sortBy) {
-          case 'newest':
-            mappedJobs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+          case "newest":
+            mappedJobs.sort(
+              (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+            );
             break;
-          case 'oldest':
-            mappedJobs.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+          case "oldest":
+            mappedJobs.sort(
+              (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+            );
             break;
-          case 'salary-high':
+          case "salary-high":
             mappedJobs.sort((a, b) => (b.salaryTo || 0) - (a.salaryTo || 0));
             break;
-          case 'salary-low':
-            mappedJobs.sort((a, b) => (a.salaryFrom || 0) - (b.salaryFrom || 0));
+          case "salary-low":
+            mappedJobs.sort(
+              (a, b) => (a.salaryFrom || 0) - (b.salaryFrom || 0)
+            );
             break;
           default:
             break;
         }
 
         setJobs(mappedJobs);
+
+        // Update applied jobs Set from the mapped jobs
+        const appliedIds = new Set(
+          mappedJobs.filter((job) => job.isApplied).map((job) => job.id)
+        );
+        setAppliedJobs(appliedIds);
       } else {
         setJobs([]);
       }
     } catch (error) {
-      console.error('Error fetching jobs:', error);
-      setError('Failed to load jobs. Please try again later.');
+      console.error("Error fetching jobs:", error);
+      setError("Failed to load jobs. Please try again later.");
       setJobs([]);
     } finally {
       setLoading(false);
@@ -122,19 +161,22 @@ const AllJobList = () => {
       const token = getAuthToken();
       if (!token) return;
 
-      const response = await fetch(`${API_BASE_URL}/applications/my-applications`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/applications/my-applications`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
-        const appliedIds = new Set(data.map(app => app.jobId || app.id));
-        setAppliedJobs(appliedIds);
+        const appliedIds = new Set(data.map((app) => app.jobId || app.id));
+        setAppliedJobs((prev) => new Set([...prev, ...appliedIds]));
       }
     } catch (error) {
-      console.error('Error fetching applied jobs:', error);
+      console.error("Error fetching applied jobs:", error);
     }
   };
 
@@ -146,17 +188,17 @@ const AllJobList = () => {
 
       const response = await fetch(`${API_BASE_URL}/saved-jobs`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
       if (response.ok) {
         const data = await response.json();
-        const savedIds = new Set(data.map(job => job.jobId || job.id));
+        const savedIds = new Set(data.map((job) => job.jobId || job.id));
         setSavedJobs(savedIds);
       }
     } catch (error) {
-      console.error('Error fetching saved jobs:', error);
+      console.error("Error fetching saved jobs:", error);
     }
   };
 
@@ -164,76 +206,53 @@ const AllJobList = () => {
   const handleApply = async (jobId) => {
     const token = getAuthToken();
     if (!token) {
-      alert('Please login to apply for jobs');
+      alert("Please login to apply for jobs");
+      navigate("/candidate-login");
       return;
     }
 
-    const confirmed = window.confirm('Are you sure you want to apply for this job?');
-    if (!confirmed) return;
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/jobs/${jobId}/apply`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          jobId,
-          appliedAt: new Date().toISOString(),
-        }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to apply');
-      }
-
-      setAppliedJobs(prev => new Set(prev).add(jobId));
-      alert('Application submitted successfully!');
-    } catch (error) {
-      console.error('Error applying for job:', error);
-      alert(error.message || 'Failed to apply for the job. Please try again.');
-    }
+    // Navigate to job details page where they can apply with full form
+    navigate(`/job-preview/${jobId}`);
   };
 
   // Handle Save Job for Later
   const handleSaveJob = async (jobId) => {
     const token = getAuthToken();
     if (!token) {
-      alert('Please login to save jobs');
+      alert("Please login to save jobs");
+      navigate("/candidate-login");
       return;
     }
 
     try {
       const isSaved = savedJobs.has(jobId);
       const url = `${API_BASE_URL}/jobs/${jobId}/save`;
-      const method = isSaved ? 'DELETE' : 'POST';
+      const method = isSaved ? "DELETE" : "POST";
 
       const response = await fetch(url, {
         method,
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 
-      if (!response.ok) throw new Error('Failed to save job');
+      if (!response.ok) throw new Error("Failed to save job");
 
       if (isSaved) {
-        setSavedJobs(prev => {
+        setSavedJobs((prev) => {
           const newSet = new Set(prev);
           newSet.delete(jobId);
           return newSet;
         });
-        alert('Job removed from saved jobs');
+        alert("Job removed from saved jobs");
       } else {
-        setSavedJobs(prev => new Set(prev).add(jobId));
-        alert('Job saved successfully!');
+        setSavedJobs((prev) => new Set(prev).add(jobId));
+        alert("Job saved successfully!");
       }
     } catch (error) {
-      console.error('Error saving job:', error);
-      alert('Failed to save job. Please try again.');
+      console.error("Error saving job:", error);
+      alert("Failed to save job. Please try again.");
     }
   };
 
@@ -246,13 +265,13 @@ const AllJobList = () => {
   // Get badge class for job type
   const getJobTypeBadge = (type) => {
     const badges = {
-      'full-time': 'badge-success',
-      'part-time': 'badge-warning',
-      'contract': 'badge-info',
-      'internship': 'badge-primary',
-      'freelance': 'badge-secondary',
+      "full-time": "badge-success",
+      "part-time": "badge-warning",
+      contract: "badge-info",
+      internship: "badge-primary",
+      freelance: "badge-secondary",
     };
-    return badges[type?.toLowerCase()] || 'badge-secondary';
+    return badges[type?.toLowerCase()] || "badge-secondary";
   };
 
   return (
@@ -334,27 +353,40 @@ const AllJobList = () => {
           <div className="job-cards-container">
             {jobs.map((job) => (
               <div key={job.id || job._id} className="job-card">
+                {/* Posted Date at Top */}
+                <div className="job-posted">
+                  Posted {job.postedDate || "2 days ago"}
+                </div>
+
+                {/* Job Card Header */}
                 <div className="job-card-header">
                   <div className="company-info">
                     <img
-                      src={job.companyLogo || 'https://via.placeholder.com/60'}
+                      src={job.companyLogo || "https://via.placeholder.com/60"}
                       alt={job.companyName}
                       className="company-logo"
                     />
                     <div>
                       <h3 className="job-title">{job.title || job.jobTitle}</h3>
-                      <p className="company-name">{job.companyName || job.company}</p>
+                      <p className="company-name">
+                        {job.companyName || job.company}
+                      </p>
                     </div>
                   </div>
                   <button
-                    className={`save-btn ${isSaved(job.id || job._id) ? 'saved' : ''}`}
+                    className={`save-btn ${
+                      isSaved(job.id || job._id) ? "saved" : ""
+                    }`}
                     onClick={() => handleSaveJob(job.id || job._id)}
-                    title={isSaved(job.id || job._id) ? 'Unsave' : 'Save for later'}
+                    title={
+                      isSaved(job.id || job._id) ? "Unsave" : "Save for later"
+                    }
                   >
-                    {isSaved(job.id || job._id) ? '❤️' : '🤍'}
+                    {isSaved(job.id || job._id) ? "❤️" : "🤍"}
                   </button>
                 </div>
 
+                {/* Job Details */}
                 <div className="job-details">
                   <div className="job-detail-item">
                     <span className="icon">📍</span>
@@ -374,38 +406,44 @@ const AllJobList = () => {
                   )}
                 </div>
 
+                {/* Job Description - Will be truncated to 3 lines by CSS */}
                 {job.description && (
-                  <p className="job-description">
-                    {job.description.length > 150
-                      ? `${job.description.substring(0, 150)}...`
-                      : job.description}
-                  </p>
+                  <p className="job-description">{job.description}</p>
                 )}
 
+                {/* Job Tags - Limited display */}
                 <div className="job-tags">
                   {job.type && (
                     <span className={`badge ${getJobTypeBadge(job.type)}`}>
                       {job.type}
                     </span>
                   )}
-                  {job.tags && job.tags.slice(0, 3).map((tag, index) => (
-                    <span key={index} className="badge badge-light">
-                      {tag}
+                  {/* Show max 4 skill tags to prevent overflow */}
+                  {job.tags &&
+                    job.tags.slice(0, 4).map((tag, index) => (
+                      <span key={index} className="badge badge-light">
+                        {tag}
+                      </span>
+                    ))}
+                  {/* Show +X more if there are additional tags */}
+                  {job.tags && job.tags.length > 4 && (
+                    <span className="badge badge-secondary">
+                      +{job.tags.length - 4} more
                     </span>
-                  ))}
+                  )}
                   {job.urgent && (
                     <span className="badge badge-danger">Urgent</span>
                   )}
                 </div>
 
+                {/* Job Card Footer - NOW AT BOTTOM */}
                 <div className="job-card-footer">
-                  <div className="job-posted">
-                    Posted {job.postedDate || '2 days ago'}
-                  </div>
                   <div className="job-actions">
                     <button
                       className="btn btn-outline"
-                      onClick={() => navigate(`/job/${job.id || job._id}`)}
+                      onClick={() =>
+                        navigate(`/job-preview/${job.id || job._id}`)
+                      }
                     >
                       View Details
                     </button>

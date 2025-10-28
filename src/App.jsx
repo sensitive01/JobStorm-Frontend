@@ -88,7 +88,7 @@ function App() {
           <Route path="/manage-jobs-page" element={<ManageJobsPage />} />
           <Route path="/saved-candidate-page" element={<SavedCandidate />} />
           <Route path="/job-list" element={<AllJobList />} />
-          <Route path="/job/:id" element={<JobDetails />} />
+          <Route path="/job-preview/:id" element={<JobDetails />} />
           <Route
             path="/candidate-details-page"
             element={<CandidateDetailsPage />}
