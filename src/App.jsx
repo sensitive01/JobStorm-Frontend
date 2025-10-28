@@ -35,6 +35,8 @@ import EmployeerResetPassword from "./Components/User/resetpassword/ResetPasswor
 import EmployeerChangePassword from "./Components/Employer/resetpassword/EmployeerChangePassword";
 import MainLayoutAdmin from "./Components/admin/layout/MainLayoutAdmin";
 import AddNewJobs from "./Components/jobs/AddNewJobs";
+import AllJobList from "./Components/jobs/AllJobLIst";
+import JobDetails from "./Components/jobs/JobDetails";
 
 function App() {
   return (
@@ -85,12 +87,14 @@ function App() {
           <Route path="/page-not-found" element={<PageNotFoundPage />} />
           <Route path="/manage-jobs-page" element={<ManageJobsPage />} />
           <Route path="/saved-candidate-page" element={<SavedCandidate />} />
+          <Route path="/job-list" element={<AllJobList />} />
+          <Route path="/job/:id" element={<JobDetails />} />
           <Route
             path="/candidate-details-page"
             element={<CandidateDetailsPage />}
           />
           <Route path="/search-candidate-page" element={<SearchCandidate />} />
-                 <Route path="/post-new-job" element={<AddNewJobs />} />
+          <Route path="/post-new-job" element={<AddNewJobs />} />
         </Route>
 
         {/* <Route path="/admin" element={<MainLayoutAdmin />}></Route> */}

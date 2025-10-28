@@ -96,7 +96,7 @@ export const editUserData = async (userId, formData) => {
         },
       }
     );
-    return response;
+      return response;
   } catch (err) {
     return err;
   }
@@ -105,6 +105,15 @@ export const editUserData = async (userId, formData) => {
 export const getUserDetails = async (userId) => {
   try {
     const response = await axiosInstance.get(`/get-user-data/${userId}`);
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const getAllJobs = async () => {
+  try {
+    const response = await axiosInstance.get(`/employer/fetchjobs`);
     return response;
   } catch (err) {
     return err;

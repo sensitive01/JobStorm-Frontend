@@ -343,7 +343,7 @@ const EditFormDataPage = ({ formData }) => {
     try {
       const response = await editUserData(userId, submitData);
 
-      if (response.success) {
+      if (response.status===200) {
         alert("Profile updated successfully!");
         window.location.reload();
       } else {

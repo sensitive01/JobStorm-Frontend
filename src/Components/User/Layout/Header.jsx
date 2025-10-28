@@ -410,7 +410,7 @@ const Header = () => {
                           </span>
                           <hr />
                           <div>
-                            <a className="dropdown-item" href="#">
+                            <a className="dropdown-item" href="/job-list">
                               IT Jobs
                             </a>
                             <a className="dropdown-item" href="#">
