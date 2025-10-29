@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import "./jobApplicationform.css";
+import "./jobapplicationform.css";
 
 const JobApplicationForm = () => {
   const navigate = useNavigate();
