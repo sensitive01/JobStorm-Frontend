@@ -1,0 +1,502 @@
+/* ===========================
+   Job Application Form Styles
+   =========================== */
+
+.job-application-form {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 100px 0 60px;
+  margin-top: 30px;
+}
+
+/* ===========================
+   Container
+   =========================== */
+.job-application-form .container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ===========================
+   Form Header
+   =========================== */
+.job-application-form .form-header {
+  text-align: center;
+  margin-bottom: 40px;
+  color: white;
+}
+
+.job-application-form .form-header h1 {
+  font-size: 36px;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.job-application-form .form-header p {
+  font-size: 18px;
+  margin: 0;
+  opacity: 0.95;
+}
+
+/* ===========================
+   Application Form
+   =========================== */
+.job-application-form .application-form {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* ===========================
+   Form Sections
+   =========================== */
+.job-application-form .form-section {
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.job-application-form .form-section:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.job-application-form .section-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 25px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.job-application-form .section-title .optional {
+  font-size: 14px;
+  font-weight: 400;
+  color: #999;
+}
+
+/* ===========================
+   Resume Upload Section
+   =========================== */
+.job-application-form .resume-upload-container {
+  margin-bottom: 20px;
+}
+
+.job-application-form .upload-area {
+  position: relative;
+  border: 2px dashed #667eea;
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  background: #f8f9ff;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.job-application-form .upload-area:hover {
+  background: #f0f3ff;
+  border-color: #5568d3;
+}
+
+.job-application-form .file-input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.job-application-form .upload-label {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.job-application-form .upload-icon {
+  font-size: 48px;
+}
+
+.job-application-form .upload-text {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.job-application-form .upload-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #667eea;
+  margin: 0;
+}
+
+.job-application-form .upload-subtitle {
+  font-size: 14px;
+  color: #999;
+  margin: 0;
+}
+
+/* Resume Preview */
+.job-application-form .resume-preview {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 2px solid #e0e0e0;
+}
+
+.job-application-form .preview-icon {
+  font-size: 40px;
+  flex-shrink: 0;
+}
+
+.job-application-form .preview-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.job-application-form .preview-filename {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 5px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.job-application-form .preview-size {
+  font-size: 13px;
+  color: #999;
+  margin: 0;
+}
+
+.job-application-form .remove-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.job-application-form .remove-btn:hover {
+  background: #c82333;
+  transform: scale(1.1);
+}
+
+/* ===========================
+   Form Groups
+   =========================== */
+.job-application-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.job-application-form .form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.job-application-form label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.job-application-form .required {
+  color: #dc3545;
+  margin-left: 3px;
+}
+
+.job-application-form input[type="text"],
+.job-application-form input[type="email"],
+.job-application-form input[type="tel"],
+.job-application-form input[type="number"],
+.job-application-form select,
+.job-application-form textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.job-application-form input:focus,
+.job-application-form select:focus,
+.job-application-form textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.job-application-form input.error,
+.job-application-form select.error,
+.job-application-form textarea.error {
+  border-color: #dc3545;
+}
+
+.job-application-form input.error:focus,
+.job-application-form select.error:focus,
+.job-application-form textarea.error:focus {
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.job-application-form select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  padding-right: 40px;
+}
+
+/* Input with Icon (for salary fields) */
+.job-application-form .input-with-icon {
+  position: relative;
+}
+
+.job-application-form .input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #666;
+  font-weight: 600;
+}
+
+.job-application-form .input-with-icon input {
+  padding-left: 35px;
+}
+
+/* Cover Letter Textarea */
+.job-application-form .cover-letter-textarea {
+  resize: vertical;
+  min-height: 150px;
+  line-height: 1.6;
+}
+
+.job-application-form .character-count {
+  font-size: 13px;
+  color: #999;
+  margin-top: 5px;
+  display: block;
+}
+
+/* ===========================
+   Error Messages
+   =========================== */
+.job-application-form .error-message {
+  color: #dc3545;
+  font-size: 13px;
+  margin-top: 5px;
+  display: block;
+  font-weight: 500;
+}
+
+/* ===========================
+   Form Actions
+   =========================== */
+.job-application-form .form-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 2px solid #f0f0f0;
+}
+
+.job-application-form .btn {
+  padding: 14px 32px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  min-width: 150px;
+}
+
+.job-application-form .btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.job-application-form .btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.job-application-form .btn-secondary {
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.job-application-form .btn-secondary:hover:not(:disabled) {
+  background: #f8f9ff;
+}
+
+.job-application-form .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Spinner for submit button */
+.job-application-form .spinner-small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ffffff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===========================
+   Responsive Design
+   =========================== */
+@media (max-width: 768px) {
+  .job-application-form {
+    padding: 80px 0 40px;
+  }
+
+  .job-application-form .form-header h1 {
+    font-size: 28px;
+  }
+
+  .job-application-form .form-header p {
+    font-size: 16px;
+  }
+
+  .job-application-form .application-form {
+    padding: 30px 20px;
+  }
+
+  .job-application-form .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .job-application-form .form-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+  }
+
+  .job-application-form .section-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .job-application-form .upload-area {
+    padding: 30px 20px;
+  }
+
+  .job-application-form .upload-icon {
+    font-size: 40px;
+  }
+
+  .job-application-form .form-actions {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+
+  .job-application-form .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .job-application-form .container {
+    padding: 0 15px;
+  }
+
+  .job-application-form .application-form {
+    padding: 25px 15px;
+  }
+
+  .job-application-form .form-header h1 {
+    font-size: 24px;
+  }
+
+  .job-application-form .section-title {
+    font-size: 18px;
+  }
+
+  .job-application-form .upload-area {
+    padding: 25px 15px;
+  }
+
+  .job-application-form input,
+  .job-application-form select,
+  .job-application-form textarea {
+    font-size: 14px;
+  }
+}
+
+/* ===========================
+   Accessibility Improvements
+   =========================== */
+.job-application-form input:focus,
+.job-application-form select:focus,
+.job-application-form textarea:focus,
+.job-application-form .upload-area:focus-within {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.job-application-form .btn:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* ===========================
+   Print Styles
+   =========================== */
+@media print {
+  .job-application-form {
+    background: white;
+  }
+
+  .job-application-form .form-actions {
+    display: none;
+  }
+}

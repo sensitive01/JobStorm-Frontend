@@ -128,7 +128,7 @@ const JobDetails = () => {
   };
 
   const handleManualApply = () => {
-    navigate(`/apply-manual/${id}`);
+    navigate(`/apply-manually/${id}`);
     closeModal();
   };
 

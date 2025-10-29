@@ -18,7 +18,7 @@ const Header = () => {
     fetchData();
   }, []);
 
-// Set body padding based on user login status and screen size
+  // Set body padding based on user login status and screen size
   useEffect(() => {
     const updateBodyPadding = () => {
       if (userId) {
@@ -595,19 +595,32 @@ const Header = () => {
                           <li>
                             <a
                               className="dropdown-item"
+                              href="/my-applied-jobs"
+                            >
+                              Applied Jobs
+                            </a>
+                          </li>
+                          <li>
+                            <a className="dropdown-item" href="/my-saved-jobs">
+                              Saved Jobs
+                            </a>
+                          </li>
+                          {/* <li>
+                            <a
+                              className="dropdown-item"
                               href="/manage-jobs-page"
                             >
                               Manage Jobs
                             </a>
-                          </li>
-                          <li>
+                          </li> */}
+                          {/* <li>
                             <a
                               className="dropdown-item"
                               href="/saved-candidate-page"
                             >
                               Bookmarks Jobs
                             </a>
-                          </li>
+                          </li> */}
                           <li>
                             <a className="dropdown-item" href="/my-profile">
                               My Profile

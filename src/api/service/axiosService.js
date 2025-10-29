@@ -89,14 +89,14 @@ export const editUserData = async (userId, formData) => {
   try {
     const response = await axiosInstance.post(
       `/edit-form-data/${userId}`,
-       formData ,
+      formData,
       {
         headers: {
           "Content-Type": "multipart/form-data", // important for files
         },
       }
     );
-      return response;
+    return response;
   } catch (err) {
     return err;
   }
@@ -120,11 +120,64 @@ export const getAllJobs = async () => {
   }
 };
 
-export const submitEasyApply = async (uploadedFileUrl, jobId,coverLetter,candidateId) => {
+export const submitEasyApply = async (
+  uploadedFileUrl,
+  jobId,
+  coverLetter,
+  candidateId
+) => {
   try {
-    const response = await axiosInstance.post(`/apply-job/${jobId}/${candidateId}`,{uploadedFileUrl,coverLetter});
+    const response = await axiosInstance.post(
+      `/apply-job/${jobId}/${candidateId}`,
+      { uploadedFileUrl, coverLetter }
+    );
     return response;
   } catch (err) {
     return err;
   }
 };
+
+export const getMyAppliedJobs = async (candidateId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/get-applied-jobs/${candidateId}`
+    );
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const candidateSaveJob = async (candidateId, jobId) => {
+  try {
+    const response = await axiosInstance.put(
+      `/candidate-save-job/${candidateId}/${jobId}`
+    );
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const getSavedJobs = async (candidateId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/get-saved-jobs/${candidateId}`
+    );
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const getSavedJobDetails = async (candidateId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/get-saved-jobs-details/${candidateId}`
+    );
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+

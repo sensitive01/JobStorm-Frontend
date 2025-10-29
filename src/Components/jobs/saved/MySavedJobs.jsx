@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./jobportal.css";
+import "../jobportal.css";
 import {
   candidateSaveJob,
-  getAllJobs,
+  getSavedJobDetails,
   getSavedJobs,
-} from "../../api/service/axiosService";
+} from "../../../api/service/axiosService";
 
 // API Configuration
 const API_BASE_URL =
@@ -30,7 +30,6 @@ const AllJobList = () => {
   // Fetch jobs on component mount and when filters change
   useEffect(() => {
     fetchJobs();
-    fetchAppliedJobs();
     fetchSavedJobs();
   }, [sortBy, filterType, searchQuery]);
 
@@ -56,12 +55,12 @@ const AllJobList = () => {
 
       const candidateId = getAuthToken(); // Get current user ID
 
-      const response = await getAllJobs();
+      const response = await getSavedJobDetails(candidateId);
       console.log("API Response:", response);
 
       if (response.status === 200) {
         // Map API data to component format
-        let mappedJobs = response.data.map((job) => {
+        let mappedJobs = response?.data?.savedJobs?.map((job) => {
           // Check if current user has applied to this job
           const hasApplied =
             candidateId &&
@@ -159,30 +158,7 @@ const AllJobList = () => {
     }
   };
 
-  // Fetch user's applied jobs
-  const fetchAppliedJobs = async () => {
-    try {
-      const token = getAuthToken();
-      if (!token) return;
 
-      const response = await fetch(
-        `${API_BASE_URL}/applications/my-applications`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        const appliedIds = new Set(data.map((app) => app.jobId || app.id));
-        setAppliedJobs((prev) => new Set([...prev, ...appliedIds]));
-      }
-    } catch (error) {
-      console.error("Error fetching applied jobs:", error);
-    }
-  };
 
   // Fetch user's saved jobs
   const fetchSavedJobs = async () => {
@@ -284,7 +260,7 @@ const AllJobList = () => {
       {/* Header Section */}
       <div className="job-list-header">
         <div className="container">
-          <h1>Find Your Dream Job</h1>
+          <h1>Saved Jobs</h1>
           <p>Browse through {jobs.length} available positions</p>
         </div>
       </div>
