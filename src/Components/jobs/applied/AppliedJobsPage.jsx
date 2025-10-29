@@ -35,6 +35,7 @@ const AppliedJobs = () => {
               "under review": "under-review",
               shortlisted: "shortlisted",
               "interview scheduled": "interview-scheduled",
+              "offer received": "offered",
               offered: "offered",
               rejected: "rejected",
               "not selected": "rejected",
@@ -355,12 +356,14 @@ const AppliedJobs = () => {
         ) : (
           <div className="jobs-list">
             {filteredJobs.map((job) => {
-              const statusBadge = getStatusBadge(job.employApplicantStatus);
+              const statusBadge = getStatusBadge(job.applicationStatus);
+              console.log("statusBadge", statusBadge);
+              console.log("job.applicationStatus", job.applicationStatus);
               const canWithdraw = ![
                 "rejected",
                 "withdrawn",
                 "offered",
-              ].includes(job.employApplicantStatus);
+              ].includes(job.applicationStatus);
 
               return (
                 <div key={job.id} className="job-application-card">
@@ -565,7 +568,7 @@ const AppliedJobs = () => {
                 <div className="detail-row">
                   <span className="label">Status:</span>
                   <span className="value">
-                    {getStatusBadge(selectedJob.employApplicantStatus).label}
+                    {getStatusBadge(selectedJob.applicationStatus).label}
                   </span>
                 </div>
                 {selectedJob.interviewDate && (
