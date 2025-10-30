@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { editUserData, getUserDetails } from "../../../api/service/axiosService";
+import {
+  editUserData,
+  getUserDetails,
+} from "../../../api/service/axiosService";
 
-const EditFormDataPage = ({ formData }) => {
+const EditFormDataPage = ({ formData, profileImages }) => {
   const userId = localStorage.getItem("userId");
 
   // Helper functions to split userName into firstName and lastName
@@ -87,7 +90,7 @@ const EditFormDataPage = ({ formData }) => {
     isCurrentlyWorking: false,
   });
 
-  const [profileImage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState(profileImages);
   const [resumeFile, setResumeFile] = useState(null);
   const [coverLetterFile, setCoverLetterFile] = useState(null);
   const [profileImageFile, setProfileImageFile] = useState(null);
@@ -97,7 +100,7 @@ const EditFormDataPage = ({ formData }) => {
     const fetchData = async () => {
       try {
         const response = await getUserDetails(userId);
-        if (response.status===200) {
+        if (response.status === 200) {
           const data = response.data.data;
           setUserData(data);
 
@@ -343,7 +346,7 @@ const EditFormDataPage = ({ formData }) => {
     try {
       const response = await editUserData(userId, submitData);
 
-      if (response.status===200) {
+      if (response.status === 200) {
         alert("Profile updated successfully!");
         window.location.reload();
       } else {
@@ -369,12 +372,7 @@ const EditFormDataPage = ({ formData }) => {
           <div className="text-center">
             <div className="mb-4 profile-user">
               <img
-                src={
-                  profileImage ||
-                  (userData?.userProfilePic?.url
-                    ? userData.userProfilePic.url
-                    : "assets/images/user/img-02.jpg")
-                }
+                src={profileImages}
                 className="rounded-circle img-thumbnail profile-img"
                 id="profile-img"
                 alt="Profile"
@@ -883,7 +881,10 @@ const EditFormDataPage = ({ formData }) => {
                     className="form-control"
                     value={workExperienceInput.position}
                     onChange={(e) =>
-                      handleWorkExperienceInputChange("position", e.target.value)
+                      handleWorkExperienceInputChange(
+                        "position",
+                        e.target.value
+                      )
                     }
                     placeholder="Job title"
                   />
@@ -911,7 +912,10 @@ const EditFormDataPage = ({ formData }) => {
                     className="form-control"
                     value={workExperienceInput.startDate}
                     onChange={(e) =>
-                      handleWorkExperienceInputChange("startDate", e.target.value)
+                      handleWorkExperienceInputChange(
+                        "startDate",
+                        e.target.value
+                      )
                     }
                   />
                 </div>
