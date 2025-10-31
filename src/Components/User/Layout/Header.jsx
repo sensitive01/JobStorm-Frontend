@@ -605,6 +605,11 @@ const Header = () => {
                               Saved Jobs
                             </a>
                           </li>
+                          <li>
+                            <a className="dropdown-item" href="/my-chats">
+                              My Chats
+                            </a>
+                          </li>
                           {/* <li>
                             <a
                               className="dropdown-item"

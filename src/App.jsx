@@ -40,6 +40,7 @@ import JobDetails from "./Components/jobs/JobDetails";
 import AppliedJobsPage from "./Components/jobs/applied/AppliedJobsPage";
 import MySavedJobs from "./Components/jobs/saved/MySavedJobs";
 import JobApplicationForm from "./Components/jobs/manualapplyjob/ApplyJobManually";
+import ChatPage from "./Components/User/chat/ChatPage";
 
 function App() {
   return (
@@ -101,6 +102,7 @@ function App() {
           <Route path="/my-applied-jobs" element={<AppliedJobsPage />} />
           <Route path="/my-saved-jobs" element={<MySavedJobs />} />
           <Route path="/apply-manually/:jobId" element={<JobApplicationForm />} />
+          <Route path="/my-chats" element={<ChatPage />} />
         </Route>
 
         {/* <Route path="/admin" element={<MainLayoutAdmin />}></Route> */}
