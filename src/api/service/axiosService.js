@@ -111,9 +111,9 @@ export const getUserDetails = async (userId) => {
   }
 };
 
-export const getAllJobs = async () => {
+export const getAllJobs = async (category, jobTitle, location,experience) => {
   try {
-    const response = await axiosInstance.get(`/employer/fetchjobs`);
+    const response = await axiosInstance.get(`/employer/fetchjobs?category=${category}&jobTitle=${jobTitle}&location=${location}&experience=${experience}`);
     return response;
   } catch (err) {
     return err;
@@ -181,3 +181,36 @@ export const getSavedJobDetails = async (candidateId) => {
   }
 };
 
+export const getJobDataOrCompanyData = async () => {
+  try {
+    const response = await axiosInstance.get(
+      `/get-company-name-or-job-name`
+    );
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const getJobsByType = async (jobType) => {
+  try {
+    const response = await axiosInstance.get(
+      `/get-jobs-by-type/${jobType}`
+    );
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+
+export const getBlogList = async (jobType) => {
+  try {
+    const response = await axiosInstance.get(
+      `/get-all-blogs`
+    );
+    return response;
+  } catch (err) {
+    return err;
+  }
+};

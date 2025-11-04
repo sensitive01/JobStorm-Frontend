@@ -1,32 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import TopHeader from "./TopHeader";
 import { getMyName } from "../../../api/service/axiosService";
 import accountImage from "../../../../public/assets/images/account.jpg";
 import HeaderAuthButtons from "./HeaderAuthButtons";
 
 const Header = () => {
+  const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
-  const [name, setName] = useState();
+  const [name, setName] = useState("");
+  const isNavigatingRef = useRef(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await getMyName(userId);
-      if (response.status === 200) {
-        setName(response.data.userName);
-      }
-    };
-    fetchData();
-  }, []);
+    if (userId) {
+      const fetchData = async () => {
+        try {
+          const response = await getMyName(userId);
+          if (response.status === 200) {
+            setName(response.data.userName);
+          }
+        } catch (error) {
+          console.error("Error fetching user name:", error);
+        }
+      };
+      fetchData();
+    }
+  }, [userId]);
 
   // Set body padding based on user login status and screen size
   useEffect(() => {
     const updateBodyPadding = () => {
       if (userId) {
-        // Logged in user - add class and set padding
         document.body.classList.add("user-logged-in");
         document.body.style.paddingTop = "0px";
       } else {
-        // Not logged in - remove class and set padding
         document.body.classList.remove("user-logged-in");
         document.body.style.paddingTop = "0px";
       }
@@ -39,6 +46,67 @@ const Header = () => {
       window.removeEventListener("resize", updateBodyPadding);
     };
   }, [userId]);
+
+  // Navigation helper function
+  const handleJobSearch = (e, filters = {}) => {
+    // Prevent multiple calls
+    if (isNavigatingRef.current) {
+      return;
+    }
+
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    isNavigatingRef.current = true;
+
+    // Close all dropdowns
+    const closeOpenUI = () => {
+      // Close dropdowns using Bootstrap API when available
+      const dropdowns = document.querySelectorAll('.dropdown-menu.show');
+      dropdowns.forEach((dropdown) => {
+        dropdown.classList.remove('show');
+      });
+
+      // Remove show class from parent dropdown
+      const dropdownParents = document.querySelectorAll('.dropdown.show');
+      dropdownParents.forEach((parent) => {
+        parent.classList.remove('show');
+      });
+
+      // Reset aria-expanded attributes
+      const toggles = document.querySelectorAll('[data-bs-toggle="dropdown"][aria-expanded="true"]');
+      toggles.forEach((toggle) => {
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+
+      // Close mobile navbar collapse if open
+      const collapse = document.getElementById('navbarCollapse');
+      if (collapse && collapse.classList.contains('show')) {
+        collapse.classList.remove('show');
+      }
+    };
+
+    closeOpenUI();
+
+    // Small delay to ensure UI closes before navigation
+    setTimeout(() => {
+      const searchData = {
+        jobTitle: filters.jobTitle || "",
+        location: filters.location || "",
+        category: filters.category || "",
+        experience: filters.experience || "",
+      };
+
+      navigate(`/job-list`, { state: searchData });
+
+      // Reset the flag after navigation
+      setTimeout(() => {
+        isNavigatingRef.current = false;
+      }, 500);
+    }, 100);
+  };
 
   return (
     <div>
@@ -139,7 +207,6 @@ const Header = () => {
           border: 1px solid rgba(0,0,0,.1);
         }
 
-        /* Add padding to body to account for fixed navbar */
         body {
           padding-top: 0;
           transition: padding-top 0.3s ease;
@@ -151,7 +218,6 @@ const Header = () => {
           }
         }
 
-        /* Desktop: Auth buttons on the right */
         @media (min-width: 992px) {
           .navbar-nav {
             margin-left: auto;
@@ -159,7 +225,6 @@ const Header = () => {
           }
         }
 
-        /* Mobile: Flexbox layout for header */
         @media (max-width: 991px) {
           .custom-container {
             display: flex;
@@ -249,7 +314,6 @@ const Header = () => {
             width: 100%;
           }
 
-          /* After login - dropdown positioned lower */
           body.user-logged-in .navbar-collapse {
             top: 120px;
           }
@@ -266,7 +330,6 @@ const Header = () => {
           }
         }
 
-        /* Notification badge */
         .count {
           top: -5px;
           right: -5px;
@@ -279,7 +342,6 @@ const Header = () => {
           text-align: center;
         }
 
-        /* Responsive spacing */
         @media (max-width: 767px) {
           .header-menu .fs-22 {
             font-size: 18px !important;
@@ -291,7 +353,6 @@ const Header = () => {
           }
         }
 
-        /* Dropdown animations */
         .dropdown-menu {
           animation: slideDown 0.3s ease;
         }
@@ -306,15 +367,18 @@ const Header = () => {
             transform: translateY(0);
           }
         }
+
+        /* Prevent pointer events during navigation */
+        .navigating {
+          pointer-events: none;
+          opacity: 0.7;
+        }
       `}</style>
 
       <>
         <div>
-          {/* START TOP-BAR */}
           <TopHeader />
-          {/* END TOP-BAR */}
 
-          {/*Navbar Start*/}
           <nav className="navbar navbar-expand-lg fixed-top sticky" id="navbar">
             <div className="container-fluid custom-container">
               <a className="navbar-brand text-dark fw-bold" href="/">
@@ -410,22 +474,45 @@ const Header = () => {
                           </span>
                           <hr />
                           <div>
-                            <a className="dropdown-item" href="/job-list">
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              onClick={(e) => handleJobSearch(e, { category: 'IT & Software' })}
+                            >
                               IT Jobs
                             </a>
-                            <a className="dropdown-item" href="#">
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              onClick={(e) => handleJobSearch(e, { category: 'Accounting' })}
+                            >
                               Accounting &amp; Banking
                             </a>
-                            <a className="dropdown-item" href="#">
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              onClick={(e) => handleJobSearch(e, { category: 'Tele-Calling' })}
+                            >
                               Tele-Calling
                             </a>
-                            <a className="dropdown-item" href="#">
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              onClick={(e) => handleJobSearch(e, { category: 'Marketing' })}
+                            >
                               Sales &amp; Marketing
                             </a>
-                            <a className="dropdown-item" href="#">
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              onClick={(e) => handleJobSearch(e, { category: 'Admin & Operations' })}
+                            >
                               Admin &amp; Operations
                             </a>
-                            <a className="dropdown-item" href="#">
+                            <a
+                              className="dropdown-item"
+                              href="/job-list"
+                            >
                               All Other Jobs
                             </a>
                           </div>
@@ -436,52 +523,95 @@ const Header = () => {
                           </span>
                           <hr />
                           <div>
-                            <a className="dropdown-item" href="#">
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              onClick={(e) => handleJobSearch(e, { location: 'India' })}
+                            >
                               India
                             </a>
-                            <a className="dropdown-item" href="#">
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              onClick={(e) => handleJobSearch(e, { location: 'Middle East' })}
+                            >
                               Middle East
                             </a>
-                            <a className="dropdown-item" href="#">
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              onClick={(e) => handleJobSearch(e, { location: 'UAE' })}
+                            >
                               UAE
                             </a>
-                            <a className="dropdown-item" href="#">
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              onClick={(e) => handleJobSearch(e, { location: 'Singapore' })}
+                            >
                               Singapore
-                            </a>
-                            <a className="dropdown-item" href="#">
+                            </a >
+                            <a
+                              className="dropdown-item"
+                              href="/job-list"
+                            >
                               Explore Locations
-                            </a>
-                          </div>
-                        </div>
+                            </a >
+                          </div >
+                        </div >
                         <div className="col-lg-4">
                           <span className="dropdown-header text-primary fw-bold">
                             Jobs by Experience
                           </span>
                           <hr />
                           <div>
-                            <a className="dropdown-item" href="#">
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              onClick={(e) => handleJobSearch(e, { experience: 'Fresher' })}
+                            >
                               Fresher
                             </a>
-                            <a className="dropdown-item" href="#">
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              onClick={(e) => handleJobSearch(e, { experience: '0-2' })}
+                            >
                               0 to 2 Years
                             </a>
-                            <a className="dropdown-item" href="#">
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              onClick={(e) => handleJobSearch(e, { experience: '2-5' })}
+                            >
                               2 to 5 Years
-                            </a>
-                            <a className="dropdown-item" href="#">
+                            </a >
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              onClick={(e) => handleJobSearch(e, { experience: '5-10' })}
+                            >
                               5 to 10 Years
-                            </a>
-                            <a className="dropdown-item" href="#">
+                            </a >
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              onClick={(e) => handleJobSearch(e, { experience: '10-15' })}
+                            >
                               10 to 15 Years
-                            </a>
-                            <a className="dropdown-item" href="#">
-                              15+ Years
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
+                            </a >
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              onClick={(e) => handleJobSearch(e, { experience: '15+' })}
+                            >
+                              15 + Years
+                            </a >
+                          </div >
+                        </div >
+                      </div >
+                    </div >
+                  </li >
 
                   {!userId && (
                     <li className="nav-item dropdown dropdown-hover">
@@ -520,9 +650,9 @@ const Header = () => {
                           >
                             Search Candidates
                           </a>
-                        </li>
-                      </ul>
-                    </li>
+                        </li >
+                      </ul >
+                    </li >
                   )}
 
                   <li className="nav-item">
@@ -540,9 +670,8 @@ const Header = () => {
                       Events &amp; Ads
                     </a>
                   </li>
-                </ul>
+                </ul >
 
-                {/* Desktop Auth Buttons - Inside collapse */}
                 <div className="ms-auto d-none d-lg-block">
                   {userId ? (
                     <ul className="header-menu list-inline d-flex align-items-center mb-0">
@@ -610,22 +739,6 @@ const Header = () => {
                               My Chats
                             </a>
                           </li>
-                          {/* <li>
-                            <a
-                              className="dropdown-item"
-                              href="/manage-jobs-page"
-                            >
-                              Manage Jobs
-                            </a>
-                          </li> */}
-                          {/* <li>
-                            <a
-                              className="dropdown-item"
-                              href="/saved-candidate-page"
-                            >
-                              Bookmarks Jobs
-                            </a>
-                          </li> */}
                           <li>
                             <a className="dropdown-item" href="/my-profile">
                               My Profile
@@ -644,16 +757,15 @@ const Header = () => {
                               Logout
                             </a>
                           </li>
-                        </ul>
-                      </li>
-                    </ul>
+                        </ul >
+                      </li >
+                    </ul >
                   ) : (
                     <HeaderAuthButtons />
                   )}
-                </div>
-              </div>
+                </div >
+              </div >
 
-              {/* Mobile Auth Section */}
               <div className="d-lg-none mobile-auth-section">
                 {userId ? (
                   <>
@@ -706,7 +818,7 @@ const Header = () => {
                           </li>
                         </ul>
                       </li>
-                    </ul>
+                    </ul >
                     <button
                       className="navbar-toggler"
                       type="button"
@@ -733,25 +845,31 @@ const Header = () => {
                     </button>
                   </>
                 )}
-              </div>
-            </div>
-          </nav>
-          {/* Navbar End */}
+              </div >
+            </div >
+          </nav >
 
-          {/* Mobile Job Buttons Bar - Only visible on mobile devices */}
-          <div className="d-lg-none mobile-job-buttons-bar ">
-            <a href="/" className="btn btn-warning">
+          <div className="d-lg-none mobile-job-buttons-bar">
+            <button
+              className="btn btn-warning"
+              onClick={(e) => handleJobSearch(e, { location: 'Middle East' })}
+            >
               Middle East Jobs
-            </a>
-            <a href="#" className="btn btn-info">
+            </button>
+            <button
+              className="btn btn-info"
+              onClick={(e) => handleJobSearch(e, { location: 'Europe' })}
+            >
               Europe Jobs
-            </a>
-            <a href="#" className="btn btn-success">
+            </button>
+            <button
+              className="btn btn-success"
+              onClick={(e) => handleJobSearch(e, { location: 'Asia' })}
+            >
               Asia Jobs
-            </a>
+            </button>
           </div>
 
-          {/* START SIGN-UP MODAL */}
           <div
             className="modal fade"
             id="signupModal"
@@ -865,13 +983,12 @@ const Header = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          {/* END SIGN-UP MODAL */}
-        </div>
+              </div >
+            </div >
+          </div >
+        </div >
       </>
-    </div>
+    </div >
   );
 };
 

@@ -84,14 +84,14 @@ const BookDemoModal = ({ showModal, setShowModal }) => {
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="schoolName" className="form-label">
-                School Name <span className="text-danger">*</span>
+                Company Name <span className="text-danger">*</span>
               </label>
               <input
                 type="text"
                 className="form-control"
                 id="schoolName"
                 name="schoolName"
-                placeholder="Enter school name"
+                placeholder="Enter Company Name"
                 value={formData.schoolName}
                 onChange={handleInputChange}
                 required

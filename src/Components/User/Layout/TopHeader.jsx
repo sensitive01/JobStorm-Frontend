@@ -1,12 +1,20 @@
 // TopHeader.jsx
 import React, { useState, useEffect } from "react";
 import BookDemoModal from "./BookDemoModal";
+import { useNavigate } from "react-router-dom";
 
 const TopHeader = () => {
   const [userId, setUserId] = useState(null);
   const [location, setLocation] = useState("Loading...");
   const [locationError, setLocationError] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+  const handleJobSearch = (e, loc) => {
+    if (e) {
+      e.preventDefault();
+    }
+    navigate('/job-list', { state: { jobTitle: '', location: loc, category: '', experience: '' } });
+  };
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
@@ -30,9 +38,8 @@ const TopHeader = () => {
             `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
           );
           const data = await response.json();
-          const locationName = `${data.city || data.locality || "Unknown"}, ${
-            data.countryName || "Unknown"
-          }`;
+          const locationName = `${data.city || data.locality || "Unknown"}, ${data.countryName || "Unknown"
+            }`;
           setLocation(locationName);
         } catch (error) {
           setLocation(`${latitude.toFixed(2)}°, ${longitude.toFixed(2)}°`);
@@ -177,9 +184,8 @@ const TopHeader = () => {
                     <i className="mdi mdi-map-marker" /> Your Location:{" "}
                     <a
                       href="#"
-                      className={`text-white ${
-                        locationError ? "text-decoration-line-through" : ""
-                      }`}
+                      className={`text-white ${locationError ? "text-decoration-line-through" : ""
+                        }`}
                       onClick={(e) => e.preventDefault()}
                     >
                       {location}
@@ -244,20 +250,23 @@ const TopHeader = () => {
               <div className="col-lg-9 col-md-8">
                 <div className="d-flex justify-content-end align-items-center gap-2">
                   <a
-                    href="/"
+                    href="#"
                     className="btn btn-warning fw-bold fs-13 py-1 px-3"
+                    onClick={(e) => handleJobSearch(e, 'Middle East')}
                   >
                     <i className="uil uil-lock" /> Middle East Jobs
                   </a>
                   <a
                     href="#"
                     className="btn btn-info text-primary fw-bold fs-13 py-1 px-3"
+                    onClick={(e) => handleJobSearch(e, 'Europe')}
                   >
                     <i className="uil uil-lock" /> Europe Jobs
                   </a>
                   <a
                     href="#"
                     className="btn btn-success fw-bold fs-13 py-1 px-3"
+                    onClick={(e) => handleJobSearch(e, 'Asia')}
                   >
                     <i className="uil uil-lock" /> Asia Jobs
                   </a>
@@ -340,18 +349,19 @@ const TopHeader = () => {
               </p>
             </div>
             <div className="mobile-buttons-row">
-              <a href="/" className="btn btn-warning fw-bold mobile-btn">
+              <a href="#" className="btn btn-warning fw-bold mobile-btn" onClick={(e) => handleJobSearch(e, 'Middle East')}>
                 <i className="uil uil-lock" />
                 Middle East
               </a>
               <a
                 href="#"
                 className="btn btn-info text-primary fw-bold mobile-btn"
+                onClick={(e) => handleJobSearch(e, 'Europe')}
               >
                 <i className="uil uil-lock" />
                 Europe
               </a>
-              <a href="#" className="btn btn-success fw-bold mobile-btn">
+              <a href="#" className="btn btn-success fw-bold mobile-btn" onClick={(e) => handleJobSearch(e, 'Asia')}>
                 <i className="uil uil-lock" />
                 Asia
               </a>

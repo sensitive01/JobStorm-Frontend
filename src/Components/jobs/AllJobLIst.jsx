@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./jobportal.css";
 import {
   candidateSaveJob,
@@ -16,6 +16,9 @@ const getAuthToken = () => {
 };
 
 const AllJobList = () => {
+  const locationCtx = useLocation();
+  const state = locationCtx?.state || {};
+  const { category = "", jobTitle = "", location: locationFilter = "", experience = "" } = state;
   const navigate = useNavigate();
   const [jobs, setJobs] = useState([]);
 
@@ -27,14 +30,13 @@ const AllJobList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [error, setError] = useState(null);
 
-  // Fetch jobs on component mount and when filters change
+
   useEffect(() => {
     fetchJobs();
-    fetchAppliedJobs();
     fetchSavedJobs();
-  }, [sortBy, filterType, searchQuery]);
+  }, [sortBy, filterType, searchQuery, category, jobTitle, locationFilter, experience]);
 
-  // Helper function to calculate time ago
+
   const getTimeAgo = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -48,21 +50,18 @@ const AllJobList = () => {
     return `${Math.floor(diffDays / 30)} months ago`;
   };
 
-  // Fetch all jobs from backend
+
   const fetchJobs = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      const candidateId = getAuthToken(); // Get current user ID
+      const candidateId = getAuthToken();
 
-      const response = await getAllJobs();
-      console.log("API Response:", response);
+      const response = await getAllJobs(category, jobTitle, locationFilter, experience);
 
       if (response.status === 200) {
-        // Map API data to component format
         let mappedJobs = response.data.map((job) => {
-          // Check if current user has applied to this job
           const hasApplied =
             candidateId &&
             job.applications?.some(
@@ -71,7 +70,7 @@ const AllJobList = () => {
 
           return {
             ...job,
-            // Map API fields to component fields
+
             id: job._id,
             title: job.jobTitle,
             companyLogo: `https://ui-avatars.com/api/?name=${encodeURIComponent(
@@ -79,9 +78,8 @@ const AllJobList = () => {
             )}&background=4A90E2&color=fff&size=128&bold=true`,
             salary:
               job.salaryFrom && job.salaryTo
-                ? `₹${job.salaryFrom.toLocaleString()} - ₹${job.salaryTo.toLocaleString()}/${
-                    job.salaryType
-                  }`
+                ? `₹${job.salaryFrom.toLocaleString()} - ₹${job.salaryTo.toLocaleString()}/${job.salaryType
+                }`
                 : null,
             experience: job.experienceLevel,
             type: job.jobType,
@@ -89,11 +87,11 @@ const AllJobList = () => {
             tags: job.skills || [],
             postedDate: getTimeAgo(job.createdAt),
             urgent: job.status === "urgent" || false,
-            isApplied: hasApplied || false, // Track if user has applied
+            isApplied: hasApplied || false,
           };
         });
 
-        // Apply search filter
+
         if (searchQuery) {
           mappedJobs = mappedJobs.filter(
             (job) =>
@@ -108,7 +106,7 @@ const AllJobList = () => {
           );
         }
 
-        // Apply type filter
+
         if (filterType !== "all") {
           mappedJobs = mappedJobs.filter(
             (job) =>
@@ -116,7 +114,7 @@ const AllJobList = () => {
           );
         }
 
-        // Apply sorting
+
         switch (sortBy) {
           case "newest":
             mappedJobs.sort(
@@ -142,7 +140,7 @@ const AllJobList = () => {
 
         setJobs(mappedJobs);
 
-        // Update applied jobs Set from the mapped jobs
+
         const appliedIds = new Set(
           mappedJobs.filter((job) => job.isApplied).map((job) => job.id)
         );
@@ -159,30 +157,6 @@ const AllJobList = () => {
     }
   };
 
-  // Fetch user's applied jobs
-  const fetchAppliedJobs = async () => {
-    try {
-      const token = getAuthToken();
-      if (!token) return;
-
-      const response = await fetch(
-        `${API_BASE_URL}/applications/my-applications`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        const appliedIds = new Set(data.map((app) => app.jobId || app.id));
-        setAppliedJobs((prev) => new Set([...prev, ...appliedIds]));
-      }
-    } catch (error) {
-      console.error("Error fetching applied jobs:", error);
-    }
-  };
 
   // Fetch user's saved jobs
   const fetchSavedJobs = async () => {
@@ -364,9 +338,8 @@ const AllJobList = () => {
                     Posted {job.postedDate || "2 days ago"}
                   </div>
                   <button
-                    className={`save-btn ${
-                      isSaved(job.id || job._id) ? "saved" : ""
-                    }`}
+                    className={`save-btn ${isSaved(job.id || job._id) ? "saved" : ""
+                      }`}
                     onClick={() => handleSaveJob(job.id || job._id)}
                     title={
                       isSaved(job.id || job._id)
