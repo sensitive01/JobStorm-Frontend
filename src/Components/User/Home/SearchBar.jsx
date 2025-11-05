@@ -504,7 +504,7 @@ const SearchBar = () => {
             <div className="col-lg-3">
               <div className="mt-3 mt-lg-0 h-100">
                 <button
-                  className="btn btn-primary submit-btn w-100 h-100"
+                  className="btn btn-warning submit-btn w-100 h-100"
                   type="submit"
                 >
                   <i className="uil uil-search me-1" /> Find Job

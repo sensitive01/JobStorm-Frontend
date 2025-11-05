@@ -769,7 +769,7 @@ body[data-bs-theme="dark"] .page-title-box {
   }
 }
 .bg-home .bg-overlay {
-  background: url(../images/home/img-01.png);
+  background: url(../../../src/assets/images/onebannerimg.jpg);
   background-size: cover;
   background-position: center;
 }

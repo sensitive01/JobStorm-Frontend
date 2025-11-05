@@ -91,6 +91,26 @@ const TopHeader = () => {
           opacity: 0.8;
         }
 
+        /* Region button custom colors */
+        .btn-europe {
+          background-color: #6E2EA3 !important; /* purple */
+          color: #ffffff !important;
+          border: none !important;
+        }
+        .btn-europe:hover {
+          background-color: #5d2490 !important;
+          color: #ffffff !important;
+        }
+        .btn-asia {
+          background-color: #169e8f !important; /* teal */
+          color: #ffffff !important;
+          border: none !important;
+        }
+        .btn-asia:hover {
+          background-color: #12897c !important;
+          color: #ffffff !important;
+        }
+
         /* Desktop View - Default */
         .top-bar-desktop {
           display: block;
@@ -258,14 +278,14 @@ const TopHeader = () => {
                   </a>
                   <a
                     href="#"
-                    className="btn btn-info text-primary fw-bold fs-13 py-1 px-3"
+                    className="btn btn-europe text-white fw-bold fs-13 py-1 px-3"
                     onClick={(e) => handleJobSearch(e, 'Europe')}
                   >
                     <i className="uil uil-lock" /> Europe Jobs
                   </a>
                   <a
                     href="#"
-                    className="btn btn-success fw-bold fs-13 py-1 px-3"
+                    className="btn btn-asia text-white fw-bold fs-13 py-1 px-3"
                     onClick={(e) => handleJobSearch(e, 'Asia')}
                   >
                     <i className="uil uil-lock" /> Asia Jobs
@@ -355,13 +375,13 @@ const TopHeader = () => {
               </a>
               <a
                 href="#"
-                className="btn btn-info text-primary fw-bold mobile-btn"
+                className="btn btn-europe text-white fw-bold mobile-btn"
                 onClick={(e) => handleJobSearch(e, 'Europe')}
               >
                 <i className="uil uil-lock" />
                 Europe
               </a>
-              <a href="#" className="btn btn-success fw-bold mobile-btn" onClick={(e) => handleJobSearch(e, 'Asia')}>
+              <a href="#" className="btn btn-asia text-white fw-bold mobile-btn" onClick={(e) => handleJobSearch(e, 'Asia')}>
                 <i className="uil uil-lock" />
                 Asia
               </a>

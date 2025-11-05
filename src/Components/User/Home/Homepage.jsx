@@ -15,13 +15,10 @@ const Homepage = () => {
               <div className="col-lg-8">
                 <div className="text-center text-white mb-5">
                   <h1 className="display-5 fw-semibold mb-3">
-                    Search Between More Then{" "}
-                    <span className="text-warning fw-bold">10,000+</span>
-                    Open Jobs.
+                    One Platform. Endless Opportunities.
                   </h1>
                   <p className="fs-17">
-                    Find jobs, create trackable resumes and enrich your
-                    applications.
+                    Find your next role, craft a standout resume, and track your job applications—all in one place
                   </p>
                 </div>
               </div>
@@ -63,7 +60,7 @@ const Homepage = () => {
         </div>
         {/* END SHAPE */}
         {/* START CATEGORY */}
-        <BrowseCatagories  />
+        <BrowseCatagories />
         {/* END CATEGORY */}
         <img src="image.jpg" width="100%" />
         {/* START JOB-LIST */}
