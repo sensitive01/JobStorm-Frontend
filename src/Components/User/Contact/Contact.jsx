@@ -175,30 +175,12 @@ const Contact = () => {
                       />
                     </div>
                     <div className="mt-4 pt-3">
-                      <div className="d-flex text-muted align-items-center mt-2">
-                        <div className="flex-shrink-0 fs-22 text-primary">
-                          <i className="uil uil-map-marker" />
-                        </div>
-                        <div className="flex-grow-1 ms-2">
-                          <p className="mb-0">
-                            2453 Clinton StreetLittle Rock, California, USA
-                          </p>
-                        </div>
-                      </div>
-                      <div className="d-flex text-muted align-items-center mt-2">
+                      <div className="d-flex text-muted align-items-center justify-content-center mt-2">
                         <div className="flex-shrink-0 fs-22 text-primary">
                           <i className="uil uil-envelope" />
                         </div>
                         <div className="flex-grow-1 ms-2">
-                          <p className="mb-0">contactus@JobsStorm .com</p>
-                        </div>
-                      </div>
-                      <div className="d-flex text-muted align-items-center mt-2">
-                        <div className="flex-shrink-0 fs-22 text-primary">
-                          <i className="uil uil-phone-alt" />
-                        </div>
-                        <div className="flex-grow-1 ms-2">
-                          <p className="mb-0">(+245) 223 1245</p>
+                          <p className="mb-0">support@jobsstorm.com</p>
                         </div>
                       </div>
                     </div>

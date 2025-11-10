@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import TopHeader from "./TopHeader";
-import { getMyName } from "../../../api/service/axiosService";
+import { getDistictValues, getMyName } from "../../../api/service/axiosService";
 import accountImage from "../../../../public/assets/images/account.jpg";
 import HeaderAuthButtons from "./HeaderAuthButtons";
 
@@ -10,6 +10,8 @@ const Header = () => {
   const userId = localStorage.getItem("userId");
   const [name, setName] = useState("");
   const isNavigatingRef = useRef(false);
+  const [categories, setCategories] = useState([]);
+  const [locations, setLocations] = useState([]);
 
   useEffect(() => {
     if (userId) {
@@ -27,7 +29,21 @@ const Header = () => {
     }
   }, [userId]);
 
-  // Set body padding based on user login status and screen size
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getDistictValues();
+        if (response.data && response.status===200) {
+          setCategories(response.data.categories || []);
+          setLocations(response.data.locations || []);
+        }
+      } catch (error) {
+        console.error("Error fetching categories and locations:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   useEffect(() => {
     const updateBodyPadding = () => {
       if (userId) {
@@ -47,9 +63,7 @@ const Header = () => {
     };
   }, [userId]);
 
-  // Navigation helper function
   const handleJobSearch = (e, filters = {}) => {
-    // Prevent multiple calls
     if (isNavigatingRef.current) {
       return;
     }
@@ -61,27 +75,22 @@ const Header = () => {
 
     isNavigatingRef.current = true;
 
-    // Close all dropdowns
     const closeOpenUI = () => {
-      // Close dropdowns using Bootstrap API when available
       const dropdowns = document.querySelectorAll('.dropdown-menu.show');
       dropdowns.forEach((dropdown) => {
         dropdown.classList.remove('show');
       });
 
-      // Remove show class from parent dropdown
       const dropdownParents = document.querySelectorAll('.dropdown.show');
       dropdownParents.forEach((parent) => {
         parent.classList.remove('show');
       });
 
-      // Reset aria-expanded attributes
       const toggles = document.querySelectorAll('[data-bs-toggle="dropdown"][aria-expanded="true"]');
       toggles.forEach((toggle) => {
         toggle.setAttribute('aria-expanded', 'false');
       });
 
-      // Close mobile navbar collapse if open
       const collapse = document.getElementById('navbarCollapse');
       if (collapse && collapse.classList.contains('show')) {
         collapse.classList.remove('show');
@@ -90,7 +99,6 @@ const Header = () => {
 
     closeOpenUI();
 
-    // Small delay to ensure UI closes before navigation
     setTimeout(() => {
       const searchData = {
         jobTitle: filters.jobTitle || "",
@@ -101,7 +109,6 @@ const Header = () => {
 
       navigate(`/job-list`, { state: searchData });
 
-      // Reset the flag after navigation
       setTimeout(() => {
         isNavigatingRef.current = false;
       }, 500);
@@ -474,45 +481,17 @@ const Header = () => {
                           </span>
                           <hr />
                           <div>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                              onClick={(e) => handleJobSearch(e, { category: 'IT & Software' })}
-                            >
-                              IT Jobs
-                            </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                              onClick={(e) => handleJobSearch(e, { category: 'Accounting' })}
-                            >
-                              Accounting &amp; Banking
-                            </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                              onClick={(e) => handleJobSearch(e, { category: 'Tele-Calling' })}
-                            >
-                              Tele-Calling
-                            </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                              onClick={(e) => handleJobSearch(e, { category: 'Marketing' })}
-                            >
-                              Sales &amp; Marketing
-                            </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                              onClick={(e) => handleJobSearch(e, { category: 'Admin & Operations' })}
-                            >
-                              Admin &amp; Operations
-                            </a>
-                            <a
-                              className="dropdown-item"
-                              href="/job-list"
-                            >
+                            {categories.map((category, index) => (
+                              <a
+                                key={index}
+                                className="dropdown-item"
+                                href="#"
+                                onClick={(e) => handleJobSearch(e, { category })}
+                              >
+                                {category}
+                              </a>
+                            ))}
+                            <a className="dropdown-item" href="/job-list">
                               All Other Jobs
                             </a>
                           </div>
@@ -523,42 +502,21 @@ const Header = () => {
                           </span>
                           <hr />
                           <div>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                              onClick={(e) => handleJobSearch(e, { location: 'India' })}
-                            >
-                              India
-                            </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                              onClick={(e) => handleJobSearch(e, { location: 'Middle East' })}
-                            >
-                              Middle East
-                            </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                              onClick={(e) => handleJobSearch(e, { location: 'UAE' })}
-                            >
-                              UAE
-                            </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                              onClick={(e) => handleJobSearch(e, { location: 'Singapore' })}
-                            >
-                              Singapore
-                            </a >
-                            <a
-                              className="dropdown-item"
-                              href="/job-list"
-                            >
+                            {locations.map((location, index) => (
+                              <a
+                                key={index}
+                                className="dropdown-item"
+                                href="#"
+                                onClick={(e) => handleJobSearch(e, { location })}
+                              >
+                                {location}
+                              </a>
+                            ))}
+                            <a className="dropdown-item" href="/job-list">
                               Explore Locations
-                            </a >
-                          </div >
-                        </div >
+                            </a>
+                          </div>
+                        </div>
                         <div className="col-lg-4">
                           <span className="dropdown-header text-primary fw-bold">
                             Jobs by Experience
@@ -585,33 +543,89 @@ const Header = () => {
                               onClick={(e) => handleJobSearch(e, { experience: '2-5' })}
                             >
                               2 to 5 Years
-                            </a >
+                            </a>
                             <a
                               className="dropdown-item"
                               href="#"
                               onClick={(e) => handleJobSearch(e, { experience: '5-10' })}
                             >
                               5 to 10 Years
-                            </a >
+                            </a>
                             <a
                               className="dropdown-item"
                               href="#"
                               onClick={(e) => handleJobSearch(e, { experience: '10-15' })}
                             >
                               10 to 15 Years
-                            </a >
+                            </a>
                             <a
                               className="dropdown-item"
                               href="#"
                               onClick={(e) => handleJobSearch(e, { experience: '15+' })}
                             >
                               15 + Years
-                            </a >
-                          </div >
-                        </div >
-                      </div >
-                    </div >
-                  </li >
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+
+                  <li className="nav-item dropdown">
+                    <a
+                      className="nav-link dropdown-toggle"
+                      href="#"
+                      id="categoriesDropdown"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      Categories
+                    </a>
+                    <ul
+                      className="dropdown-menu"
+                      aria-labelledby="categoriesDropdown"
+                    >
+                      {categories.map((category, index) => (
+                        <li key={index}>
+                          <a
+                            className="dropdown-item"
+                            href={`/jobs?category=${encodeURIComponent(category)}`}
+                          >
+                            {category}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+
+                  <li className="nav-item dropdown">
+                    <a
+                      className="nav-link dropdown-toggle"
+                      href="#"
+                      id="locationsDropdown"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      Locations
+                    </a>
+                    <ul
+                      className="dropdown-menu"
+                      aria-labelledby="locationsDropdown"
+                    >
+                      {locations.map((location, index) => (
+                        <li key={index}>
+                          <a
+                            className="dropdown-item"
+                            href={`/jobs?location=${encodeURIComponent(location)}`}
+                          >
+                            {location}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
 
                   {!userId && (
                     <li className="nav-item dropdown dropdown-hover">
@@ -635,24 +649,24 @@ const Header = () => {
                             Login | Signup
                           </a>
                         </li>
-                        <li>
+                        {/* <li>
                           <a
                             className="dropdown-item"
                             href="/associated-company-list"
                           >
                             Associated Companies
                           </a>
-                        </li>
-                        <li>
+                        </li> */}
+                        {/* <li>
                           <a
                             className="dropdown-item"
                             href="/saved-candidate-page"
                           >
                             Search Candidates
                           </a>
-                        </li >
-                      </ul >
-                    </li >
+                        </li> */}
+                      </ul>
+                    </li>
                   )}
 
                   <li className="nav-item">

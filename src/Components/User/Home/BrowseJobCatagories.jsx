@@ -8,8 +8,8 @@ const BrowseJobCatagories = () => {
       jobs: '2024',
       iconSvg: (
         <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="24" height="24" x="8" y="8" fill="#6366f1" rx="4"/>
-          <rect width="16" height="16" x="16" y="4" fill="#818cf8" rx="3"/>
+          <rect width="24" height="24" x="8" y="8" fill="#6366f1" rx="4" />
+          <rect width="16" height="16" x="16" y="4" fill="#818cf8" rx="3" />
         </svg>
       ),
       color: '#6366f1'
@@ -20,8 +20,8 @@ const BrowseJobCatagories = () => {
       jobs: '1250',
       iconSvg: (
         <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M10 15 L20 10 L30 15 L20 20 Z" fill="#8b5cf6"/>
-          <path d="M20 20 L20 30 L10 25 L10 15 Z" fill="#a78bfa"/>
+          <path d="M10 15 L20 10 L30 15 L20 20 Z" fill="#8b5cf6" />
+          <path d="M20 20 L20 30 L10 25 L10 15 Z" fill="#a78bfa" />
         </svg>
       ),
       color: '#8b5cf6'
@@ -32,8 +32,8 @@ const BrowseJobCatagories = () => {
       jobs: '802',
       iconSvg: (
         <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="28" height="20" x="6" y="14" fill="#ec4899" rx="2"/>
-          <rect width="8" height="12" x="16" y="8" fill="#f472b6" rx="2"/>
+          <rect width="28" height="20" x="6" y="14" fill="#ec4899" rx="2" />
+          <rect width="8" height="12" x="16" y="8" fill="#f472b6" rx="2" />
         </svg>
       ),
       color: '#ec4899'
@@ -44,8 +44,8 @@ const BrowseJobCatagories = () => {
       jobs: '577',
       iconSvg: (
         <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="20" cy="16" r="8" fill="#f59e0b"/>
-          <path d="M12 24 C12 20 16 18 20 18 C24 18 28 20 28 24 L28 30 L12 30 Z" fill="#fbbf24"/>
+          <circle cx="20" cy="16" r="8" fill="#f59e0b" />
+          <path d="M12 24 C12 20 16 18 20 18 C24 18 28 20 28 24 L28 30 L12 30 Z" fill="#fbbf24" />
         </svg>
       ),
       color: '#f59e0b'
@@ -56,9 +56,9 @@ const BrowseJobCatagories = () => {
       jobs: '285',
       iconSvg: (
         <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="24" height="24" x="8" y="10" fill="#10b981" rx="2"/>
-          <rect width="4" height="8" x="14" y="16" fill="#34d399"/>
-          <rect width="4" height="8" x="22" y="16" fill="#34d399"/>
+          <rect width="24" height="24" x="8" y="10" fill="#10b981" rx="2" />
+          <rect width="4" height="8" x="14" y="16" fill="#34d399" />
+          <rect width="4" height="8" x="22" y="16" fill="#34d399" />
         </svg>
       ),
       color: '#10b981'
@@ -69,8 +69,8 @@ const BrowseJobCatagories = () => {
       jobs: '495',
       iconSvg: (
         <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M8 20 L20 8 L32 20 L28 24 L20 16 L12 24 Z" fill="#06b6d4"/>
-          <circle cx="20" cy="20" r="3" fill="#22d3ee"/>
+          <path d="M8 20 L20 8 L32 20 L28 24 L20 16 L12 24 Z" fill="#06b6d4" />
+          <circle cx="20" cy="20" r="3" fill="#22d3ee" />
         </svg>
       ),
       color: '#06b6d4'
@@ -81,9 +81,9 @@ const BrowseJobCatagories = () => {
       jobs: '1045',
       iconSvg: (
         <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="24" height="18" x="8" y="11" fill="#f43f5e" rx="2"/>
-          <path d="M12 23 L16 15 L22 23 Z" fill="#fb7185"/>
-          <circle cx="25" cy="17" r="2" fill="#fb7185"/>
+          <rect width="24" height="18" x="8" y="11" fill="#f43f5e" rx="2" />
+          <path d="M12 23 L16 15 L22 23 Z" fill="#fb7185" />
+          <circle cx="25" cy="17" r="2" fill="#fb7185" />
         </svg>
       ),
       color: '#f43f5e'
@@ -94,9 +94,9 @@ const BrowseJobCatagories = () => {
       jobs: '1516',
       iconSvg: (
         <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="20" height="26" x="10" y="7" fill="#14b8a6" rx="3"/>
-          <rect width="8" height="12" x="16" y="16" fill="#2dd4bf" rx="2"/>
-          <rect width="4" height="6" x="18" y="11" fill="#2dd4bf" rx="1"/>
+          <rect width="20" height="26" x="10" y="7" fill="#14b8a6" rx="3" />
+          <rect width="8" height="12" x="16" y="16" fill="#2dd4bf" rx="2" />
+          <rect width="4" height="6" x="18" y="11" fill="#2dd4bf" rx="1" />
         </svg>
       ),
       color: '#14b8a6'
@@ -198,9 +198,9 @@ const BrowseJobCatagories = () => {
         {categories.map((category) => (
           <div key={category.id} className="col-lg-3 col-md-6 mt-4 pt-2">
             <div className="popu-category-box rounded text-center">
-              <div 
-                className="popu-category-icon icons-md" 
-                style={{ 
+              <div
+                className="popu-category-icon icons-md"
+                style={{
                   backgroundColor: `${category.color}15`,
                 }}
               >

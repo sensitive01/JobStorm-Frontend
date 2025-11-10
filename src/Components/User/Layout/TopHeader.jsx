@@ -300,7 +300,7 @@ const TopHeader = () => {
                     <i className="uil uil-lock" /> Post Jobs FREE
                   </a>
 
-                  <div className="dropdown d-inline-block language-switch ms-2">
+                  {/* <div className="dropdown d-inline-block language-switch ms-2">
                     <button
                       type="button"
                       className="btn p-1"
@@ -351,7 +351,7 @@ const TopHeader = () => {
                         <span className="align-middle">German</span>
                       </a>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

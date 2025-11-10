@@ -214,3 +214,25 @@ export const getBlogList = async (jobType) => {
     return err;
   }
 };
+
+export const getDistictValues = async () => {
+  try {
+    const response = await axiosInstance.get(
+      `/get-distict-category-location`
+    );
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const getRandomBlogs = async () => {
+  try {
+    const response = await axiosInstance.get(
+      `/get-random-blogs`
+    );
+    return response;
+  } catch (err) {
+    return err;
+  }
+};

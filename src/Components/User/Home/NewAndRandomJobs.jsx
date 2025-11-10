@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { getJobsByType } from '../../../api/service/axiosService';
 
 const NewAndRandomJobs = () => {
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('recent-jobs');
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -24,7 +26,9 @@ const NewAndRandomJobs = () => {
                 const response = await getJobsByType(jobType);
 
                 if (response.data && response.data.success) {
-                    setJobs(response.data.data);
+                    // Limit to only 5 jobs
+                    const limitedJobs = response.data.data.slice(0, 5);
+                    setJobs(limitedJobs);
                 }
                 setLoading(false);
             } catch (error) {
@@ -40,6 +44,14 @@ const NewAndRandomJobs = () => {
         setActiveTab(tabId);
     };
 
+    const handleApplyNow = (jobId) => {
+        navigate(`/job-preview/${jobId}`);
+    };
+
+    const handleJobDetails = (jobId) => {
+        navigate(`/job-details/${jobId}`);
+    };
+
     const renderJobCard = (job, index) => (
         <div key={index} className="job-box bookmark-post card mt-4">
             <div className="bookmark-label text-center">
@@ -51,7 +63,10 @@ const NewAndRandomJobs = () => {
                 <div className="row align-items-center">
                     <div className="col-md-2">
                         <div className="text-center mb-4 mb-md-0">
-                            <a href="#">
+                            <a href="#" onClick={(e) => {
+                                e.preventDefault();
+                                handleJobDetails(job._id);
+                            }}>
                                 <img
                                     src={job.companyLogo || "assets/images/featured-job/img-01.png"}
                                     alt=""
@@ -63,7 +78,15 @@ const NewAndRandomJobs = () => {
                     <div className="col-md-3">
                         <div className="mb-2 mb-md-0">
                             <h5 className="fs-18 mb-1">
-                                <a href={`/job-details/${job._id}`} className="text-dark">
+                                <a
+                                    href="#"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        handleJobDetails(job._id);
+                                    }}
+                                    className="text-dark"
+                                    style={{ cursor: 'pointer' }}
+                                >
                                     {job.jobTitle}
                                 </a>
                             </h5>
@@ -125,13 +148,13 @@ const NewAndRandomJobs = () => {
                     </div>
                     <div className="col-lg-2 col-md-3">
                         <div className="text-start text-md-end">
-                            <a
-                                href="#applyNow"
-                                data-bs-toggle="modal"
-                                className="bg-white text-primary rounded p-2 primary-link"
+                            <button
+                                onClick={() => handleApplyNow(job._id)}
+                                className="bg-white text-primary rounded p-2 primary-link border-0"
+                                style={{ cursor: 'pointer' }}
                             >
                                 Apply Now <i className="mdi mdi-chevron-double-right" />
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
