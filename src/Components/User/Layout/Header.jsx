@@ -571,7 +571,7 @@ const Header = () => {
                     </div>
                   </li>
 
-                  <li className="nav-item dropdown">
+                  {/* <li className="nav-item dropdown">
                     <a
                       className="nav-link dropdown-toggle"
                       href="#"
@@ -597,9 +597,9 @@ const Header = () => {
                         </li>
                       ))}
                     </ul>
-                  </li>
+                  </li> */}
 
-                  <li className="nav-item dropdown">
+                  {/* <li className="nav-item dropdown">
                     <a
                       className="nav-link dropdown-toggle"
                       href="#"
@@ -625,7 +625,7 @@ const Header = () => {
                         </li>
                       ))}
                     </ul>
-                  </li>
+                  </li> */}
 
                   {!userId && (
                     <li className="nav-item dropdown dropdown-hover">
