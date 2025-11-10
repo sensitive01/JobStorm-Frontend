@@ -151,7 +151,7 @@ const BlogsPage = () => {
             {blogs.length > 0 && (
                 <div className="row">
                     <div className="col-lg-12 text-center mt-4">
-                        <a href="/blogs" className="btn btn-primary">
+                        <a href="/blogs-pages" className="btn btn-primary">
                             View All Blogs <i className="uil uil-arrow-right" />
                         </a>
                     </div>
