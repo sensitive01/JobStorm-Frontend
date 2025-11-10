@@ -248,7 +248,7 @@ const AllJobList = () => {
 
   // Clear all filters
   const clearFilters = () => {
-    navigate("/all-jobs", { state: {} });
+    navigate("/job-list", { state: {} });
   };
 
   // Pagination Logic
