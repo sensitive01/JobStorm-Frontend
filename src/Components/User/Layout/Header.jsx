@@ -849,22 +849,51 @@ const Header = () => {
             </div >
           </nav >
 
-          <div className="d-lg-none mobile-job-buttons-bar">
+          {/* Region Job Buttons - Desktop */}
+          <div className="d-none d-lg-flex align-items-center ms-3" style={{ gap: '8px' }}>
             <button
-              className="btn btn-warning"
+              className="btn btn-sm btn-warning"
               onClick={(e) => handleJobSearch(e, { location: 'Middle East' })}
+              style={{ whiteSpace: 'nowrap' }}
+            >
+              Middle East
+            </button>
+            <button
+              className="btn btn-sm btn-info text-white"
+              onClick={(e) => handleJobSearch(e, { location: 'Europe' })}
+              style={{ whiteSpace: 'nowrap' }}
+            >
+              Europe
+            </button>
+            <button
+              className="btn btn-sm btn-success"
+              onClick={(e) => handleJobSearch(e, { location: 'Asia' })}
+              style={{ whiteSpace: 'nowrap' }}
+            >
+              Asia
+            </button>
+          </div>
+
+          {/* Region Job Buttons - Mobile */}
+          <div className="d-lg-none mobile-job-buttons-bar" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', padding: '8px' }}>
+            <button
+              className="btn btn-sm btn-warning"
+              onClick={(e) => handleJobSearch(e, { location: 'Middle East' })}
+              style={{ flex: '1', minWidth: '120px' }}
             >
               Middle East Jobs
             </button>
             <button
-              className="btn btn-info"
+              className="btn btn-sm btn-info text-white"
               onClick={(e) => handleJobSearch(e, { location: 'Europe' })}
+              style={{ flex: '1', minWidth: '120px' }}
             >
               Europe Jobs
             </button>
             <button
-              className="btn btn-success"
+              className="btn btn-sm btn-success"
               onClick={(e) => handleJobSearch(e, { location: 'Asia' })}
+              style={{ flex: '1', minWidth: '120px' }}
             >
               Asia Jobs
             </button>

@@ -20,9 +20,6 @@ const BrowseCatagories = () => {
                 {/*end row*/}
                 <div className="row">
                     <BrowseJobCatagories />
-                    {/*end col*/}
-
-                    {/*end col*/}
                 </div>
                 {/*end row*/}
                 <div className="row">
