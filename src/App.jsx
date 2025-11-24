@@ -41,6 +41,8 @@ import AppliedJobsPage from "./Components/jobs/applied/AppliedJobsPage";
 import MySavedJobs from "./Components/jobs/saved/MySavedJobs";
 import JobApplicationForm from "./Components/jobs/manualapplyjob/ApplyJobManually";
 import ChatPage from "./Components/User/chat/ChatPage";
+import TermsAndConditions from "./Components/policy/TermsAndConditions";
+import PrivacyPolicyContent from "./Components/policy/PrivacyPolicy";
 
 function App() {
   return (
@@ -77,6 +79,8 @@ function App() {
           <Route path="/jobs-grid-view" element={<JobsGridView />} />
           <Route path="/jobs-details-page" element={<JobDetailsPage />} />
           <Route path="/price-page" element={<PricingPage />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyContent />} />
           <Route
             path="/associated-company-list"
             element={<AssociatedCompanyList />}

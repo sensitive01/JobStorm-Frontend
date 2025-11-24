@@ -270,8 +270,13 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a href="/privacy-policy">
                   <i className="mdi mdi-chevron-right" /> Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a href="/terms-and-conditions">
+                  <i className="mdi mdi-chevron-right" /> Terms and Conditions
                 </a>
               </li>
             </ul>

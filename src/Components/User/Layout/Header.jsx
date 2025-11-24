@@ -995,7 +995,7 @@ const Header = () => {
                             >
                               I agree to the{" "}
                               <a
-                                href="#"
+                                href="/terms-and-conditions"
                                 className="text-primary form-text text-decoration-underline"
                               >
                                 Terms and conditions
