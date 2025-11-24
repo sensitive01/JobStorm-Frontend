@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './privacyPolicy.css';
+import './privacypolicy.css';
 
 const PrivacyPolicyContent = () => {
     const [activeSection, setActiveSection] = useState(null);
