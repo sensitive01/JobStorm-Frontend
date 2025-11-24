@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './TermsAndConditions.css';
+import './termsAndConditions.css';
 
 const TermsAndConditionsContent = () => {
     const [activeSection, setActiveSection] = useState(null);
