@@ -108,6 +108,8 @@ function App() {
           <Route path="/apply-manually/:jobId" element={<JobApplicationForm />} />
           <Route path="/my-chats" element={<ChatPage />} />
         </Route>
+          <Route path="/terms-and-conditions-page" element={<TermsAndConditions />} />
+          <Route path="/privacy-policy-page" element={<PrivacyPolicyContent />} />
 
         {/* <Route path="/admin" element={<MainLayoutAdmin />}></Route> */}
       </Routes>
