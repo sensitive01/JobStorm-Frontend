@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './TermsAndConditions.css';
+import './css/termsandconditions.css';
 
 const TermsAndConditionsContent = () => {
     const [activeSection, setActiveSection] = useState(null);
@@ -333,8 +333,8 @@ Website: www.jobsstorm.com`
                         </div>
                     ))}
 
-                    
-                    
+
+
                 </main>
             </div>
         </div>
