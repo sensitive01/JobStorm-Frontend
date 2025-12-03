@@ -163,7 +163,7 @@ const MyProfile = () => {
                           About Me
                         </button>
                       </li>
-                      <li className="nav-item" role="presentation">
+                      {/* <li className="nav-item" role="presentation">
                         <button
                           className={`nav-link ${activeTab === 'jobs' ? 'active' : ''}`}
                           onClick={() => setActiveTab('jobs')}
@@ -172,7 +172,7 @@ const MyProfile = () => {
                         >
                           My Jobs
                         </button>
-                      </li>
+                      </li> */}
                       <li className="nav-item" role="presentation">
                         <button
                           className={`nav-link ${activeTab === 'settings' ? 'active' : ''}`}
