@@ -28,7 +28,7 @@ const MyProfileSideView = ({ data, profileImage }) => {
       {/* Profile Section */}
       <div className="text-center pb-4 border-bottom">
         <img
-          src={ profileImage}
+          src={profileImage}
           alt={data.userName}
           className="avatar-lg img-thumbnail rounded-circle mb-4"
           style={{ width: "120px", height: "120px", objectFit: "cover" }}
@@ -108,6 +108,16 @@ const MyProfileSideView = ({ data, profileImage }) => {
           )}
         </ul>
       </div>
+
+      {/* Profile Summary Section */}
+      {data.profilesummary && (
+        <div className="py-4 border-bottom">
+          <h6 className="fs-16 fw-bold mb-3">Profile Summary</h6>
+          <p className="text-muted fs-14 mb-0" style={{ lineHeight: "1.6", textAlign: "justify" }}>
+            {data.profilesummary}
+          </p>
+        </div>
+      )}
 
       {/* Contact Details */}
       <div className="py-4 border-bottom">

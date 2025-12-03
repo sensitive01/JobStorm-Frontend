@@ -1,0 +1,494 @@
+/* CandidateOverview.module.css */
+
+.candidateOverviewContainer {
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+.headerActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.downloadButton,
+.emailButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.downloadButton {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.downloadButton:hover {
+  background-color: #e5e7eb;
+}
+
+.emailButton {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.emailButton:hover {
+  background-color: #1d4ed8;
+}
+
+.contactGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .contactGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.contactItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.iconCircle {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iconCircleBlue {
+  background-color: #dbeafe;
+}
+
+.iconCirclePurple {
+  background-color: #f3e8ff;
+}
+
+.iconCircleGreen {
+  background-color: #d1fae5;
+}
+
+.iconBlue {
+  color: #2563eb;
+}
+
+.iconPurple {
+  color: #9333ea;
+}
+
+.iconGreen {
+  color: #059669;
+}
+
+.contactLabel {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.contactValue {
+  color: #111827;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.contactLink {
+  color: #2563eb;
+  font-weight: 500;
+  word-break: break-all;
+  text-decoration: none;
+}
+
+.contactLink:hover {
+  color: #1d4ed8;
+}
+
+.sectionCard {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.sectionHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.sectionHeader:hover {
+  background-color: #f9fafb;
+}
+
+.sectionHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sectionTitle {
+  font-weight: 600;
+  color: #111827;
+  font-size: 1rem;
+}
+
+.sectionContent {
+  padding: 1rem;
+  padding-top: 0;
+}
+
+.sectionContentFull {
+  padding: 1.5rem;
+}
+
+.documentsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.documentCard {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: all 0.2s;
+  cursor: pointer;
+  background-color: #ffffff;
+}
+
+.documentCard:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.documentCardTop {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  padding: 0.75rem;
+  display: flex;
+  justify-content: flex-end;
+  height: 50px;
+}
+
+.documentCheckIcon {
+  width: 1rem;
+  height: 1rem;
+  color: #10b981;
+}
+
+.documentCardContent {
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.documentDownloadIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0 auto 0.5rem;
+  padding: 0.375rem;
+  background-color: #f3f4f6;
+  border-radius: 0.375rem;
+  color: #6b7280;
+}
+
+.documentCardTitle {
+  font-weight: 600;
+  color: #111827;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.documentCardInfo {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.passportExpiryInfo {
+  background-color: #f9fafb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+}
+
+
+
+.experienceTimeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.experienceTimeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  width: 2px;
+  background-color: #e5e7eb;
+}
+
+.experienceItem {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.experienceItem:last-child {
+  margin-bottom: 0;
+}
+
+.timelineDot {
+  position: absolute;
+  left: -2rem;
+  top: 0.25rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: #2563eb;
+  border: 2px solid #ffffff;
+}
+
+.experienceItemHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.experiencePosition {
+  font-weight: 600;
+  color: #111827;
+  font-size: 1rem;
+}
+
+.experienceDuration {
+  font-size: 0.875rem;
+  color: #2563eb;
+  font-weight: 500;
+  white-space: nowrap;
+  margin-left: 1rem;
+}
+
+.experienceCompany {
+  color: #4b5563;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.experienceDescription {
+  color: #4b5563;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.educationList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.educationItem {
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 1rem;
+}
+
+.educationItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.educationItemHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.educationInstitution {
+  font-weight: 600;
+  color: #111827;
+  font-size: 1rem;
+}
+
+.educationDuration {
+  font-size: 0.875rem;
+  color: #6b7280;
+  white-space: nowrap;
+  margin-left: 1rem;
+}
+
+.educationType {
+  color: #2563eb;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.educationDegree {
+  color: #4b5563;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.educationDescription {
+  color: #4b5563;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  line-height: 1.5;
+}
+
+.additionalInfoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.languagesContainer {
+  margin-bottom: 1rem;
+}
+
+.languagesLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.languagesList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.languageBadge {
+  padding: 0.25rem 0.75rem;
+  background-color: #d1fae5;
+  color: #065f46;
+  font-size: 0.875rem;
+  border-radius: 9999px;
+}
+
+.infoItem {
+  padding-top: 1rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+.infoItem:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.infoText {
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.infoLabel {
+  font-weight: 500;
+}
+
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 4px solid #2563eb;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.noDataAlert {
+  background-color: #fef3c7;
+  border: 1px solid #fcd34d;
+  color: #92400e;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.iconSmall {
+  width: 1rem;
+  height: 1rem;
+}
+
+.chevronIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #9ca3af;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .candidateOverviewContainer {
+    padding: 1rem;
+  }
+
+  .headerActions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .downloadButton,
+  .emailButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .contactGrid {
+    padding: 1rem;
+  }
+
+  .experienceItemHeader,
+  .educationItemHeader {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .experienceDuration,
+  .educationDuration {
+    margin-left: 0;
+  }
+}

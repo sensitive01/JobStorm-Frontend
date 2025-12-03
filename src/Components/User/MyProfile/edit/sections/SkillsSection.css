@@ -1,0 +1,123 @@
+/* SkillsSection.css */
+@import './SharedSectionStyles.css';
+
+.skills-display-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.skill-display-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #eff6ff;
+  color: #1e40af;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  border: 1px solid #dbeafe;
+  transition: all 0.2s ease;
+}
+
+.skill-display-tag:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+}
+
+.skill-display-tag span {
+  line-height: 1;
+}
+
+.skill-display-remove-btn {
+  background: none;
+  border: none;
+  color: #1e40af;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.skill-display-remove-btn:hover {
+  color: #ef4444;
+  transform: scale(1.2);
+}
+
+.skill-add-container {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.skill-add-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #1e293b;
+  transition: all 0.2s ease;
+}
+
+.skill-add-input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.skill-add-input::placeholder {
+  color: #94a3b8;
+}
+
+.skill-add-button {
+  padding: 12px 24px;
+  background: #6366f1;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.skill-add-button:hover:not(:disabled) {
+  background: #4f46e5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.skill-add-button:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+}
+
+.skill-add-button i {
+  font-size: 18px;
+}
+
+@media (max-width: 768px) {
+  .skill-add-container {
+    flex-direction: column;
+  }
+  
+  .skill-add-button {
+    justify-content: center;
+  }
+}

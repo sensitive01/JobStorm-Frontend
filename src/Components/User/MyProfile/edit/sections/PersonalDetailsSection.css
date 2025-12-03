@@ -1,0 +1,77 @@
+/* PersonalDetailsSection.css */
+@import './SharedSectionStyles.css';
+
+/* Profile Picture Upload */
+.profile-picture-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.upload-avatar-wrapper {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.upload-avatar-img,
+.upload-avatar-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.upload-avatar-placeholder {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 2px;
+}
+
+.upload-avatar-btn {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 40px;
+  height: 40px;
+  background: #6366f1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.upload-avatar-btn:hover {
+  background: #4f46e5;
+  transform: scale(1.1);
+}
+
+.upload-avatar-btn i {
+  color: white;
+  font-size: 18px;
+}
+
+.upload-input-hidden {
+  display: none;
+}
+
+.upload-hint {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+  text-align: center;
+}
+
+/* This component uses the shared form styles from EditProfilePage.css */
+/* Add any section-specific styles below */

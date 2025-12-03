@@ -302,7 +302,7 @@ const HeaderAuthButtons = () => {
 
               <div
                 className="auth-option-card"
-                onClick={() => handleNavigation("https://employer.jobsstorm.com/")}
+                onClick={() => handleNavigation("https://jobsstorm.com/employer-login")}
               >
                 <div className="auth-option-icon">
                   <Building2 size={28} style={{ strokeWidth: 2.5 }} />

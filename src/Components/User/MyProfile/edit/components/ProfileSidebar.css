@@ -1,0 +1,9 @@
+/* ProfileSidebar.css */
+
+.profile-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ProfileCard and SkillsCard have their own CSS files */

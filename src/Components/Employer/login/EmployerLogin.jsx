@@ -11,6 +11,10 @@ const EmployerLogin = () => {
     rememberMe: false,
   });
 
+  const handleNavigation = (url) => {
+    window.location.href = url;
+  };
+
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -53,7 +57,7 @@ const EmployerLogin = () => {
         });
 
         setTimeout(() => {
-          navigate("/");
+          handleNavigation("https://employer.jobsstorm.com/dashboard")
         }, 1000);
       } else {
         toast.error(response?.response?.data?.message);
@@ -258,7 +262,7 @@ const EmployerLogin = () => {
         </div>
       </div>
 
-      <div id="style-switcher" onClick={() => {}} style={{ left: "-165px" }}>
+      <div id="style-switcher" onClick={() => { }} style={{ left: "-165px" }}>
         <div>
           <h6>Select your color</h6>
           <ul className="pattern list-unstyled mb-0">

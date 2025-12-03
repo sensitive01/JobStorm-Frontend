@@ -1,0 +1,170 @@
+/* DocumentUploadCard.css */
+
+.document-upload-card {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.2s ease;
+}
+
+.document-upload-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.document-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.document-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.required-star {
+  color: #ef4444;
+  font-size: 16px;
+}
+
+.document-status {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.document-status.uploaded {
+  color: #10b981;
+  background-color: #d1fae5;
+}
+
+.document-status.not-uploaded {
+  color: #6b7280;
+  background-color: #f3f4f6;
+}
+
+.view-icon {
+  color: #3b82f6;
+  cursor: pointer;
+  font-size: 16px;
+  transition: color 0.2s ease;
+  margin-left: 4px;
+}
+
+.view-icon:hover {
+  color: #2563eb;
+}
+
+.document-formats {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0 0 16px 0;
+}
+
+.expiry-date-group {
+  margin-bottom: 16px;
+}
+
+.expiry-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.expiry-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1e293b;
+  transition: all 0.2s ease;
+}
+
+.expiry-input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.upload-zone {
+  border: 2px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: 28px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.upload-zone:hover {
+  border-color: #6366f1;
+  background: #f8f9ff;
+}
+
+.upload-zone.dragging {
+  border-color: #6366f1;
+  background: #eff6ff;
+  border-width: 3px;
+}
+
+.file-input-hidden {
+  display: none;
+}
+
+.upload-icon {
+  font-size: 36px;
+  color: #94a3b8;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+}
+
+.upload-zone:hover .upload-icon {
+  color: #6366f1;
+  transform: scale(1.1);
+}
+
+.upload-icon.uil-check-circle {
+  color: #10b981;
+}
+
+.upload-text {
+  font-size: 14px;
+  color: #6366f1;
+  font-weight: 600;
+  margin: 0;
+}
+
+.uploaded-file-name {
+  font-size: 13px;
+  color: #475569;
+  margin: 8px 0 0 0;
+  word-break: break-all;
+}
+
+/* Documents Grid */
+.documents-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .documents-grid {
+    grid-template-columns: 1fr;
+  }
+}

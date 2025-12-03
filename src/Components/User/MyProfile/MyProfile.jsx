@@ -4,9 +4,18 @@ import CandidateOverview from "./CandidateOverview";
 import MyProfileSideView from "./MyProfileSideView";
 import { getUserDetails } from "../../../api/service/axiosService";
 import profileImage from "../../../assets/images/profileImage.png"
+import DashboardOverview from "./DashboardOverview";
+import MyJobs from "./MyJobs";
+import EditProfilePage from "./edit/EditProfilePage";
 
 const MyProfile = () => {
   const userId = localStorage.getItem("userId");
+  const [activeTab, setActiveTab] = useState('dashboard');
+
+  // Debug: Log tab changes
+  useEffect(() => {
+    console.log('Active tab changed to:', activeTab);
+  }, [activeTab]);
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -56,6 +65,7 @@ const MyProfile = () => {
       fetchData();
     }
   }, [userId]);
+
   return (
     <div>
       <div className="main-content">
@@ -112,14 +122,13 @@ const MyProfile = () => {
           </div>
           {/* END SHAPE */}
           {/* START PROFILE */}
-          <section className="section">
-            <div className="container">
-              <div className="row">
-                <div className="col-lg-4">
-                  <div className="card profile-sidebar me-lg-4">
+          <section className="section" style={{ backgroundColor: '#f8f9fa' }}>
+            <div className="container-fluid px-4">
+              <div className="row gx-4">
+                <div className="col-lg-3">
+                  <div className="card profile-sidebar">
                     <div className="card-body p-4">
                       <MyProfileSideView data={data} profileImage={profileImage} />
-
                       {/*end contact-details*/}
                     </div>
                     {/*end card-body*/}
@@ -127,7 +136,7 @@ const MyProfile = () => {
                   {/*end profile-sidebar*/}
                 </div>
                 {/*end col*/}
-                <div className="col-lg-8">
+                <div className="col-lg-9">
                   <div className="card profile-content-page mt-4 mt-lg-0">
                     <ul
                       className="profile-content-nav nav nav-pills border-bottom mb-4"
@@ -136,42 +145,43 @@ const MyProfile = () => {
                     >
                       <li className="nav-item" role="presentation">
                         <button
-                          className="nav-link active"
-                          id="overview-tab"
-                          data-bs-toggle="pill"
-                          data-bs-target="#overview"
+                          className={`nav-link ${activeTab === 'dashboard' ? 'active' : ''}`}
+                          onClick={() => setActiveTab('dashboard')}
                           type="button"
                           role="tab"
-                          aria-controls="overview"
-                          aria-selected="true"
                         >
-                          Overview
+                          Dashboard Overview
                         </button>
                       </li>
                       <li className="nav-item" role="presentation">
                         <button
-                          className="nav-link"
-                          id="settings-tab"
-                          data-bs-toggle="pill"
-                          data-bs-target="#settings"
+                          className={`nav-link ${activeTab === 'about' ? 'active' : ''}`}
+                          onClick={() => setActiveTab('about')}
                           type="button"
                           role="tab"
-                          aria-controls="settings"
-                          aria-selected="false"
+                        >
+                          About Me
+                        </button>
+                      </li>
+                      <li className="nav-item" role="presentation">
+                        <button
+                          className={`nav-link ${activeTab === 'jobs' ? 'active' : ''}`}
+                          onClick={() => setActiveTab('jobs')}
+                          type="button"
+                          role="tab"
                         >
                           My Jobs
                         </button>
                       </li>
                       <li className="nav-item" role="presentation">
                         <button
-                          className="nav-link"
-                          id="settings-tab"
-                          data-bs-toggle="pill"
-                          data-bs-target="#settings"
+                          className={`nav-link ${activeTab === 'settings' ? 'active' : ''}`}
+                          onClick={(e) => {
+                            console.log('Edit Profile button clicked');
+                            setActiveTab('settings');
+                          }}
                           type="button"
                           role="tab"
-                          aria-controls="settings"
-                          aria-selected="false"
                         >
                           Edit Profile
                         </button>
@@ -180,11 +190,35 @@ const MyProfile = () => {
                     {/*end profile-content-nav*/}
                     <div className="card-body p-4">
                       <div className="tab-content" id="pills-tabContent">
-                        <CandidateOverview data={data} loading={loading} />
-                        <EditFormDataPage profileImages={profileImage} />
-                        {/*end tab-pane*/}
+                        {/* Dashboard Tab */}
+                        {activeTab === 'dashboard' && (
+                          <div className="tab-pane fade show active">
+                            <DashboardOverview />
+                          </div>
+                        )}
+
+                        {/* About Me Tab */}
+                        {activeTab === 'about' && (
+                          <div className="tab-pane fade show active">
+                            <CandidateOverview data={data} loading={loading} />
+                          </div>
+                        )}
+
+                        {/* My Jobs Tab */}
+                        {activeTab === 'jobs' && (
+                          <div className="tab-pane fade show active">
+                            <MyJobs />
+                          </div>
+                        )}
+
+                        {/* Edit Profile Tab */}
+                        {activeTab === 'settings' && (
+                          <div className="tab-pane fade show active">
+                            {console.log('Rendering EditFormDataPage with data:', data)}
+                            <EditProfilePage formData={data} profileImages={profileImage} />
+                          </div>
+                        )}
                       </div>
-                      {/*end tab-content*/}
                     </div>
                     {/*end card-body*/}
                   </div>

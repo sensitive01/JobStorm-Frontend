@@ -5,6 +5,7 @@ import {
 } from "../../../api/service/axiosService";
 
 const EditFormDataPage = ({ formData, profileImages }) => {
+  console.log("opening the edit page")
   const userId = localStorage.getItem("userId");
 
   // Helper functions to split userName into firstName and lastName
@@ -359,12 +360,7 @@ const EditFormDataPage = ({ formData, profileImages }) => {
   };
 
   return (
-    <div
-      className="tab-pane fade"
-      id="settings"
-      role="tabpanel"
-      aria-labelledby="settings-tab"
-    >
+    <div className="tab-pane show active">
       <form onSubmit={handleSubmit}>
         {/* Profile Picture Section */}
         <div>

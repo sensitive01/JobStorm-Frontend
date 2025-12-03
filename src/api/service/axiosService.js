@@ -236,3 +236,36 @@ export const getRandomBlogs = async () => {
     return err;
   }
 };
+
+export const getDasboardData = async (candidateId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/get-candidate-dashboard-data/${candidateId}`
+    );
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const generateSubscription = async (candidateId) => {
+  try {
+    const response = await axiosInstance.post(
+      `/generate-job-storm-card/${candidateId}`
+    );
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const getSubscriptionCardData = async (candidateId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/get-job-storm-card-data/${candidateId}`
+    );
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
