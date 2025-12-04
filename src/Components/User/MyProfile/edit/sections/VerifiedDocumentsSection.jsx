@@ -44,7 +44,7 @@ const VerifiedDocumentsSection = ({
           {/* Police Clearance */}
           <DocumentUploadCard
             title="Police Clearance"
-            required
+       
             acceptedFormats="Max 8MB, PDF, JPG, PNG"
             documentType="policeClearance"
             document={documents.policeClearance}
