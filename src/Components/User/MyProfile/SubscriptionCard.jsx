@@ -11,6 +11,7 @@ const SubscriptionCard = () => {
     const [cardData, setCardData] = useState(null);
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
+    const [isSubscribed, setIsSubscribed] = useState(false);
 
     useEffect(() => {
         const fetchCardData = async () => {
@@ -18,6 +19,8 @@ const SubscriptionCard = () => {
                 const response = await getSubscriptionCardData(candidateId);
                 if (response?.data?.success) {
                     setCardData(response.data.data);
+                    // Set isSubscribed based on API response
+                    // setIsSubscribed(response.data.data.isSubscribed || false);
                 }
             } catch (err) {
                 console.error('Error fetching card data:', err);
@@ -31,6 +34,13 @@ const SubscriptionCard = () => {
     }, [candidateId]);
 
     const handleGenerateSubscription = async () => {
+        // Check if user is subscribed
+        if (!isSubscribed) {
+            setError('Payment integration coming soon!');
+            setTimeout(() => setError(null), 3000);
+            return;
+        }
+
         try {
             setIsGenerating(true);
             setError(null);
@@ -67,7 +77,8 @@ const SubscriptionCard = () => {
         return '•••• •••• •••• ' + number.slice(-4);
     };
 
-    if (!cardData) {
+    // Show blurred card if no data OR if user is not subscribed
+    if (!cardData || !isSubscribed) {
         return (
             <div style={styles.noDataContainer}>
                 <div style={styles.blurredCard}>
@@ -283,14 +294,16 @@ const styles = {
         display: 'inline-block',
     },
     errorMessage: {
-        color: '#ef4444',
-        fontSize: '12px',
+        color: '#f59e0b',
+        fontSize: '13px',
         textAlign: 'center',
-        background: 'rgba(239, 68, 68, 0.1)',
-        padding: '8px 16px',
-        borderRadius: '8px',
-        border: '1px solid rgba(239, 68, 68, 0.2)',
+        background: 'rgba(245, 158, 11, 0.15)',
+        padding: '10px 20px',
+        borderRadius: '10px',
+        border: '1px solid rgba(245, 158, 11, 0.3)',
         margin: 0,
+        fontWeight: '600',
+        letterSpacing: '0.5px',
     },
     // Original styles (when data is present)
     cardHeader: {
