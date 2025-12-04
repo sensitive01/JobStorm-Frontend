@@ -1,118 +1,78 @@
-import React from "react";
+import React, { useState } from 'react';
+import './IntegratedPricing.css';
 
 const PricingPage = () => {
+  const [currentPlan] = useState({
+    name: 'Gold Plan',
+    id: 'SUB-8839-2825',
+    type: 'gold',
+    validity: '6 months'
+  });
+
+  const [usage] = useState({
+    applications: { current: 12, total: 50, resetDays: 14 },
+    profileViews: { current: 45, total: 100, status: 'Good visibility!' },
+    resumeReviews: { current: 1, total: 3, remaining: 2 }
+  });
+
+  const plans = [
+    {
+      id: 'gold',
+      name: 'Gold',
+      price: 15000,
+      period: '+GST',
+      description: 'Perfect for serious job seekers',
+      icon: 'uim-award',
+      features: [
+        'Apply to jobs',
+        'Medium priority to recruiters',
+        'Profile boosted in listings',
+        '1 resume review & optimization',
+        'Email & SMS confirmation',
+        'Valid for 6 months'
+      ],
+      disabledFeatures: [
+        'Immediate interview call',
+        'Dedicated account manager',
+        'Subscription card'
+      ],
+      isCurrent: true
+    },
+    {
+      id: 'platinum',
+      name: 'Platinum',
+      price: 30000,
+      period: '+GST',
+      description: 'Maximum visibility & priority',
+      icon: 'uim-trophy',
+      popular: true,
+      features: [
+        'Apply to jobs',
+        'Highest priority to recruiters',
+        'Top profile boosted in listings',
+        'Immediate interview call (priority pass)',
+        'Dedicated account manager',
+        '2 resume reviews & optimization',
+        'Email & SMS + subscription card',
+        'Valid for 1 year'
+      ],
+      disabledFeatures: []
+    }
+  ];
+
+  const getProgressPercentage = (current, total) => {
+    return (current / total) * 100;
+  };
+
+  const getProgressColor = (percentage) => {
+    if (percentage >= 80) return '#ef4444';
+    if (percentage >= 50) return '#f59e0b';
+    return '#8b5cf6';
+  };
+
   return (
     <>
       <div>
-        {/* START SIGN-UP MODAL */}
-        <div
-          className="modal fade"
-          id="signupModal"
-          tabIndex={-1}
-          aria-hidden="true"
-        >
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-body p-5">
-                <div className="position-absolute end-0 top-0 p-3">
-                  <button
-                    type="button"
-                    className="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  />
-                </div>
-                <div className="auth-content">
-                  <div className="w-100">
-                    <div className="text-center mb-4">
-                      <h5>Sign Up</h5>
-                      <p className="text-muted">
-                        Sign Up and get access to all the features of JobsStorm
-                      </p>
-                    </div>
-                    <form action="#" className="auth-form">
-                      <div className="mb-3">
-                        <label htmlFor="usernameInput" className="form-label">
-                          Username
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="usernameInput"
-                          placeholder="Enter your username"
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label htmlFor="passwordInput" className="form-label">
-                          Email
-                        </label>
-                        <input
-                          type="email"
-                          className="form-control"
-                          id="emailInput"
-                          placeholder="Enter your email"
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label htmlFor="emailInput" className="form-label">
-                          Password
-                        </label>
-                        <input
-                          type="password"
-                          className="form-control"
-                          id="passwordInput"
-                          placeholder="Password"
-                        />
-                      </div>
-                      <div className="mb-4">
-                        <div className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id="flexCheckDefault"
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor="flexCheckDefault"
-                          >
-                            I agree to the{" "}
-                            <a
-                              href="javascript:void(0)"
-                              className="text-primary form-text text-decoration-underline"
-                            >
-                              Terms and conditions
-                            </a>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="text-center">
-                        <button type="submit" className="btn btn-primary w-100">
-                          Sign Up
-                        </button>
-                      </div>
-                    </form>
-                    <div className="mt-3 text-center">
-                      <p className="mb-0">
-                        Already a member ?{" "}
-                        <a
-                          href="sign-in.html"
-                          className="form-text text-primary text-decoration-underline"
-                        >
-                          {" "}
-                          Sign-in{" "}
-                        </a>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/*end modal-body*/}
-            </div>
-            {/*end modal-content*/}
-          </div>
-          {/*end modal-dialog*/}
-        </div>
-        {/* END SIGN-UP MODAL */}
         <div className="main-content">
           <div className="page-content">
             {/* Start home */}
@@ -121,7 +81,7 @@ const PricingPage = () => {
                 <div className="row justify-content-center">
                   <div className="col-md-6">
                     <div className="text-center text-white">
-                      <h3 className="mb-4">Pricing</h3>
+                      <h3 className="mb-4">Pricing & Subscription</h3>
                       <div className="page-next">
                         <nav
                           className="d-inline-block"
@@ -129,7 +89,7 @@ const PricingPage = () => {
                         >
                           <ol className="breadcrumb justify-content-center">
                             <li className="breadcrumb-item">
-                              <a href="index-2.html">Home</a>
+                              <a href="/">Home</a>
                             </li>
                             <li className="breadcrumb-item">
                               <a href="javascript:void(0)">Company</a>
@@ -138,21 +98,18 @@ const PricingPage = () => {
                               className="breadcrumb-item active"
                               aria-current="page"
                             >
-                              {" "}
-                              Pricing{" "}
+                              Pricing
                             </li>
                           </ol>
                         </nav>
                       </div>
                     </div>
                   </div>
-                  {/*end col*/}
                 </div>
-                {/*end row*/}
               </div>
-              {/*end container*/}
             </section>
             {/* end home */}
+
             {/* START SHAPE */}
             <div className="position-relative" style={{ zIndex: 1 }}>
               <div className="shape">
@@ -166,193 +123,191 @@ const PricingPage = () => {
               </div>
             </div>
             {/* END SHAPE */}
-            {/* START PRICING */}
+
+            {/* CURRENT PLAN HEADER */}
+            <section className="section pt-4">
+              <div className="container">
+                <div className="current-plan-header">
+                  <div className="plan-header-content">
+                    <div className="plan-info-badges">
+                      <span className="badge bg-primary">Current Plan</span>
+                      <span className="plan-id-badge">ID: {currentPlan.id}</span>
+                    </div>
+                    <h2 className="plan-title-main">{currentPlan.name}</h2>
+                    <p className="plan-description-text">
+                      You are currently on the {currentPlan.name}. Valid for {currentPlan.validity}. Upgrade to Platinum for highest priority and dedicated account manager.
+                    </p>
+                  </div>
+                  <div className="plan-header-actions">
+                    <button className="btn btn-primary btn-lg">
+                      Upgrade to Platinum
+                    </button>
+                    <button className="btn btn-primary btn-lg" >
+                      Manage Subscription
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* START PRICING - MOVED UP */}
             <section className="section">
               <div className="container">
                 <div className="row justify-content-center">
-                  <div className="col-lg-6">
+                  <div className="col-lg-8">
                     <div className="text-center">
-                      <span className="badge warning-bg-subtle  fs-15 mb-2">
+                      <span className="badge warning-bg-subtle fs-15 mb-2">
                         Choose Your Plan
                       </span>
-                      <h3>Save up to 15%</h3>
+                      <h3>Get Premium Access to Top Recruiters</h3>
                       <p className="text-muted">
-                        The faster, most seamless CI &amp; development you'll
-                        find anywhere.
+                        Boost your profile visibility and get priority access to recruiters.
                       </p>
                     </div>
                   </div>
-                  {/*end col*/}
                 </div>
-                {/*end row*/}
-                <div className="row">
-                  <div className="col-lg-4 col-md-6 mt-5 pt-2">
-                    <div className="pricing-box card bg-light">
-                      <div className="card-body p-4 px-lg-5">
-                        <div className="pricing-icon bg-light rounded-circle icons-md">
-                          <i className="uim uim-telegram-alt" />
-                        </div>
-                        <div className="pricing-name text-center mt-4 pt-2">
-                          <h4 className="fs-18">Starter</h4>
-                        </div>
-                        <div className="pricing-price text-center mt-4">
-                          <h2 className="fw-semibold">
-                            $35.99<small className="fs-16">/mo</small>
-                          </h2>
-                        </div>
-                        <ul className="list-unstyled pricing-details text-muted mt-4">
-                          <li className="pricing-item">
-                            <i className="mdi mdi-check-bold success-bg-subtle me-2" />{" "}
-                            Unlimited file recovery
-                          </li>
-                          <li className="pricing-item">
-                            <i className="mdi mdi-check-bold success-bg-subtle me-2" />{" "}
-                            Professional reports
-                          </li>
-                          <li className="pricing-item">
-                            <i className="mdi mdi-check-bold success-bg-subtle me-2" />{" "}
-                            Sell on marketplaces
-                          </li>
-                          <li className="pricing-item text-decoration-line-through">
-                            <i className="mdi mdi-close-thick bg-soft-muted me-2" />{" "}
-                            Unlimited Builds
-                          </li>
-                          <li className="pricing-item text-decoration-line-through">
-                            <i className="mdi mdi-close-thick bg-soft-muted me-2" />{" "}
-                            Job displayed for 30 days
-                          </li>
-                          <li className="pricing-item text-decoration-line-through">
-                            <i className="mdi mdi-close-thick bg-soft-muted me-2" />{" "}
-                            Premium Support 24/7
-                          </li>
-                        </ul>
-                        <div className="text-center mt-4 mb-2">
-                          <a
-                            href="javascript:void(0)"
-                            className="btn btn-soft-primary rounded-pill"
-                          >
-                            Purchase Now <i className="uil uil-arrow-right" />
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                    {/*end pricing-box*/}
-                  </div>
-                  {/*end col*/}
-                  <div className="col-lg-4 col-md-6 mt-5 pt-2">
-                    <div className="pricing-box card bg-light">
-                      <div className="card-body p-4 px-lg-5">
-                        <div className="pricing-icon bg-light rounded-circle icons-md">
-                          <i className="uim uim-rocket" />
-                        </div>
-                        <div className="pricing-name text-center mt-4 pt-2">
-                          <h4 className="fs-18">Professional</h4>
-                        </div>
-                        <div className="pricing-price text-center mt-4">
-                          <h2 className="fw-semibold">
-                            $49.99<small className="fs-16">/mo</small>
-                          </h2>
-                        </div>
-                        <ul className="list-unstyled pricing-details text-muted mt-4">
-                          <li className="pricing-item">
-                            <i className="mdi mdi-check-bold success-bg-subtle me-2" />{" "}
-                            Unlimited file recovery
-                          </li>
-                          <li className="pricing-item">
-                            <i className="mdi mdi-check-bold success-bg-subtle me-2" />{" "}
-                            Professional reports
-                          </li>
-                          <li className="pricing-item">
-                            <i className="mdi mdi-check-bold success-bg-subtle me-2" />{" "}
-                            Sell on marketplaces
-                          </li>
-                          <li className="pricing-item">
-                            <i className="mdi mdi-check-bold success-bg-subtle me-2" />{" "}
-                            Unlimited Builds
-                          </li>
-                          <li className="pricing-item text-decoration-line-through">
-                            <i className="mdi mdi-close-thick bg-soft-muted me-2" />{" "}
-                            Job displayed for 30 days
-                          </li>
-                          <li className="pricing-item text-decoration-line-through">
-                            <i className="mdi mdi-close-thick bg-soft-muted me-2" />{" "}
-                            Premium Support 24/7
-                          </li>
-                        </ul>
-                        <div className="text-center mt-4 mb-2">
-                          <a
-                            href="javascript:void(0)"
-                            className="btn btn-primary rounded-pill"
-                          >
-                            Purchase Now <i className="uil uil-arrow-right" />
-                          </a>
+
+                <div className="row mt-4 justify-content-center">
+                  {plans.map((plan) => (
+                    <div key={plan.id} className="col-lg-5 col-md-6 mt-4">
+                      <div className={`pricing-box card bg-light ${plan.popular ? 'popular-plan' : ''} ${plan.isCurrent ? 'current-plan-card' : ''}`}>
+                        {plan.popular && (
+                          <div className="popular-ribbon">
+                            <span>MOST POPULAR</span>
+                          </div>
+                        )}
+
+                        <div className="card-body p-4 px-lg-5">
+                          <div className="pricing-icon bg-light rounded-circle icons-md">
+                            <i className={`uim ${plan.icon}`} />
+                          </div>
+
+                          <div className="pricing-name text-center mt-4 pt-2">
+                            <h4 className="fs-18">{plan.name}</h4>
+                            <p className="text-muted fs-14 mb-0">{plan.description}</p>
+                          </div>
+
+                          <div className="pricing-price text-center mt-4">
+                            <h2 className="fw-semibold">
+                              ₹{plan.price.toLocaleString('en-IN')}
+                              <small className="fs-16"> {plan.period}</small>
+                            </h2>
+                          </div>
+
+                          <ul className="list-unstyled pricing-details text-muted mt-4">
+                            {plan.features.map((feature, index) => (
+                              <li key={index} className="pricing-item">
+                                <i className="mdi mdi-check-bold success-bg-subtle me-2" />
+                                {feature}
+                              </li>
+                            ))}
+                            {plan.disabledFeatures && plan.disabledFeatures.map((feature, index) => (
+                              <li key={`disabled-${index}`} className="pricing-item text-decoration-line-through">
+                                <i className="mdi mdi-close-thick bg-soft-muted me-2" />
+                                {feature}
+                              </li>
+                            ))}
+                          </ul>
+
+                          <div className="text-center mt-4 mb-2">
+                            {plan.isCurrent ? (
+                              <button className="btn btn-soft-secondary rounded-pill" disabled>
+                                Current Plan <i className="uil uil-check" />
+                              </button>
+                            ) : (
+                              <a
+                                href="javascript:void(0)"
+                                className={`btn ${plan.popular ? 'btn-primary' : 'btn-soft-primary'} rounded-pill`}
+                              >
+                                Upgrade Now <i className="uil uil-arrow-right" />
+                              </a>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
-                    {/*end pricing-box*/}
-                  </div>
-                  {/*end col*/}
-                  <div className="col-lg-4 col-md-6 mt-5 pt-2">
-                    <div className="pricing-box card bg-light">
-                      <div className="card-body p-4 px-lg-5">
-                        <div className="pricing-icon bg-light rounded-circle icons-md">
-                          <i className="uim uim-bag" />
-                        </div>
-                        <div className="pricing-name text-center mt-4 pt-2">
-                          <h4 className="fs-18">Enterprice</h4>
-                        </div>
-                        <div className="pricing-price text-center mt-4">
-                          <h2 className="fw-semibold">
-                            $59.99<small className="fs-16">/mo</small>
-                          </h2>
-                        </div>
-                        <ul className="list-unstyled pricing-details text-muted mt-4">
-                          <li className="pricing-item">
-                            <i className="mdi mdi-check-bold success-bg-subtle me-2" />{" "}
-                            Unlimited file recovery
-                          </li>
-                          <li className="pricing-item">
-                            <i className="mdi mdi-check-bold success-bg-subtle me-2" />{" "}
-                            Professional reports
-                          </li>
-                          <li className="pricing-item">
-                            <i className="mdi mdi-check-bold success-bg-subtle me-2" />{" "}
-                            Sell on marketplaces
-                          </li>
-                          <li className="pricing-item">
-                            <i className="mdi mdi-check-bold success-bg-subtle me-2" />{" "}
-                            Unlimited Builds
-                          </li>
-                          <li className="pricing-item">
-                            <i className="mdi mdi-check-bold success-bg-subtle me-2" />{" "}
-                            Job displayed for 30 days
-                          </li>
-                          <li className="pricing-item">
-                            <i className="mdi mdi-check-bold success-bg-subtle me-2" />{" "}
-                            Premium Support 24/7
-                          </li>
-                        </ul>
-                        <div className="text-center mt-4 mb-2">
-                          <a
-                            href="javascript:void(0)"
-                            className="btn btn-soft-primary rounded-pill"
-                          >
-                            Purchase Now <i className="uil uil-arrow-right" />
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                    {/*end pricing-box*/}
-                  </div>
-                  {/*end col*/}
+                  ))}
                 </div>
-                {/*end row*/}
               </div>
-              {/*end container*/}
             </section>
             {/* END PRICING */}
+
+            {/* PLAN USAGE SECTION - MOVED DOWN */}
+            <section className="section pt-2">
+              <div className="container">
+                <div className="usage-card-wrapper">
+                  <div className="section-header-custom">
+                    <span className="usage-icon">⚡</span>
+                    <h4 className="mb-0">Current Plan Usage</h4>
+                  </div>
+
+                  <div className="row mt-4">
+                    {/* Monthly Applications */}
+                    <div className="col-lg-4 col-md-6 mb-4">
+                      <div className="usage-card">
+                        <div className="usage-card-header">
+                          <span className="usage-label">Monthly Applications</span>
+                          <span className="usage-value">{usage.applications.current} / {usage.applications.total}</span>
+                        </div>
+                        <div className="custom-progress-bar">
+                          <div
+                            className="custom-progress-fill"
+                            style={{
+                              width: `${getProgressPercentage(usage.applications.current, usage.applications.total)}%`,
+                              backgroundColor: getProgressColor(getProgressPercentage(usage.applications.current, usage.applications.total))
+                            }}
+                          ></div>
+                        </div>
+                        <span className="usage-info-text">Resets in {usage.applications.resetDays} days</span>
+                      </div>
+                    </div>
+
+                    {/* Profile Views */}
+                    <div className="col-lg-4 col-md-6 mb-4">
+                      <div className="usage-card">
+                        <div className="usage-card-header">
+                          <span className="usage-label">Profile Views</span>
+                          <span className="usage-value">{usage.profileViews.current} / {usage.profileViews.total}</span>
+                        </div>
+                        <div className="custom-progress-bar">
+                          <div
+                            className="custom-progress-fill"
+                            style={{
+                              width: `${getProgressPercentage(usage.profileViews.current, usage.profileViews.total)}%`,
+                              backgroundColor: '#10b981'
+                            }}
+                          ></div>
+                        </div>
+                        <span className="usage-info-text">{usage.profileViews.status}</span>
+                      </div>
+                    </div>
+
+                    {/* Resume Reviews */}
+                    <div className="col-lg-4 col-md-6 mb-4">
+                      <div className="usage-card">
+                        <div className="usage-card-header">
+                          <span className="usage-label">Resume Reviews</span>
+                          <span className="usage-value">{usage.resumeReviews.current} / {usage.resumeReviews.total}</span>
+                        </div>
+                        <div className="custom-progress-bar">
+                          <div
+                            className="custom-progress-fill"
+                            style={{
+                              width: `${getProgressPercentage(usage.resumeReviews.current, usage.resumeReviews.total)}%`,
+                              backgroundColor: '#8b5cf6'
+                            }}
+                          ></div>
+                        </div>
+                        <span className="usage-info-text">{usage.resumeReviews.remaining} credits remaining</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
             {/*START CTA*/}
-            <section className="section bg-light">
+            <section className="section">
               <div className="container">
                 <div className="row justify-content-center">
                   <div className="section-title text-center">
@@ -365,13 +320,13 @@ const PricingPage = () => {
                     </p>
                     <div className="mt-4">
                       <a
-                        href="contact.html"
+                        href="/contact-us"
                         className="btn btn-primary btn-hover mt-2"
                       >
                         <i className="uil uil-phone me-1" /> Contact
                       </a>
                       <a
-                        href="faqs.html"
+                        href="/faq-pages"
                         className="btn btn-outline-primary btn-hover ms-sm-1 mt-2"
                       >
                         <i className="uil uil-file-question me-1" /> Faq's
@@ -379,13 +334,12 @@ const PricingPage = () => {
                     </div>
                   </div>
                 </div>
-                {/*end row*/}
               </div>
-              {/*end container*/}
             </section>
             {/*END CTA*/}
+
             {/* START CTA */}
-            <section className="section">
+            <section className="section bg-light">
               <div className="container">
                 <div className="pricing-counter text-white">
                   <div className="row">
@@ -397,7 +351,6 @@ const PricingPage = () => {
                         </div>
                       </div>
                     </div>
-                    {/*end col*/}
                     <div className="col-lg-3 col-md-6">
                       <div className="counter-box mt-3">
                         <div className="counters text-center">
@@ -406,7 +359,6 @@ const PricingPage = () => {
                         </div>
                       </div>
                     </div>
-                    {/*end col*/}
                     <div className="col-lg-3 col-md-6">
                       <div className="counter-box mt-3">
                         <div className="counters text-center">
@@ -415,7 +367,6 @@ const PricingPage = () => {
                         </div>
                       </div>
                     </div>
-                    {/*end col*/}
                     <div className="col-lg-3 col-md-6">
                       <div className="counter-box mt-3">
                         <div className="counters text-center">
@@ -424,17 +375,12 @@ const PricingPage = () => {
                         </div>
                       </div>
                     </div>
-                    {/*end col*/}
                   </div>
-                  {/*end row*/}
                 </div>
-                {/*end pricing-counter*/}
               </div>
-              {/*end container*/}
             </section>
             {/* END CTA */}
           </div>
-          {/* End Page-content */}
         </div>
       </div>
     </>

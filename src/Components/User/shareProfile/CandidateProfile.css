@@ -1,0 +1,986 @@
+/* ==================== Candidate Profile Page Styles - SCOPED ==================== */
+/* All styles are scoped under .candidate-profile-wrapper to prevent conflicts */
+
+/* Import Font Awesome only if not already loaded */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+/* ==================== CSS Variables - Scoped ==================== */
+.candidate-profile-wrapper {
+  --cp-primary-color: #5b5dff;
+  --cp-primary-dark: #4648d8;
+  --cp-primary-light: #7375ff;
+  --cp-success-color: #10b981;
+  --cp-text-primary: #1a202c;
+  --cp-text-secondary: #4a5568;
+  --cp-text-light: #718096;
+  --cp-bg-primary: #ffffff;
+  --cp-bg-secondary: #f7fafc;
+  --cp-bg-tertiary: #edf2f7;
+  --cp-border-color: #e2e8f0;
+  --cp-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  --cp-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --cp-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Reset only for this component */
+.candidate-profile-wrapper * {
+  box-sizing: border-box;
+}
+
+.candidate-profile-wrapper {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Helvetica Neue', sans-serif;
+  background-color: var(--cp-bg-secondary);
+  color: var(--cp-text-primary);
+  line-height: 1.6;
+  padding: 24px;
+  min-height: 100vh;
+}
+
+/* ==================== Main Layout ==================== */
+.candidate-profile-wrapper .candidate-profile-page {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ==================== Loading & Error States ==================== */
+.candidate-profile-wrapper .loading-container,
+.candidate-profile-wrapper .error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 20px;
+}
+
+.candidate-profile-wrapper .spinner {
+  border: 4px solid var(--cp-bg-tertiary);
+  border-top: 4px solid var(--cp-primary-color);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: cp-spin 1s linear infinite;
+}
+
+@keyframes cp-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ==================== Left Sidebar ==================== */
+.candidate-profile-wrapper .profile-sidebar {
+  background: var(--cp-bg-primary);
+  border-radius: 12px;
+  padding: 0;
+  box-shadow: var(--cp-shadow-sm);
+  height: fit-content;
+  position: sticky;
+  top: 24px;
+}
+
+.candidate-profile-wrapper .profile-header {
+  padding: 32px 24px;
+  text-align: center;
+  border-bottom: 1px solid var(--cp-border-color);
+}
+
+.candidate-profile-wrapper .profile-avatar {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 16px;
+}
+
+.candidate-profile-wrapper .profile-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--cp-primary-color);
+}
+
+.candidate-profile-wrapper .avatar-initials {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--cp-primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  font-weight: 700;
+  color: white;
+  border: 4px solid var(--cp-primary-color);
+}
+
+.candidate-profile-wrapper .verified-badge {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: white;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.candidate-profile-wrapper .verified-badge i {
+  color: var(--cp-success-color);
+  font-size: 24px;
+}
+
+.candidate-profile-wrapper .profile-name {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--cp-text-primary);
+}
+
+.candidate-profile-wrapper .profile-title {
+  font-size: 16px;
+  color: var(--cp-primary-color);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.candidate-profile-wrapper .social-links {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.candidate-profile-wrapper .social-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--cp-bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cp-text-secondary);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.candidate-profile-wrapper .social-icon:hover {
+  background: var(--cp-primary-color);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.candidate-profile-wrapper .btn-share-profile {
+  width: 100%;
+  padding: 12px 24px;
+  background: var(--cp-primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.candidate-profile-wrapper .btn-share-profile:hover {
+  background: var(--cp-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--cp-shadow-md);
+}
+
+/* ==================== Sidebar Sections ==================== */
+.candidate-profile-wrapper .sidebar-section {
+  padding: 24px;
+  border-bottom: 1px solid var(--cp-border-color);
+}
+
+.candidate-profile-wrapper .sidebar-section:last-child {
+  border-bottom: none;
+}
+
+.candidate-profile-wrapper .section-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--cp-text-light);
+  margin-bottom: 16px;
+}
+
+.candidate-profile-wrapper .about-text {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--cp-text-secondary);
+}
+
+/* ==================== Skills Section ==================== */
+.candidate-profile-wrapper .skills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.candidate-profile-wrapper .skill-tag {
+  padding: 6px 14px;
+  background: var(--cp-bg-secondary);
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cp-text-primary);
+  transition: all 0.3s ease;
+}
+
+.candidate-profile-wrapper .skill-tag:hover {
+  background: var(--cp-primary-color);
+  color: white;
+}
+
+/* ==================== Notes Section ==================== */
+.candidate-profile-wrapper .notes-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  border: 1px solid var(--cp-border-color);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+}
+
+.candidate-profile-wrapper .notes-textarea:focus {
+  outline: none;
+  border-color: var(--cp-primary-color);
+}
+
+.candidate-profile-wrapper .notes-textarea::placeholder {
+  color: var(--cp-text-light);
+}
+
+/* ==================== Main Content ==================== */
+.candidate-profile-wrapper .profile-content {
+  background: transparent;
+}
+
+/* ==================== Content Header ==================== */
+.candidate-profile-wrapper .content-header {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.candidate-profile-wrapper .btn-action {
+  padding: 10px 20px;
+  border: 1px solid var(--cp-border-color);
+  background: var(--cp-bg-primary);
+  color: var(--cp-text-primary);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.candidate-profile-wrapper .btn-action:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--cp-shadow-md);
+}
+
+.candidate-profile-wrapper .btn-download:hover {
+  background: var(--cp-primary-color);
+  color: white;
+  border-color: var(--cp-primary-color);
+}
+
+.candidate-profile-wrapper .btn-email {
+  background: var(--cp-primary-color);
+  color: white;
+  border-color: var(--cp-primary-color);
+}
+
+.candidate-profile-wrapper .btn-email:hover {
+  background: var(--cp-primary-dark);
+}
+
+/* ==================== Contact Information Grid ==================== */
+.candidate-profile-wrapper .contact-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.candidate-profile-wrapper .contact-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.candidate-profile-wrapper .contact-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(91, 93, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.candidate-profile-wrapper .contact-icon i {
+  color: var(--cp-primary-color);
+  font-size: 18px;
+}
+
+.candidate-profile-wrapper .contact-icon.email-icon {
+  background: rgba(236, 72, 153, 0.1);
+}
+
+.candidate-profile-wrapper .contact-icon.email-icon i {
+  color: #ec4899;
+}
+
+.candidate-profile-wrapper .contact-icon.phone-icon {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.candidate-profile-wrapper .contact-icon.phone-icon i {
+  color: #3b82f6;
+}
+
+.candidate-profile-wrapper .contact-icon.website-icon {
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.candidate-profile-wrapper .contact-icon.website-icon i {
+  color: var(--cp-success-color);
+}
+
+.candidate-profile-wrapper .contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.candidate-profile-wrapper .contact-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--cp-text-light);
+  text-transform: uppercase;
+}
+
+.candidate-profile-wrapper .contact-value {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--cp-text-primary);
+}
+
+.candidate-profile-wrapper .contact-value a {
+  color: var(--cp-text-primary);
+  text-decoration: none;
+}
+
+.candidate-profile-wrapper .contact-value a:hover {
+  color: var(--cp-primary-color);
+}
+
+/* ==================== Content Sections ==================== */
+.candidate-profile-wrapper .content-section {
+  background: var(--cp-bg-primary);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--cp-shadow-sm);
+}
+
+.candidate-profile-wrapper .section-header-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  padding-bottom: 20px;
+}
+
+.candidate-profile-wrapper .section-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.candidate-profile-wrapper .section-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.candidate-profile-wrapper .verified-icon {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--cp-success-color);
+}
+
+.candidate-profile-wrapper .experience-icon {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.candidate-profile-wrapper .education-icon {
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+}
+
+.candidate-profile-wrapper .certification-icon {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.candidate-profile-wrapper .section-heading {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--cp-text-primary);
+  margin: 0;
+}
+
+.candidate-profile-wrapper .toggle-icon {
+  color: var(--cp-text-light);
+  transition: transform 0.3s ease;
+}
+
+/* ==================== Documents Grid ==================== */
+.candidate-profile-wrapper .documents-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.candidate-profile-wrapper .document-card {
+  background: var(--cp-bg-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.candidate-profile-wrapper .document-card:hover {
+  border-color: var(--cp-primary-color);
+  transform: translateY(-4px);
+  box-shadow: var(--cp-shadow-md);
+}
+
+.candidate-profile-wrapper .document-header {
+  margin-bottom: 12px;
+}
+
+.candidate-profile-wrapper .verified-check {
+  color: var(--cp-success-color);
+  font-size: 20px;
+}
+
+.candidate-profile-wrapper .document-download-icon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: white;
+  border: 1px solid var(--cp-border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--cp-text-secondary);
+}
+
+.candidate-profile-wrapper .document-download-icon:hover {
+  background: var(--cp-primary-color);
+  color: white;
+  border-color: var(--cp-primary-color);
+}
+
+.candidate-profile-wrapper .document-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--cp-text-primary);
+}
+
+.candidate-profile-wrapper .document-info {
+  font-size: 13px;
+  color: var(--cp-text-light);
+  margin: 0;
+}
+
+/* ==================== Timeline (Experience) ==================== */
+.candidate-profile-wrapper .timeline {
+  margin-top: 20px;
+  position: relative;
+}
+
+.candidate-profile-wrapper .timeline-item {
+  position: relative;
+  padding-left: 32px;
+  margin-bottom: 32px;
+}
+
+.candidate-profile-wrapper .timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.candidate-profile-wrapper .timeline-dot {
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--cp-primary-color);
+  border: 3px solid var(--cp-bg-primary);
+  box-shadow: 0 0 0 2px var(--cp-primary-color);
+}
+
+.candidate-profile-wrapper .timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 18px;
+  bottom: -32px;
+  width: 2px;
+  background: var(--cp-border-color);
+}
+
+.candidate-profile-wrapper .timeline-item:last-child::before {
+  display: none;
+}
+
+.candidate-profile-wrapper .timeline-content {
+  background: var(--cp-bg-secondary);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.candidate-profile-wrapper .timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  gap: 16px;
+}
+
+.candidate-profile-wrapper .timeline-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--cp-text-primary);
+  margin: 0;
+  flex: 1;
+}
+
+.candidate-profile-wrapper .timeline-date {
+  font-size: 13px;
+  color: var(--cp-primary-color);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.candidate-profile-wrapper .timeline-company {
+  font-size: 15px;
+  color: var(--cp-text-secondary);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.candidate-profile-wrapper .timeline-description {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--cp-text-secondary);
+  margin: 0;
+}
+
+/* ==================== Education List ==================== */
+.candidate-profile-wrapper .education-list {
+  margin-top: 20px;
+}
+
+.candidate-profile-wrapper .education-item {
+  background: var(--cp-bg-secondary);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.candidate-profile-wrapper .education-item:last-child {
+  margin-bottom: 0;
+}
+
+.candidate-profile-wrapper .education-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  gap: 16px;
+}
+
+.candidate-profile-wrapper .education-institution {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--cp-text-primary);
+  margin: 0;
+  flex: 1;
+}
+
+.candidate-profile-wrapper .education-date {
+  font-size: 13px;
+  color: var(--cp-text-light);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.candidate-profile-wrapper .education-degree {
+  font-size: 14px;
+  color: var(--cp-text-secondary);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.candidate-profile-wrapper .education-description {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--cp-text-secondary);
+  margin: 0;
+}
+
+/* ==================== Certifications ==================== */
+.candidate-profile-wrapper .certifications-list {
+  margin-top: 20px;
+}
+
+.candidate-profile-wrapper .no-data-message {
+  text-align: center;
+  color: var(--cp-text-light);
+  padding: 40px 20px;
+  font-size: 14px;
+}
+
+/* ==================== Share Modal ==================== */
+.candidate-profile-wrapper .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.candidate-profile-wrapper .modal-content {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.candidate-profile-wrapper .modal-header {
+  padding: 24px;
+  border-bottom: 1px solid var(--cp-border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.candidate-profile-wrapper .modal-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--cp-text-primary);
+}
+
+.candidate-profile-wrapper .modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: none;
+  background: var(--cp-bg-secondary);
+  color: var(--cp-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.candidate-profile-wrapper .modal-close:hover {
+  background: var(--cp-bg-tertiary);
+  color: var(--cp-text-primary);
+}
+
+.candidate-profile-wrapper .modal-body {
+  padding: 24px;
+}
+
+.candidate-profile-wrapper .modal-description {
+  font-size: 14px;
+  color: var(--cp-text-secondary);
+  margin-bottom: 20px;
+}
+
+.candidate-profile-wrapper .share-link-container {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.candidate-profile-wrapper .share-link-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid var(--cp-border-color);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--cp-text-primary);
+  background: var(--cp-bg-secondary);
+}
+
+.candidate-profile-wrapper .share-link-input:focus {
+  outline: none;
+  border-color: var(--cp-primary-color);
+}
+
+.candidate-profile-wrapper .btn-copy-link {
+  padding: 12px 20px;
+  background: var(--cp-primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.candidate-profile-wrapper .btn-copy-link:hover {
+  background: var(--cp-primary-dark);
+}
+
+.candidate-profile-wrapper .share-options {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.candidate-profile-wrapper .share-option-btn {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid var(--cp-border-color);
+  background: var(--cp-bg-primary);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--cp-text-primary);
+}
+
+.candidate-profile-wrapper .share-option-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--cp-shadow-md);
+}
+
+.candidate-profile-wrapper .email-share:hover {
+  background: #ea4335;
+  color: white;
+  border-color: #ea4335;
+}
+
+.candidate-profile-wrapper .whatsapp-share:hover {
+  background: #25d366;
+  color: white;
+  border-color: #25d366;
+}
+
+.candidate-profile-wrapper .linkedin-share:hover {
+  background: #0077b5;
+  color: white;
+  border-color: #0077b5;
+}
+
+/* ==================== Responsive Design ==================== */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .candidate-profile-wrapper .candidate-profile-page {
+    grid-template-columns: 280px 1fr;
+    gap: 20px;
+  }
+
+  .candidate-profile-wrapper .contact-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .candidate-profile-wrapper .documents-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+/* Mobile Devices */
+@media (max-width: 768px) {
+  .candidate-profile-wrapper {
+    padding: 16px;
+  }
+
+  .candidate-profile-wrapper .candidate-profile-page {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .candidate-profile-wrapper .profile-sidebar {
+    position: static;
+  }
+
+  .candidate-profile-wrapper .content-header {
+    flex-direction: column;
+  }
+
+  .candidate-profile-wrapper .btn-action {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .candidate-profile-wrapper .contact-info-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .candidate-profile-wrapper .documents-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .candidate-profile-wrapper .timeline-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .candidate-profile-wrapper .education-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .candidate-profile-wrapper .share-options {
+    flex-direction: column;
+  }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+  .candidate-profile-wrapper {
+    padding: 12px;
+  }
+
+  .candidate-profile-wrapper .profile-header {
+    padding: 24px 16px;
+  }
+
+  .candidate-profile-wrapper .profile-avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .candidate-profile-wrapper .avatar-initials {
+    font-size: 40px;
+  }
+
+  .candidate-profile-wrapper .profile-name {
+    font-size: 20px;
+  }
+
+  .candidate-profile-wrapper .sidebar-section {
+    padding: 16px;
+  }
+
+  .candidate-profile-wrapper .content-section {
+    padding: 16px;
+  }
+
+  .candidate-profile-wrapper .documents-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .candidate-profile-wrapper .timeline-content,
+  .candidate-profile-wrapper .education-item {
+    padding: 16px;
+  }
+
+  .candidate-profile-wrapper .modal-content {
+    width: 95%;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .candidate-profile-wrapper {
+    background: white;
+  }
+
+  .candidate-profile-wrapper .candidate-profile-page {
+    display: block;
+  }
+
+  .candidate-profile-wrapper .btn-share-profile,
+  .candidate-profile-wrapper .content-header,
+  .candidate-profile-wrapper .notes-textarea,
+  .candidate-profile-wrapper .modal-overlay {
+    display: none !important;
+  }
+
+  .candidate-profile-wrapper .profile-sidebar {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+/* Accessibility */
+.candidate-profile-wrapper a:focus,
+.candidate-profile-wrapper button:focus,
+.candidate-profile-wrapper textarea:focus {
+  outline: 2px solid var(--cp-primary-color);
+  outline-offset: 2px;
+}
+
+.candidate-profile-wrapper button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -1,0 +1,513 @@
+/* ==================== Integrated Pricing Page Styles ==================== */
+
+/* Current Plan Header */
+.current-plan-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  padding: 28px 36px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+  margin-bottom: 30px;
+}
+
+.plan-header-content {
+  flex: 1;
+}
+
+.plan-info-badges {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.plan-id-badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+}
+
+.plan-title-main {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1.1;
+  color: white;
+}
+
+.plan-description-text {
+  font-size: 14px;
+  opacity: 0.95;
+  line-height: 1.5;
+  max-width: 650px;
+  margin-bottom: 0;
+}
+
+.plan-header-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.plan-header-actions .btn {
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.plan-header-actions .btn-outline-primary {
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  background: transparent !important;
+}
+
+.plan-header-actions .btn-outline-primary:hover {
+  background: #3b82f6 !important;
+  color: white !important;
+  border-color: #3b82f6 !important;
+}
+
+/* Usage Cards */
+.usage-card-wrapper {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.section-header-custom {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 0;
+}
+
+.usage-icon {
+  font-size: 28px;
+}
+
+.usage-card {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.usage-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.usage-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.usage-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.usage-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #212529;
+}
+
+.custom-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.custom-progress-fill {
+  height: 100%;
+  transition: width 0.5s ease, background-color 0.3s ease;
+  border-radius: 10px;
+}
+
+.usage-info-text {
+  font-size: 13px;
+  color: #6c757d;
+  display: block;
+}
+
+/* Enhanced Pricing Cards */
+.pricing-box {
+  position: relative;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  overflow: hidden;
+}
+
+.pricing-box:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15) !important;
+}
+
+.popular-plan {
+  border-color: #6366f1 !important;
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.25) !important;
+}
+
+.popular-ribbon {
+  position: absolute;
+  top: 20px;
+  right: -35px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 8px 50px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  transform: rotate(45deg);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.current-plan-card {
+  background: #f8f9fa !important;
+  border-color: #dee2e6 !important;
+  opacity: 0.95;
+}
+
+.pricing-icon {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-size: 32px;
+  color: #6366f1;
+}
+
+.pricing-name p {
+  margin-top: 8px;
+}
+
+.pricing-details {
+  padding: 0;
+  margin: 0;
+}
+
+.pricing-item {
+  padding: 12px 0;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+}
+
+.pricing-item i {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 12px;
+}
+
+/* Billing History Section */
+.billing-history-section {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.billing-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.billing-title-group {
+  display: flex;
+  align-items: center;
+}
+
+.table-custom {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.table-custom thead {
+  background: #f8f9fa;
+}
+
+.table-custom thead th {
+  border-bottom: 2px solid #dee2e6;
+  padding: 16px 20px;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6c757d;
+}
+
+.table-custom tbody td {
+  padding: 18px 20px;
+  vertical-align: middle;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.table-custom tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table-custom tbody tr:hover {
+  background: #f8f9fa;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .current-plan-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 24px 28px;
+  }
+
+  .plan-info-badges {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .plan-title-main {
+    font-size: 32px;
+  }
+
+  .plan-description-text {
+    font-size: 14px;
+  }
+
+  .plan-header-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .plan-header-actions .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .current-plan-header {
+    padding: 20px 24px;
+  }
+
+  .plan-title-main {
+    font-size: 28px;
+  }
+
+  .plan-description-text {
+    font-size: 13px;
+  }
+
+  .usage-card-wrapper {
+    padding: 20px;
+  }
+
+  .billing-history-section {
+    padding: 20px;
+  }
+
+  .billing-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  /* Stack table on mobile */
+  .table-responsive {
+    border-radius: 12px;
+    overflow-x: auto;
+  }
+
+  .table-custom {
+    min-width: 600px;
+  }
+}
+
+@media (max-width: 576px) {
+  .plan-title-main {
+    font-size: 24px;
+  }
+
+  .plan-info-badges {
+    font-size: 11px;
+  }
+
+  .plan-id-badge {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+
+  .usage-card {
+    padding: 20px;
+  }
+
+  .pricing-box .card-body {
+    padding: 24px !important;
+  }
+
+  .popular-ribbon {
+    font-size: 10px;
+    padding: 6px 40px;
+  }
+}
+
+/* Additional Enhancements */
+.btn-hover {
+  transition: all 0.3s ease;
+}
+
+.btn-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.section {
+  position: relative;
+}
+
+/* Custom Badge Styles */
+.badge {
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.plan-info-badges .badge {
+  font-size: 11px;
+  padding: 5px 12px;
+}
+
+.bg-success-subtle {
+  background-color: #d1fae5 !important;
+  color: #065f46 !important;
+}
+
+.success-bg-subtle {
+  background-color: #d1fae5 !important;
+  color: #065f46 !important;
+}
+
+.warning-bg-subtle {
+  background-color: #fed7aa !important;
+  color: #92400e !important;
+}
+
+.bg-soft-muted {
+  background-color: #f1f3f5 !important;
+  color: #6c757d !important;
+}
+
+/* Animation for counters */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.counter-box {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Print Styles */
+@media print {
+  .current-plan-header {
+    background: #667eea;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .btn,
+  .popular-ribbon {
+    display: none;
+  }
+
+  .pricing-box:hover,
+  .usage-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* Loading States */
+.loading-spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #6366f1;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Accessibility */
+.btn:focus,
+.table-custom a:focus {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+/* Dark Mode Support (Optional) */
+@media (prefers-color-scheme: dark) {
+  .usage-card-wrapper,
+  .billing-history-section {
+    background: #1a1a1a;
+    color: #e5e7eb;
+  }
+
+  .usage-card {
+    background: #2a2a2a;
+  }
+
+  .usage-label,
+  .usage-info-text {
+    color: #9ca3af;
+  }
+
+  .table-custom {
+    background: #1a1a1a;
+  }
+
+  .table-custom thead {
+    background: #2a2a2a;
+  }
+
+  .table-custom tbody tr:hover {
+    background: #2a2a2a;
+  }
+}

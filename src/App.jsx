@@ -43,12 +43,14 @@ import JobApplicationForm from "./Components/jobs/manualapplyjob/ApplyJobManuall
 import ChatPage from "./Components/User/chat/ChatPage";
 import TermsAndConditions from "./Components/policy/TermsAndConditions";
 import PrivacyPolicyContent from "./Components/policy/PrivacyPolicy";
+import ShareProfile from "./Components/User/shareProfile/ShareProfile";
 
 function App() {
   return (
     <Router>
       <Routes>
         {/* Layout route */}
+         <Route path="/company-share-profile/:candidateId" element={<ShareProfile />} />
         <Route path="/candidate-login" element={<UserLogin />} />
         <Route path="/candidate-signup" element={<SignUpPage />} />
         <Route path="/candidate-logout" element={<LogoutPage />} />

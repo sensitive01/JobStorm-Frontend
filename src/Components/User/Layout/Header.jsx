@@ -33,7 +33,7 @@ const Header = () => {
     const fetchData = async () => {
       try {
         const response = await getDistictValues();
-        if (response.data && response.status===200) {
+        if (response.data && response.status === 200) {
           setCategories(response.data.categories || []);
           setLocations(response.data.locations || []);
         }
@@ -443,7 +443,7 @@ const Header = () => {
                         </a>
                       </li>
                       <li>
-                        <a className="dropdown-item" href="#">
+                        <a className="dropdown-item" href="/privacy-policy">
                           Privacy &amp; Policy
                         </a>
                       </li>
@@ -736,6 +736,11 @@ const Header = () => {
                           aria-labelledby="userdropdown"
                         >
                           <li>
+                            <a className="dropdown-item" href="/my-profile">
+                              My Profile
+                            </a>
+                          </li>
+                          <li>
                             <a
                               className="dropdown-item"
                               href="/my-applied-jobs"
@@ -753,11 +758,12 @@ const Header = () => {
                               My Chats
                             </a>
                           </li>
-                          <li>
-                            <a className="dropdown-item" href="/my-profile">
-                              My Profile
+                          {/* <li>
+                            <a className="dropdown-item" href="/price-page">
+                              Plans
                             </a>
-                          </li>
+                          </li> */}
+
                           <li>
                             <a
                               className="dropdown-item"

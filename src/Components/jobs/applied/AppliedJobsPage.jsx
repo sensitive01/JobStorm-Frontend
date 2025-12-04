@@ -84,7 +84,7 @@ const AppliedJobs = () => {
     } catch (error) {
       console.error("Error fetching applied jobs:", error);
       // You might want to show an error message to the user
-      alert("Failed to fetch applied jobs. Please try again.");
+      // alert("Failed to fetch applied jobs. Please try again.");
     } finally {
       setLoading(false);
     }

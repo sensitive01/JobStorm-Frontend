@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import logoImg from "../../../../public/assets/images/favicon.ico"
 import { generateSubscription, getSubscriptionCardData } from '../../../api/service/axiosService';
 
 const SubscriptionCard = () => {
+    const navigate = useNavigate();
     const candidateId = localStorage.getItem("userId");
     const [isGenerating, setIsGenerating] = useState(false);
     const [showFullNumber, setShowFullNumber] = useState(false);
@@ -49,6 +51,10 @@ const SubscriptionCard = () => {
         } finally {
             setIsGenerating(false);
         }
+    };
+
+    const handleViewProfile = () => {
+        navigate(`/company-share-profile/${candidateId}`);
     };
 
     const toggleCardNumber = () => {
@@ -163,7 +169,7 @@ const SubscriptionCard = () => {
                         <span style={styles.detailValue}>{cardData.cardHolderName}</span>
                     </div>
 
-                    <div style={styles.detailRow}>
+                    <div style={styles.detailRowWithButton}>
                         <div style={styles.detailItemSmall}>
                             <span style={styles.detailLabel}>Expires</span>
                             <span style={styles.detailValue}>
@@ -181,6 +187,14 @@ const SubscriptionCard = () => {
                                 })}
                             </span>
                         </div>
+
+                        <button
+                            style={styles.viewProfileButton}
+                            onClick={handleViewProfile}
+                        >
+                            <span style={styles.viewProfileIcon}>👤</span>
+                            VIEW PROFILE
+                        </button>
                     </div>
                 </div>
             </div>
@@ -207,7 +221,7 @@ const styles = {
         border: '1px solid rgba(255, 255, 255, 0.05)',
         filter: 'blur(4px)',
         opacity: 0.6,
-        height: '280px', // Reduced height
+        height: '280px',
     },
     blurredContent: {
         padding: '24px',
@@ -423,6 +437,12 @@ const styles = {
         gridTemplateColumns: '1fr 1fr',
         gap: '16px',
     },
+    detailRowWithButton: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr auto',
+        gap: '16px',
+        alignItems: 'end',
+    },
     detailItemSmall: {
         display: 'flex',
         flexDirection: 'column',
@@ -494,14 +514,65 @@ const styles = {
         fontWeight: '700',
         letterSpacing: '1px',
     },
+    // New styles for View Profile button
+    viewProfileButton: {
+        background: 'linear-gradient(90deg, #3b82f6 0%, #2563eb 100%)',
+        border: 'none',
+        color: 'white',
+        borderRadius: '8px',
+        padding: '10px 16px',
+        fontSize: '10px',
+        cursor: 'pointer',
+        fontWeight: '800',
+        letterSpacing: '1.2px',
+        textTransform: 'uppercase',
+        transition: 'all 0.3s ease',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '6px',
+        boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
+        whiteSpace: 'nowrap',
+        height: 'fit-content',
+    },
+    viewProfileIcon: {
+        fontSize: '12px',
+        lineHeight: 1,
+    },
 };
 
-// Add CSS animation for spinner
+// Add CSS animations
 const styleSheet = document.createElement("style");
 styleSheet.textContent = `
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
+    }
+    
+    /* Hover effect for view profile button */
+    button[style*="viewProfileButton"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4) !important;
+    }
+    
+    /* Hover effect for view button */
+    button[style*="viewButton"]:hover {
+        background: rgba(255, 255, 255, 0.15) !important;
+        border-color: rgba(255, 255, 255, 0.3) !important;
+    }
+    
+    /* Hover effect for generate button */
+    button[style*="generateBtnLarge"]:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(245, 158, 11, 0.45) !important;
+    }
+    
+    /* Responsive layout for mobile */
+    @media (max-width: 480px) {
+        div[style*="detailRowWithButton"] {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+        }
     }
 `;
 document.head.appendChild(styleSheet);
