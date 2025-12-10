@@ -37,7 +37,7 @@ const PricingPage = () => {
   });
 
   const API_BASE_URL =
-    import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
+    import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     fetchPricingPlans();
@@ -92,7 +92,7 @@ const PricingPage = () => {
       }
 
       // Clean URL
-      navigate("/pricing", { replace: true });
+      navigate("/price-page", { replace: true });
     } catch (error) {
       console.error("❌ Error handling payment return:", error);
       showNotification("Error processing payment response", "error");
@@ -129,7 +129,7 @@ const PricingPage = () => {
 
       console.log("📥 Verification response:", response);
 
-      if (response.data.success) {
+      if (response.success) {
         // Clear stored data
         localStorage.removeItem("pending_payment_plan");
         localStorage.removeItem("pending_payment_txn");
@@ -143,7 +143,7 @@ const PricingPage = () => {
           navigate("/dashboard");
         }, 2000);
       } else {
-        throw new Error(response.data.error || "Verification failed");
+        throw new Error(response.error || "Verification failed");
       }
     } catch (error) {
       console.error("❌ Verification error:", error);
@@ -178,15 +178,14 @@ const PricingPage = () => {
         user.id || user._id,
         plan.id,
         plan.totalAmount || plan.price,
-        plan.name,
+        plan.id,
         user.firstName,
         user.email,
         user.phone
       );
 
-      console.log("📦 Order response:", orderResponse.data);
-
-      const { paymentData, order } = orderResponse.data;
+      console.log("📦 Order response:", orderResponse);
+      const { paymentData, order } = orderResponse;
 
       if (
         !paymentData ||
@@ -209,8 +208,10 @@ const PricingPage = () => {
 
       const currentOrigin = window.location.origin;
       // We append ?status=success so that even if POST data is dropped, the URL param triggers our handler
-      const successUrl = `${currentOrigin}/price-page?status=success`;
-      const failureUrl = `${currentOrigin}/price-page?status=failure`;
+      const successUrl =
+        paymentData.surl || `${currentOrigin}/price-page?status=success`;
+      const failureUrl =
+        paymentData.furl || `${currentOrigin}/price-page?status=failure`;
 
       console.log("Using Backend SURL:", successUrl);
       console.log("Using Backend FURL:", failureUrl);

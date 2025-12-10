@@ -204,7 +204,7 @@ export const getJobsByType = async (jobType) => {
 };
 
 
-export const getBlogList = async (jobType) => {
+export const getBlogList = async () => {
   try {
     const response = await axiosInstance.get(
       `/get-all-blogs`
@@ -285,7 +285,7 @@ export const getAllCandidatePlans = async () => {
 export const bookSubscription = async (employeeId, planId, amount, planType, firstName, email, phone) => {
   try {
     const response = await axiosInstance.post(
-      `/order/create`,
+      `/payment/order/create`,
       {
         employeeId,
         planId,
@@ -296,7 +296,7 @@ export const bookSubscription = async (employeeId, planId, amount, planType, fir
         phone
       }
     );
-    return response;
+    return response.data;
   } catch (err) {
     return err;
   }
@@ -307,12 +307,10 @@ export const bookSubscription = async (employeeId, planId, amount, planType, fir
 export const verifyPayment = async (verificationData) => {
   try {
     const response = await axiosInstance.post(
-      `/order/verify`,
-
+      `/payment/order/verify`,
       verificationData
-
     );
-    return response;
+    return response.data;
   } catch (err) {
     return err;
   }
