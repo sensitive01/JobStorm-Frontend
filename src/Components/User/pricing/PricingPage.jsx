@@ -7,6 +7,7 @@ import {
   verifyPayment,
 } from "../../../api/service/axiosService";
 
+// Helper functions (remain unchanged)
 const getAuthToken = () => {
   return localStorage.getItem("userId") || localStorage.getItem("token");
 };
@@ -36,92 +37,108 @@ const PricingPage = () => {
     resumeReviews: { current: 1, total: 3, remaining: 2 },
   });
 
-  const API_BASE_URL =
-    import.meta.env.VITE_API_BASE_URL;
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+  // --- Core Logic for PayU Return ---
   useEffect(() => {
     fetchPricingPlans();
 
     // Check if returning from PayU
     const status = searchParams.get("status");
     const txnid = searchParams.get("txnid");
+    const hash = searchParams.get("hash");
+    const amount = searchParams.get("amount");
 
-    if (status && txnid) {
+    // CRITICAL CHECK: Only trigger payment return if we have enough data to verify
+    if (status && txnid && hash && amount) {
       handlePaymentReturn();
+    } 
+    // Handle failure status, cancellation, or internal error without full payload
+    else if (status === 'failure' || status === 'cancelled' || searchParams.get("error")) {
+        console.log("Payment failure or cancellation detected with minimal parameters.");
+        // We clean the URL to prevent subsequent unnecessary checks
+        navigate("/price-page", { replace: true }); 
     }
   }, [searchParams]);
 
   const fetchPricingPlans = async () => {
     try {
       const response = await getAllCandidatePlans();
-      if (response.status === 200) {
+      if (response.status === 200 && response.data?.data) {
         setPlans(response.data.data);
       } else {
-        setPlans(fallbackPlans);
+        // Handle scenario where API succeeds but returns no data
+        setPlans([]); 
       }
     } catch (error) {
       console.error("Error fetching pricing plans:", error);
-      setPlans(fallbackPlans);
+      setPlans([]); // Set to empty array on fetch error
     } finally {
       setLoading(false);
     }
   };
 
   const handlePaymentReturn = async () => {
-    console.log("🔙 Payment return detected");
-
+    console.log("🔙 Payment return detected. Starting Verification...");
     setPaymentLoading(true);
 
+    const params = {};
+    searchParams.forEach((value, key) => {
+      params[key] = value;
+    });
+
+    const storedPlanId = localStorage.getItem("pending_payment_plan");
+    const status = params.status;
+
     try {
-      // Get all URL parameters from PayU response
-      const params = {};
-      searchParams.forEach((value, key) => {
-        params[key] = value;
-      });
+        if (!storedPlanId) {
+             throw new Error("Missing plan data in local storage. Cannot verify subscription.");
+        }
 
-      console.log("📋 Payment response params:", params);
+        if (status === "success") {
+            await verifyAndActivateSubscription(params, storedPlanId);
+        } else if (status === "failure" || status === "cancelled") {
+            const errorMessage = params.errorMessage || `Payment ${status}. Please try again.`;
+            showNotification(errorMessage, "error");
+        } 
 
-      const status = params.status;
-
-      if (status === "success") {
-        await verifyAndActivateSubscription(params);
-      } else if (status === "failure") {
-        showNotification("Payment failed. Please try again.", "error");
-      } else if (status === "cancelled") {
-        showNotification("Payment was cancelled.", "warning");
-      }
-
-      // Clean URL
-      navigate("/price-page", { replace: true });
     } catch (error) {
       console.error("❌ Error handling payment return:", error);
-      showNotification("Error processing payment response", "error");
+      showNotification(`Payment process error: ${error.message}`, "error");
     } finally {
       setPaymentLoading(false);
+      // Always clean the URL parameters to prevent re-triggering
+      navigate("/price-page", { replace: true });
     }
   };
 
-  const verifyAndActivateSubscription = async (paymentResponse) => {
+  const verifyAndActivateSubscription = async (paymentResponse, storedPlanId) => {
     try {
-      console.log("🔍 Verifying payment...");
-
+      console.log("🔍 Verifying payment with backend...");
       const user = getUserDetails();
 
-      // Get stored plan ID and txn ID
-      const storedPlanId = localStorage.getItem("pending_payment_plan");
-      const storedTxnId = localStorage.getItem("pending_payment_txn");
-
       const verifyData = {
-        txnid: paymentResponse.txnid || storedTxnId,
+        txnid: paymentResponse.txnid,
         status: paymentResponse.status,
-        hash: paymentResponse.hash || "",
-        amount: paymentResponse.amount || "",
+        hash: paymentResponse.hash, 
+        amount: paymentResponse.amount, 
         productinfo: paymentResponse.productinfo || "",
         firstname: paymentResponse.firstname || "",
         email: paymentResponse.email || "",
-        employeeId: user.id,
-        planType: storedPlanId,
+        employeeId: user.id, 
+        planType: storedPlanId, 
+        // Forward UDFs for backend hash verification consistency
+        udf1: paymentResponse.udf1 || "", 
+        udf2: paymentResponse.udf2 || "", 
+        udf3: paymentResponse.udf3 || "", 
+        udf4: paymentResponse.udf4 || "", 
+        udf5: paymentResponse.udf5 || "", 
       };
+
+      // CRITICAL DATA CHECK
+      if (!verifyData.txnid || !verifyData.hash || !verifyData.employeeId || !verifyData.planType) {
+           throw new Error("Critical payment details missing for server verification.");
+      }
 
       console.log("📤 Verification request:", verifyData);
 
@@ -130,7 +147,6 @@ const PricingPage = () => {
       console.log("📥 Verification response:", response);
 
       if (response.success) {
-        // Clear stored data
         localStorage.removeItem("pending_payment_plan");
         localStorage.removeItem("pending_payment_txn");
 
@@ -143,14 +159,12 @@ const PricingPage = () => {
           navigate("/dashboard");
         }, 2000);
       } else {
-        throw new Error(response.error || "Verification failed");
+        throw new Error(response.error || "Verification failed on the server.");
       }
     } catch (error) {
-      console.error("❌ Verification error:", error);
-      showNotification(
-        `Payment verification failed: ${error.message}`,
-        "error"
-      );
+      console.error("❌ Verification API Error:", error);
+      // Re-throw the error so handlePaymentReturn can catch and notify/cleanup
+      throw error; 
     }
   };
 
@@ -201,17 +215,9 @@ const PricingPage = () => {
       localStorage.setItem("pending_payment_txn", paymentData.txnid);
       setCurrentTxnId(paymentData.txnid);
 
-      // --- FRONTEND DIRECT REDIRECT ---
-      // We redirect directly to the frontend route.
-      // Note: PayU sends a POST request. If the Dev Server shows "Cannot POST",
-      // you can simply refresh that page (Turn it into GET) and the logic will run because of the query params.
-
-      const currentOrigin = window.location.origin;
-      // We append ?status=success so that even if POST data is dropped, the URL param triggers our handler
-      const successUrl =
-        paymentData.surl || `${currentOrigin}/price-page?status=success`;
-      const failureUrl =
-        paymentData.furl || `${currentOrigin}/price-page?status=failure`;
+      // SURL/FURL are provided by the backend, which PayU POSTs to
+      const successUrl = paymentData.surl; 
+      const failureUrl = paymentData.furl; 
 
       console.log("Using Backend SURL:", successUrl);
       console.log("Using Backend FURL:", failureUrl);
@@ -226,22 +232,18 @@ const PricingPage = () => {
   };
 
   const submitPayUForm = (paymentData, successUrl, failureUrl) => {
-    // Get PayU URL from backend or use default
     let payuUrl = paymentData.payuBaseUrl || "https://test.payu.in";
 
-    // Ensure proper endpoint (matches Flutter logic)
     if (!payuUrl.endsWith("/_payment")) {
       payuUrl = payuUrl.replace(/\/$/, "") + "/_payment";
     }
 
     console.log("🚀 Submitting form to PayU:", payuUrl);
 
-    // Create form element
     const form = document.createElement("form");
     form.method = "POST";
     form.action = payuUrl;
 
-    // EXACT fields from Flutter - no more, no less
     const params = {
       key: paymentData.key,
       txnid: paymentData.txnid,
@@ -254,29 +256,31 @@ const PricingPage = () => {
       furl: failureUrl,
       hash: paymentData.hash,
       service_provider: paymentData.service_provider || "payu_paisa",
+      // Include optional UDF fields as empty strings for consistent hash matching
+      udf1: paymentData.udf1 || "",
+      udf2: paymentData.udf2 || "",
+      udf3: paymentData.udf3 || "",
+      udf4: paymentData.udf4 || "",
+      udf5: paymentData.udf5 || "",
     };
 
     console.log("📋 Form params:", params);
 
-    // Create hidden input fields
     Object.keys(params).forEach((key) => {
-      if (params[key]) {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = key;
-        input.value = params[key];
-        form.appendChild(input);
-      }
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = key;
+      input.value = params[key];
+      form.appendChild(input);
     });
 
-    // Append form to body and submit
     document.body.appendChild(form);
     form.submit();
   };
 
   const showNotification = (message, type = "info") => {
+    console.log(`[Notification ${type.toUpperCase()}]: ${message}`);
     alert(message);
-    // Or use your preferred notification library
   };
 
   const getProgressPercentage = (current, total) => {
@@ -303,6 +307,7 @@ const PricingPage = () => {
         </div>
       )}
 
+      {/* Main Content JSX */}
       <div>
         <div className="main-content">
           <div className="page-content">
@@ -423,34 +428,22 @@ const PricingPage = () => {
                             <hr className="my-4" style={{ opacity: 0.1 }} />
 
                             <ul className="list-unstyled pricing-details text-muted">
-                              {plan.features && Array.isArray(plan.features)
-                                ? plan.features.map((feature, index) => (
-                                    <li
-                                      key={index}
-                                      className="pricing-item d-flex align-items-center mb-3"
-                                    >
-                                      <i className="uil uil-check text-success fs-18 me-2" />
-                                      <span>{feature}</span>
-                                    </li>
-                                  ))
-                                : plan.featuresList &&
-                                  Array.isArray(plan.featuresList)
-                                ? plan.featuresList.map((feature, index) => (
+                              {/* Consolidated feature rendering logic */}
+                              {(plan.features || plan.featuresList)?.map((feature, index) => (
                                     <li
                                       key={index}
                                       className="pricing-item d-flex align-items-center mb-3"
                                     >
                                       <i
                                         className={`uil ${
-                                          feature.included
-                                            ? "uil-check text-success"
-                                            : "uil-times text-muted"
+                                          (feature.included === false)
+                                            ? "uil-times text-muted"
+                                            : "uil-check text-success"
                                         } fs-18 me-2`}
                                       />
-                                      <span>{feature.text}</span>
+                                      <span>{feature.text || feature}</span>
                                     </li>
-                                  ))
-                                : null}
+                                  ))}
                             </ul>
 
                             <div className="mt-auto pt-3">
@@ -496,13 +489,13 @@ const PricingPage = () => {
                       </div>
                     ))
                   ) : (
-                    <div className="col-12 text-center">No plans found.</div>
+                    <div className="col-12 text-center mt-5">No plans available at this time.</div>
                   )}
                 </div>
               </div>
             </section>
 
-            {/* Plan Usage Section */}
+            {/* Plan Usage Section - Remaing JSX as provided */}
             <section className="section pt-2">
               <div className="container">
                 <div className="usage-card-wrapper">
