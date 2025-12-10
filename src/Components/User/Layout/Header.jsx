@@ -758,11 +758,11 @@ const Header = () => {
                               My Chats
                             </a>
                           </li>
-                          {/* <li>
+                           <li>
                             <a className="dropdown-item" href="/price-page">
-                              Plans
+                              My Subscription
                             </a>
-                          </li> */}
+                          </li> 
 
                           <li>
                             <a

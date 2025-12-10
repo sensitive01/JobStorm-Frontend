@@ -18,6 +18,7 @@ import JobsListView from "./Components/User/jobslist/JobsListView";
 import JobsGridView from "./Components/User/jobslist/JobsGridView";
 import JobDetailsPage from "./Components/User/jobslist/JobDetailsPage";
 import PricingPage from "./Components/User/pricing/PricingPage";
+import PaymentStatus from "./Components/User/pricing/PaymentStatus";
 import AssociatedCompanyList from "./Components/User/associatedCompany/AssociatedCompanyList";
 import FaqPage from "./Components/User/faq/FaqPage";
 import BlogsPage from "./Components/User/blogs/BlogsPage";
@@ -50,7 +51,10 @@ function App() {
     <Router>
       <Routes>
         {/* Layout route */}
-         <Route path="/company-share-profile/:candidateId" element={<ShareProfile />} />
+        <Route
+          path="/company-share-profile/:candidateId"
+          element={<ShareProfile />}
+        />
         <Route path="/candidate-login" element={<UserLogin />} />
         <Route path="/candidate-signup" element={<SignUpPage />} />
         <Route path="/candidate-logout" element={<LogoutPage />} />
@@ -81,7 +85,12 @@ function App() {
           <Route path="/jobs-grid-view" element={<JobsGridView />} />
           <Route path="/jobs-details-page" element={<JobDetailsPage />} />
           <Route path="/price-page" element={<PricingPage />} />
-          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/payment/success" element={<PaymentStatus />} />
+          <Route path="/payment/failure" element={<PaymentStatus />} />
+          <Route
+            path="/terms-and-conditions"
+            element={<TermsAndConditions />}
+          />
           <Route path="/privacy-policy" element={<PrivacyPolicyContent />} />
           <Route
             path="/associated-company-list"
@@ -107,10 +116,16 @@ function App() {
           <Route path="/post-new-job" element={<AddNewJobs />} />
           <Route path="/my-applied-jobs" element={<AppliedJobsPage />} />
           <Route path="/my-saved-jobs" element={<MySavedJobs />} />
-          <Route path="/apply-manually/:jobId" element={<JobApplicationForm />} />
+          <Route
+            path="/apply-manually/:jobId"
+            element={<JobApplicationForm />}
+          />
           <Route path="/my-chats" element={<ChatPage />} />
         </Route>
-        <Route path="/terms-and-conditions-page" element={<TermsAndConditions />} />
+        <Route
+          path="/terms-and-conditions-page"
+          element={<TermsAndConditions />}
+        />
         <Route path="/privacy-policy-page" element={<PrivacyPolicyContent />} />
 
         {/* <Route path="/admin" element={<MainLayoutAdmin />}></Route> */}

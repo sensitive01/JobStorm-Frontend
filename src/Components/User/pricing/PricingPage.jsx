@@ -1,87 +1,317 @@
-import React, { useState } from 'react';
-import './IntegratedPricing.css';
+import React, { useState, useEffect } from "react";
+import "./IntegratedPricing.css";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  bookSubscription,
+  getAllCandidatePlans,
+  verifyPayment,
+} from "../../../api/service/axiosService";
+
+const getAuthToken = () => {
+  return localStorage.getItem("userId") || localStorage.getItem("token");
+};
+
+const getUserDetails = () => {
+  return {
+    firstName: localStorage.getItem("firstName") || "User",
+    email: localStorage.getItem("email") || "user@example.com",
+    phone: localStorage.getItem("phone") || "9999999999",
+    id: localStorage.getItem("userId"),
+  };
+};
 
 const PricingPage = () => {
-  const [currentPlan] = useState({
-    name: 'Gold Plan',
-    id: 'SUB-8839-2825',
-    type: 'gold',
-    validity: '6 months'
-  });
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const [plans, setPlans] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [paymentLoading, setPaymentLoading] = useState(false);
+  const [currentPlanId, setCurrentPlanId] = useState(null);
+  const [currentTxnId, setCurrentTxnId] = useState(null);
 
   const [usage] = useState({
     applications: { current: 12, total: 50, resetDays: 14 },
-    profileViews: { current: 45, total: 100, status: 'Good visibility!' },
-    resumeReviews: { current: 1, total: 3, remaining: 2 }
+    profileViews: { current: 45, total: 100, status: "Good visibility!" },
+    resumeReviews: { current: 1, total: 3, remaining: 2 },
   });
 
-  const plans = [
-    {
-      id: 'gold',
-      name: 'Gold',
-      price: 15000,
-      period: '+GST',
-      description: 'Perfect for serious job seekers',
-      icon: 'uim-award',
-      features: [
-        'Apply to jobs',
-        'Medium priority to recruiters',
-        'Profile boosted in listings',
-        '1 resume review & optimization',
-        'Email & SMS confirmation',
-        'Valid for 6 months'
-      ],
-      disabledFeatures: [
-        'Immediate interview call',
-        'Dedicated account manager',
-        'Subscription card'
-      ],
-      isCurrent: true
-    },
-    {
-      id: 'platinum',
-      name: 'Platinum',
-      price: 30000,
-      period: '+GST',
-      description: 'Maximum visibility & priority',
-      icon: 'uim-trophy',
-      popular: true,
-      features: [
-        'Apply to jobs',
-        'Highest priority to recruiters',
-        'Top profile boosted in listings',
-        'Immediate interview call (priority pass)',
-        'Dedicated account manager',
-        '2 resume reviews & optimization',
-        'Email & SMS + subscription card',
-        'Valid for 1 year'
-      ],
-      disabledFeatures: []
+  const API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
+
+  useEffect(() => {
+    fetchPricingPlans();
+
+    // Check if returning from PayU
+    const status = searchParams.get("status");
+    const txnid = searchParams.get("txnid");
+
+    if (status && txnid) {
+      handlePaymentReturn();
     }
-  ];
+  }, [searchParams]);
+
+  const fetchPricingPlans = async () => {
+    try {
+      const response = await getAllCandidatePlans();
+      if (response.status === 200) {
+        setPlans(response.data.data);
+      } else {
+        setPlans(fallbackPlans);
+      }
+    } catch (error) {
+      console.error("Error fetching pricing plans:", error);
+      setPlans(fallbackPlans);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePaymentReturn = async () => {
+    console.log("🔙 Payment return detected");
+
+    setPaymentLoading(true);
+
+    try {
+      // Get all URL parameters from PayU response
+      const params = {};
+      searchParams.forEach((value, key) => {
+        params[key] = value;
+      });
+
+      console.log("📋 Payment response params:", params);
+
+      const status = params.status;
+
+      if (status === "success") {
+        await verifyAndActivateSubscription(params);
+      } else if (status === "failure") {
+        showNotification("Payment failed. Please try again.", "error");
+      } else if (status === "cancelled") {
+        showNotification("Payment was cancelled.", "warning");
+      }
+
+      // Clean URL
+      navigate("/pricing", { replace: true });
+    } catch (error) {
+      console.error("❌ Error handling payment return:", error);
+      showNotification("Error processing payment response", "error");
+    } finally {
+      setPaymentLoading(false);
+    }
+  };
+
+  const verifyAndActivateSubscription = async (paymentResponse) => {
+    try {
+      console.log("🔍 Verifying payment...");
+
+      const user = getUserDetails();
+
+      // Get stored plan ID and txn ID
+      const storedPlanId = localStorage.getItem("pending_payment_plan");
+      const storedTxnId = localStorage.getItem("pending_payment_txn");
+
+      const verifyData = {
+        txnid: paymentResponse.txnid || storedTxnId,
+        status: paymentResponse.status,
+        hash: paymentResponse.hash || "",
+        amount: paymentResponse.amount || "",
+        productinfo: paymentResponse.productinfo || "",
+        firstname: paymentResponse.firstname || "",
+        email: paymentResponse.email || "",
+        employeeId: user.id,
+        planType: storedPlanId,
+      };
+
+      console.log("📤 Verification request:", verifyData);
+
+      const response = await verifyPayment(verifyData);
+
+      console.log("📥 Verification response:", response);
+
+      if (response.data.success) {
+        // Clear stored data
+        localStorage.removeItem("pending_payment_plan");
+        localStorage.removeItem("pending_payment_txn");
+
+        showNotification(
+          `${paymentResponse.productinfo || "Plan"} activated successfully!`,
+          "success"
+        );
+
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 2000);
+      } else {
+        throw new Error(response.data.error || "Verification failed");
+      }
+    } catch (error) {
+      console.error("❌ Verification error:", error);
+      showNotification(
+        `Payment verification failed: ${error.message}`,
+        "error"
+      );
+    }
+  };
+
+  const handlePayment = async (plan) => {
+    const user = getUserDetails();
+    const token = getAuthToken();
+
+    if (!token) {
+      showNotification("Please login to purchase a plan", "error");
+      return;
+    }
+
+    if (plan.isCustom || plan.id === "special") {
+      navigate("/contact-us");
+      return;
+    }
+
+    setPaymentLoading(true);
+    setCurrentPlanId(plan.id);
+
+    try {
+      console.log("🛒 Starting payment for plan:", plan.id);
+
+      const orderResponse = await bookSubscription(
+        user.id || user._id,
+        plan.id,
+        plan.totalAmount || plan.price,
+        plan.name,
+        user.firstName,
+        user.email,
+        user.phone
+      );
+
+      console.log("📦 Order response:", orderResponse.data);
+
+      const { paymentData, order } = orderResponse.data;
+
+      if (
+        !paymentData ||
+        !paymentData.key ||
+        !paymentData.hash ||
+        !paymentData.txnid
+      ) {
+        throw new Error("Missing payment parameters from backend");
+      }
+
+      // Store for verification later
+      localStorage.setItem("pending_payment_plan", plan.id);
+      localStorage.setItem("pending_payment_txn", paymentData.txnid);
+      setCurrentTxnId(paymentData.txnid);
+
+      // --- FRONTEND DIRECT REDIRECT ---
+      // We redirect directly to the frontend route.
+      // Note: PayU sends a POST request. If the Dev Server shows "Cannot POST",
+      // you can simply refresh that page (Turn it into GET) and the logic will run because of the query params.
+
+      const currentOrigin = window.location.origin;
+      // We append ?status=success so that even if POST data is dropped, the URL param triggers our handler
+      const successUrl = `${currentOrigin}/price-page?status=success`;
+      const failureUrl = `${currentOrigin}/price-page?status=failure`;
+
+      console.log("Using Backend SURL:", successUrl);
+      console.log("Using Backend FURL:", failureUrl);
+
+      // Submit form to PayU
+      submitPayUForm(paymentData, successUrl, failureUrl);
+    } catch (error) {
+      console.error("❌ Payment initiation error:", error);
+      showNotification(`Payment failed: ${error.message}`, "error");
+      setPaymentLoading(false);
+    }
+  };
+
+  const submitPayUForm = (paymentData, successUrl, failureUrl) => {
+    // Get PayU URL from backend or use default
+    let payuUrl = paymentData.payuBaseUrl || "https://test.payu.in";
+
+    // Ensure proper endpoint (matches Flutter logic)
+    if (!payuUrl.endsWith("/_payment")) {
+      payuUrl = payuUrl.replace(/\/$/, "") + "/_payment";
+    }
+
+    console.log("🚀 Submitting form to PayU:", payuUrl);
+
+    // Create form element
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = payuUrl;
+
+    // EXACT fields from Flutter - no more, no less
+    const params = {
+      key: paymentData.key,
+      txnid: paymentData.txnid,
+      amount: paymentData.amount,
+      productinfo: paymentData.productinfo,
+      firstname: paymentData.firstname,
+      email: paymentData.email,
+      phone: paymentData.phone || "",
+      surl: successUrl,
+      furl: failureUrl,
+      hash: paymentData.hash,
+      service_provider: paymentData.service_provider || "payu_paisa",
+    };
+
+    console.log("📋 Form params:", params);
+
+    // Create hidden input fields
+    Object.keys(params).forEach((key) => {
+      if (params[key]) {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = params[key];
+        form.appendChild(input);
+      }
+    });
+
+    // Append form to body and submit
+    document.body.appendChild(form);
+    form.submit();
+  };
+
+  const showNotification = (message, type = "info") => {
+    alert(message);
+    // Or use your preferred notification library
+  };
 
   const getProgressPercentage = (current, total) => {
     return (current / total) * 100;
   };
 
   const getProgressColor = (percentage) => {
-    if (percentage >= 80) return '#ef4444';
-    if (percentage >= 50) return '#f59e0b';
-    return '#8b5cf6';
+    if (percentage >= 80) return "#ef4444";
+    if (percentage >= 50) return "#f59e0b";
+    return "#8b5cf6";
   };
 
   return (
     <>
+      {/* Payment Loading Overlay */}
+      {paymentLoading && (
+        <div className="payment-loading-overlay">
+          <div className="payment-loading-spinner">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Processing payment...</span>
+            </div>
+            <p className="mt-3">Processing your payment...</p>
+          </div>
+        </div>
+      )}
+
       <div>
         <div className="main-content">
           <div className="page-content">
-            {/* Start home */}
+            {/* Page Title */}
             <section className="page-title-box">
               <div className="container">
                 <div className="row justify-content-center">
                   <div className="col-md-6">
                     <div className="text-center text-white">
-                      <h3 className="mb-4">Pricing & Subscription</h3>
+                      <h3 className="mb-4">Pricing & Plans</h3>
                       <div className="page-next">
                         <nav
                           className="d-inline-block"
@@ -108,9 +338,8 @@ const PricingPage = () => {
                 </div>
               </div>
             </section>
-            {/* end home */}
 
-            {/* START SHAPE */}
+            {/* Shape */}
             <div className="position-relative" style={{ zIndex: 1 }}>
               <div className="shape">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
@@ -122,117 +351,157 @@ const PricingPage = () => {
                 </svg>
               </div>
             </div>
-            {/* END SHAPE */}
 
-            {/* CURRENT PLAN HEADER */}
-            <section className="section pt-4">
-              <div className="container">
-                <div className="current-plan-header">
-                  <div className="plan-header-content">
-                    <div className="plan-info-badges">
-                      <span className="badge bg-primary">Current Plan</span>
-                      <span className="plan-id-badge">ID: {currentPlan.id}</span>
-                    </div>
-                    <h2 className="plan-title-main">{currentPlan.name}</h2>
-                    <p className="plan-description-text">
-                      You are currently on the {currentPlan.name}. Valid for {currentPlan.validity}. Upgrade to Platinum for highest priority and dedicated account manager.
-                    </p>
-                  </div>
-                  <div className="plan-header-actions">
-                    <button className="btn btn-primary btn-lg">
-                      Upgrade to Platinum
-                    </button>
-                    <button className="btn btn-primary btn-lg" >
-                      Manage Subscription
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* START PRICING - MOVED UP */}
+            {/* Pricing Plans */}
             <section className="section">
               <div className="container">
                 <div className="row justify-content-center">
                   <div className="col-lg-8">
                     <div className="text-center">
-                      <span className="badge warning-bg-subtle fs-15 mb-2">
-                        Choose Your Plan
-                      </span>
-                      <h3>Get Premium Access to Top Recruiters</h3>
+                      <h3>Pricing & Plans</h3>
                       <p className="text-muted">
-                        Boost your profile visibility and get priority access to recruiters.
+                        With lots of unique blocks, you can easily build a page
+                        without coding. Build your next consultancy website
+                        within few minutes.
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="row mt-4 justify-content-center">
-                  {plans.map((plan) => (
-                    <div key={plan.id} className="col-lg-5 col-md-6 mt-4">
-                      <div className={`pricing-box card bg-light ${plan.popular ? 'popular-plan' : ''} ${plan.isCurrent ? 'current-plan-card' : ''}`}>
-                        {plan.popular && (
-                          <div className="popular-ribbon">
-                            <span>MOST POPULAR</span>
-                          </div>
-                        )}
+                <div className="row mt-4">
+                  {loading ? (
+                    <div className="col-12 text-center mt-5">
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                      >
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                    </div>
+                  ) : plans.length > 0 ? (
+                    plans.map((plan) => (
+                      <div key={plan.id} className="col-lg-4 col-md-6 mt-4">
+                        <div
+                          className="pricing-box card bg-white border-0 shadow-sm h-100"
+                          style={{ borderRadius: "12px" }}
+                        >
+                          <div className="card-body p-4">
+                            <div className="pricing-name mb-3">
+                              <h6 className="text-uppercase fw-bold text-primary mb-0">
+                                {plan.name}
+                              </h6>
+                            </div>
 
-                        <div className="card-body p-4 px-lg-5">
-                          <div className="pricing-icon bg-light rounded-circle icons-md">
-                            <i className={`uim ${plan.icon}`} />
-                          </div>
+                            <div className="pricing-price">
+                              {plan.isCustom || plan.id === "special" ? (
+                                <h2 className="fw-bold text-dark mb-0">
+                                  Custom Price{" "}
+                                  <span className="fs-16 text-muted fw-normal">
+                                    / month
+                                  </span>
+                                </h2>
+                              ) : (
+                                <h2 className="fw-bold text-dark mb-0">
+                                  ₹
+                                  {plan.price
+                                    ? plan.price.toLocaleString("en-IN")
+                                    : 0}{" "}
+                                  <span className="text-dark">+ GST</span>
+                                  <span className="fs-16 text-muted fw-normal">
+                                    {plan.validity ? ` / ${plan.validity}` : ""}
+                                  </span>
+                                </h2>
+                              )}
+                              <p className="text-muted fs-13 mb-0">
+                                {plan.billingType === "monthly"
+                                  ? "billed monthly"
+                                  : "billed One time"}
+                              </p>
+                            </div>
 
-                          <div className="pricing-name text-center mt-4 pt-2">
-                            <h4 className="fs-18">{plan.name}</h4>
-                            <p className="text-muted fs-14 mb-0">{plan.description}</p>
-                          </div>
+                            <hr className="my-4" style={{ opacity: 0.1 }} />
 
-                          <div className="pricing-price text-center mt-4">
-                            <h2 className="fw-semibold">
-                              ₹{plan.price.toLocaleString('en-IN')}
-                              <small className="fs-16"> {plan.period}</small>
-                            </h2>
-                          </div>
+                            <ul className="list-unstyled pricing-details text-muted">
+                              {plan.features && Array.isArray(plan.features)
+                                ? plan.features.map((feature, index) => (
+                                    <li
+                                      key={index}
+                                      className="pricing-item d-flex align-items-center mb-3"
+                                    >
+                                      <i className="uil uil-check text-success fs-18 me-2" />
+                                      <span>{feature}</span>
+                                    </li>
+                                  ))
+                                : plan.featuresList &&
+                                  Array.isArray(plan.featuresList)
+                                ? plan.featuresList.map((feature, index) => (
+                                    <li
+                                      key={index}
+                                      className="pricing-item d-flex align-items-center mb-3"
+                                    >
+                                      <i
+                                        className={`uil ${
+                                          feature.included
+                                            ? "uil-check text-success"
+                                            : "uil-times text-muted"
+                                        } fs-18 me-2`}
+                                      />
+                                      <span>{feature.text}</span>
+                                    </li>
+                                  ))
+                                : null}
+                            </ul>
 
-                          <ul className="list-unstyled pricing-details text-muted mt-4">
-                            {plan.features.map((feature, index) => (
-                              <li key={index} className="pricing-item">
-                                <i className="mdi mdi-check-bold success-bg-subtle me-2" />
-                                {feature}
-                              </li>
-                            ))}
-                            {plan.disabledFeatures && plan.disabledFeatures.map((feature, index) => (
-                              <li key={`disabled-${index}`} className="pricing-item text-decoration-line-through">
-                                <i className="mdi mdi-close-thick bg-soft-muted me-2" />
-                                {feature}
-                              </li>
-                            ))}
-                          </ul>
-
-                          <div className="text-center mt-4 mb-2">
-                            {plan.isCurrent ? (
-                              <button className="btn btn-soft-secondary rounded-pill" disabled>
-                                Current Plan <i className="uil uil-check" />
-                              </button>
-                            ) : (
-                              <a
-                                href="javascript:void(0)"
-                                className={`btn ${plan.popular ? 'btn-primary' : 'btn-soft-primary'} rounded-pill`}
+                            <div className="mt-auto pt-3">
+                              <button
+                                onClick={() => handlePayment(plan)}
+                                disabled={paymentLoading}
+                                className={`btn w-100 ${
+                                  plan.isCustom || plan.id === "special"
+                                    ? "btn-soft-primary"
+                                    : "btn-primary"
+                                } rounded-pill py-2 fw-medium`}
                               >
-                                Upgrade Now <i className="uil uil-arrow-right" />
-                              </a>
-                            )}
+                                {paymentLoading ? (
+                                  <>
+                                    <span
+                                      className="spinner-border spinner-border-sm me-2"
+                                      role="status"
+                                      aria-hidden="true"
+                                    ></span>
+                                    Processing...
+                                  </>
+                                ) : (
+                                  <>
+                                    {plan.isCustom || plan.id === "special"
+                                      ? "Request Us"
+                                      : "Subscribe Now"}
+                                    {!(
+                                      plan.isCustom || plan.id === "special"
+                                    ) && (
+                                      <i className="uil uil-arrow-right ms-1" />
+                                    )}
+                                  </>
+                                )}
+                              </button>
+                              {(plan.isCustom || plan.id === "special") && (
+                                <p className="text-center text-muted fs-12 mt-2 mb-0">
+                                  No credit card required
+                                </p>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <div className="col-12 text-center">No plans found.</div>
+                  )}
                 </div>
               </div>
             </section>
-            {/* END PRICING */}
 
-            {/* PLAN USAGE SECTION - MOVED DOWN */}
+            {/* Plan Usage Section */}
             <section className="section pt-2">
               <div className="container">
                 <div className="usage-card-wrapper">
@@ -242,63 +511,91 @@ const PricingPage = () => {
                   </div>
 
                   <div className="row mt-4">
-                    {/* Monthly Applications */}
                     <div className="col-lg-4 col-md-6 mb-4">
                       <div className="usage-card">
                         <div className="usage-card-header">
-                          <span className="usage-label">Monthly Applications</span>
-                          <span className="usage-value">{usage.applications.current} / {usage.applications.total}</span>
+                          <span className="usage-label">
+                            Monthly Applications
+                          </span>
+                          <span className="usage-value">
+                            {usage.applications.current} /{" "}
+                            {usage.applications.total}
+                          </span>
                         </div>
                         <div className="custom-progress-bar">
                           <div
                             className="custom-progress-fill"
                             style={{
-                              width: `${getProgressPercentage(usage.applications.current, usage.applications.total)}%`,
-                              backgroundColor: getProgressColor(getProgressPercentage(usage.applications.current, usage.applications.total))
+                              width: `${getProgressPercentage(
+                                usage.applications.current,
+                                usage.applications.total
+                              )}%`,
+                              backgroundColor: getProgressColor(
+                                getProgressPercentage(
+                                  usage.applications.current,
+                                  usage.applications.total
+                                )
+                              ),
                             }}
                           ></div>
                         </div>
-                        <span className="usage-info-text">Resets in {usage.applications.resetDays} days</span>
+                        <span className="usage-info-text">
+                          Resets in {usage.applications.resetDays} days
+                        </span>
                       </div>
                     </div>
 
-                    {/* Profile Views */}
                     <div className="col-lg-4 col-md-6 mb-4">
                       <div className="usage-card">
                         <div className="usage-card-header">
                           <span className="usage-label">Profile Views</span>
-                          <span className="usage-value">{usage.profileViews.current} / {usage.profileViews.total}</span>
+                          <span className="usage-value">
+                            {usage.profileViews.current} /{" "}
+                            {usage.profileViews.total}
+                          </span>
                         </div>
                         <div className="custom-progress-bar">
                           <div
                             className="custom-progress-fill"
                             style={{
-                              width: `${getProgressPercentage(usage.profileViews.current, usage.profileViews.total)}%`,
-                              backgroundColor: '#10b981'
+                              width: `${getProgressPercentage(
+                                usage.profileViews.current,
+                                usage.profileViews.total
+                              )}%`,
+                              backgroundColor: "#10b981",
                             }}
                           ></div>
                         </div>
-                        <span className="usage-info-text">{usage.profileViews.status}</span>
+                        <span className="usage-info-text">
+                          {usage.profileViews.status}
+                        </span>
                       </div>
                     </div>
 
-                    {/* Resume Reviews */}
                     <div className="col-lg-4 col-md-6 mb-4">
                       <div className="usage-card">
                         <div className="usage-card-header">
                           <span className="usage-label">Resume Reviews</span>
-                          <span className="usage-value">{usage.resumeReviews.current} / {usage.resumeReviews.total}</span>
+                          <span className="usage-value">
+                            {usage.resumeReviews.current} /{" "}
+                            {usage.resumeReviews.total}
+                          </span>
                         </div>
                         <div className="custom-progress-bar">
                           <div
                             className="custom-progress-fill"
                             style={{
-                              width: `${getProgressPercentage(usage.resumeReviews.current, usage.resumeReviews.total)}%`,
-                              backgroundColor: '#8b5cf6'
+                              width: `${getProgressPercentage(
+                                usage.resumeReviews.current,
+                                usage.resumeReviews.total
+                              )}%`,
+                              backgroundColor: "#8b5cf6",
                             }}
                           ></div>
                         </div>
-                        <span className="usage-info-text">{usage.resumeReviews.remaining} credits remaining</span>
+                        <span className="usage-info-text">
+                          {usage.resumeReviews.remaining} credits remaining
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -306,39 +603,7 @@ const PricingPage = () => {
               </div>
             </section>
 
-            {/*START CTA*/}
-            <section className="section">
-              <div className="container">
-                <div className="row justify-content-center">
-                  <div className="section-title text-center">
-                    <h3 className="title mb-4 pb-2">
-                      See everything about your employee at one place.
-                    </h3>
-                    <p className="para-desc text-muted mx-auto">
-                      Start working with JobsStorm that can provide everything
-                      you need to generate awareness, drive traffic, connect.
-                    </p>
-                    <div className="mt-4">
-                      <a
-                        href="/contact-us"
-                        className="btn btn-primary btn-hover mt-2"
-                      >
-                        <i className="uil uil-phone me-1" /> Contact
-                      </a>
-                      <a
-                        href="/faq-pages"
-                        className="btn btn-outline-primary btn-hover ms-sm-1 mt-2"
-                      >
-                        <i className="uil uil-file-question me-1" /> Faq's
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-            {/*END CTA*/}
-
-            {/* START CTA */}
+            {/* CTA Section */}
             <section className="section bg-light">
               <div className="container">
                 <div className="pricing-counter text-white">
@@ -379,7 +644,6 @@ const PricingPage = () => {
                 </div>
               </div>
             </section>
-            {/* END CTA */}
           </div>
         </div>
       </div>
