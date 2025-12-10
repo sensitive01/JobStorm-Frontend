@@ -52,12 +52,18 @@ const PricingPage = () => {
     // CRITICAL CHECK: Only trigger payment return if we have enough data to verify
     if (status && txnid && hash && amount) {
       handlePaymentReturn();
-    } 
+    }
     // Handle failure status, cancellation, or internal error without full payload
-    else if (status === 'failure' || status === 'cancelled' || searchParams.get("error")) {
-        console.log("Payment failure or cancellation detected with minimal parameters.");
-        // We clean the URL to prevent subsequent unnecessary checks
-        navigate("/price-page", { replace: true }); 
+    else if (
+      status === "failure" ||
+      status === "cancelled" ||
+      searchParams.get("error")
+    ) {
+      console.log(
+        "Payment failure or cancellation detected with minimal parameters."
+      );
+      // We clean the URL to prevent subsequent unnecessary checks
+      navigate("/price-page", { replace: true });
     }
   }, [searchParams]);
 
@@ -68,7 +74,7 @@ const PricingPage = () => {
         setPlans(response.data.data);
       } else {
         // Handle scenario where API succeeds but returns no data
-        setPlans([]); 
+        setPlans([]);
       }
     } catch (error) {
       console.error("Error fetching pricing plans:", error);
@@ -91,17 +97,19 @@ const PricingPage = () => {
     const status = params.status;
 
     try {
-        if (!storedPlanId) {
-             throw new Error("Missing plan data in local storage. Cannot verify subscription.");
-        }
+      if (!storedPlanId) {
+        throw new Error(
+          "Missing plan data in local storage. Cannot verify subscription."
+        );
+      }
 
-        if (status === "success") {
-            await verifyAndActivateSubscription(params, storedPlanId);
-        } else if (status === "failure" || status === "cancelled") {
-            const errorMessage = params.errorMessage || `Payment ${status}. Please try again.`;
-            showNotification(errorMessage, "error");
-        } 
-
+      if (status === "success") {
+        await verifyAndActivateSubscription(params, storedPlanId);
+      } else if (status === "failure" || status === "cancelled") {
+        const errorMessage =
+          params.errorMessage || `Payment ${status}. Please try again.`;
+        showNotification(errorMessage, "error");
+      }
     } catch (error) {
       console.error("❌ Error handling payment return:", error);
       showNotification(`Payment process error: ${error.message}`, "error");
@@ -112,7 +120,10 @@ const PricingPage = () => {
     }
   };
 
-  const verifyAndActivateSubscription = async (paymentResponse, storedPlanId) => {
+  const verifyAndActivateSubscription = async (
+    paymentResponse,
+    storedPlanId
+  ) => {
     try {
       console.log("🔍 Verifying payment with backend...");
       const user = getUserDetails();
@@ -120,24 +131,31 @@ const PricingPage = () => {
       const verifyData = {
         txnid: paymentResponse.txnid,
         status: paymentResponse.status,
-        hash: paymentResponse.hash, 
-        amount: paymentResponse.amount, 
+        hash: paymentResponse.hash,
+        amount: paymentResponse.amount,
         productinfo: paymentResponse.productinfo || "",
         firstname: paymentResponse.firstname || "",
         email: paymentResponse.email || "",
-        employeeId: user.id, 
-        planType: storedPlanId, 
+        employeeId: user.id,
+        planType: storedPlanId,
         // Forward UDFs for backend hash verification consistency
-        udf1: paymentResponse.udf1 || "", 
-        udf2: paymentResponse.udf2 || "", 
-        udf3: paymentResponse.udf3 || "", 
-        udf4: paymentResponse.udf4 || "", 
-        udf5: paymentResponse.udf5 || "", 
+        udf1: paymentResponse.udf1 || "",
+        udf2: paymentResponse.udf2 || "",
+        udf3: paymentResponse.udf3 || "",
+        udf4: paymentResponse.udf4 || "",
+        udf5: paymentResponse.udf5 || "",
       };
 
       // CRITICAL DATA CHECK
-      if (!verifyData.txnid || !verifyData.hash || !verifyData.employeeId || !verifyData.planType) {
-           throw new Error("Critical payment details missing for server verification.");
+      if (
+        !verifyData.txnid ||
+        !verifyData.hash ||
+        !verifyData.employeeId ||
+        !verifyData.planType
+      ) {
+        throw new Error(
+          "Critical payment details missing for server verification."
+        );
       }
 
       console.log("📤 Verification request:", verifyData);
@@ -164,7 +182,7 @@ const PricingPage = () => {
     } catch (error) {
       console.error("❌ Verification API Error:", error);
       // Re-throw the error so handlePaymentReturn can catch and notify/cleanup
-      throw error; 
+      throw error;
     }
   };
 
@@ -216,8 +234,8 @@ const PricingPage = () => {
       setCurrentTxnId(paymentData.txnid);
 
       // SURL/FURL are provided by the backend, which PayU POSTs to
-      const successUrl = paymentData.surl; 
-      const failureUrl = paymentData.furl; 
+      const successUrl = paymentData.surl;
+      const failureUrl = paymentData.furl;
 
       console.log("Using Backend SURL:", successUrl);
       console.log("Using Backend FURL:", failureUrl);
@@ -428,22 +446,32 @@ const PricingPage = () => {
                             <hr className="my-4" style={{ opacity: 0.1 }} />
 
                             <ul className="list-unstyled pricing-details text-muted">
-                              {/* Consolidated feature rendering logic */}
-                              {(plan.features || plan.featuresList)?.map((feature, index) => (
-                                    <li
-                                      key={index}
-                                      className="pricing-item d-flex align-items-center mb-3"
-                                    >
-                                      <i
-                                        className={`uil ${
-                                          (feature.included === false)
-                                            ? "uil-times text-muted"
-                                            : "uil-check text-success"
-                                        } fs-18 me-2`}
-                                      />
-                                      <span>{feature.text || feature}</span>
-                                    </li>
-                                  ))}
+                              {/* Consolidated feature rendering logic with safe array check */}
+                              {(() => {
+                                const features =
+                                  plan.features || plan.featuresList;
+                                const featuresArray = Array.isArray(features)
+                                  ? features
+                                  : typeof features === "string"
+                                  ? features.split(",")
+                                  : [];
+
+                                return featuresArray.map((feature, index) => (
+                                  <li
+                                    key={index}
+                                    className="pricing-item d-flex align-items-center mb-3"
+                                  >
+                                    <i
+                                      className={`uil ${
+                                        feature.included === false
+                                          ? "uil-times text-muted"
+                                          : "uil-check text-success"
+                                      } fs-18 me-2`}
+                                    />
+                                    <span>{feature.text || feature}</span>
+                                  </li>
+                                ));
+                              })()}
                             </ul>
 
                             <div className="mt-auto pt-3">
@@ -489,7 +517,9 @@ const PricingPage = () => {
                       </div>
                     ))
                   ) : (
-                    <div className="col-12 text-center mt-5">No plans available at this time.</div>
+                    <div className="col-12 text-center mt-5">
+                      No plans available at this time.
+                    </div>
                   )}
                 </div>
               </div>
