@@ -282,23 +282,28 @@ export const getAllCandidatePlans = async () => {
   }
 };
 
-export const bookSubscription = async (employeeId, planId, amount, planType, firstName, email, phone) => {
+export const bookSubscription = async (
+  employeeId,
+  planId,
+  amount,
+  planType,
+  firstName,
+  email,
+  phone
+) => {
   try {
-    const response = await axiosInstance.post(
-      `/payment/order/create`,
-      {
-        employeeId,
-        planId,
-        planType,
-        amount,
-        firstName,
-        email,
-        phone
-      }
-    );
+    const response = await axiosInstance.post("/payment/create-order", {
+      employeeId,    // ✅ Matches backend
+      planType,      // ✅ Matches backend (this is the planId actually)
+      amount,        // ✅ Matches backend
+      firstName,     // ✅ Matches backend
+      email,         // ✅ Matches backend
+      phone,         // ✅ Matches backend
+    });
     return response.data;
   } catch (err) {
-    return err;
+    console.error("Error booking subscription:", err);
+    throw err; // ✅ Throw error instead of returning it
   }
 };
 

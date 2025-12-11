@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   bookSubscription,
   getAllCandidatePlans,
-} from "../../../api/service/axiosService"; // <-- Removed verifyPayment
+} from "../../../api/service/axiosService";
 
 const getAuthToken = () => {
   return localStorage.getItem("userId") || localStorage.getItem("token");
@@ -40,17 +40,41 @@ const PricingPage = () => {
   useEffect(() => {
     const status = searchParams.get("status");
     const txnid = searchParams.get("txnid");
+    const error = searchParams.get("error");
 
     if (status && txnid) {
-      console.log("PayU Payment Return:", { status, txnid });
+      console.log("PayU Payment Return:", { status, txnid, error });
 
-      if (status === "success") {
-        alert("Payment Successful! Subscription Activated.");
-        setTimeout(() => navigate("/dashboard"), 2000);
-      } else {
-        alert("Payment failed or cancelled");
+      switch (status) {
+        case "success":
+          alert("✅ Payment Successful! Subscription Activated.");
+          setTimeout(() => {
+            navigate("/dashboard", { replace: true });
+          }, 2000);
+          break;
+
+        case "failed":
+        case "failure":
+          alert(
+            `❌ Payment Failed! ${
+              error ? `Error: ${error}` : "Please try again."
+            }`
+          );
+          break;
+
+        case "pending":
+          alert("⏳ Payment is pending. We'll update you once confirmed.");
+          break;
+
+        case "error":
+          alert(`⚠️ An error occurred: ${error || "Unknown error"}`);
+          break;
+
+        default:
+          alert("Payment status unknown. Please contact support.");
       }
 
+      // Clean URL after showing message
       setTimeout(() => {
         navigate("/price-page", { replace: true });
       }, 2500);
@@ -59,7 +83,7 @@ const PricingPage = () => {
     }
 
     fetchPricingPlans();
-  }, [searchParams]);
+  }, [searchParams, navigate]);
 
   /* ======================================================
       🚀 Fetch Plans
@@ -78,11 +102,6 @@ const PricingPage = () => {
   };
 
   /* ======================================================
-      ❌ REMOVE handlePaymentReturn — NOT USED ANYMORE
-  ====================================================== */
-  // (function removed completely – unused & causing confusion)
-
-  /* ======================================================
       🚀 Start PayU Payment
   ====================================================== */
   const handlePayment = async (plan) => {
@@ -90,6 +109,12 @@ const PricingPage = () => {
 
     if (!getAuthToken()) {
       return alert("Please login to continue");
+    }
+
+    // Check if it's a custom plan
+    if (plan.isCustom || plan.id === "special") {
+      alert("Please contact support for custom pricing");
+      return;
     }
 
     setPaymentLoading(true);
@@ -112,10 +137,14 @@ const PricingPage = () => {
         throw new Error("Invalid PayU order response");
       }
 
+      console.log("Payment initiated:", paymentData.txnid);
       submitPayUForm(paymentData);
     } catch (error) {
       console.error("Payment Start Error:", error);
-      alert("Unable to start payment");
+      alert(
+        error.response?.data?.message ||
+          "Unable to start payment. Please try again."
+      );
       setPaymentLoading(false);
       setCurrentPlanId(null);
     }
@@ -125,14 +154,7 @@ const PricingPage = () => {
       🚀 Submit Form to PayU
   ====================================================== */
   const submitPayUForm = (paymentData) => {
-    let payuUrl = paymentData.payuBaseUrl.replace(/\/$/, "") + "/_payment";
-
-    // ❌ OLD: Manually constructing URL (RISKY if env var is wrong)
-    // const backendBaseUrl = (import.meta.env.VITE_BASE_ROUTE_JOBSTORM || "").replace(/\/$/, "");
-
-    // ✅ NEW: Use EXACTLY what the backend sent (It knows the correct URL)
-    const surl = paymentData.surl;
-    const furl = paymentData.furl;
+    const payuUrl = paymentData.payuBaseUrl.replace(/\/$/, "") + "/_payment";
 
     const params = {
       key: paymentData.key,
@@ -142,16 +164,22 @@ const PricingPage = () => {
       firstname: paymentData.firstname,
       email: paymentData.email,
       phone: paymentData.phone,
-      surl: surl, // <--- Use backend provided URL
-      furl: furl, // <--- Use backend provided URL
+      surl: paymentData.surl,
+      furl: paymentData.furl,
       hash: paymentData.hash,
       service_provider: "payu_paisa",
       udf1: paymentData.udf1 || "",
-      udf2: "",
+      udf2: paymentData.udf2 || "",
       udf3: "",
       udf4: "",
       udf5: "",
     };
+
+    // ✅ LOG ALL PARAMETERS
+    console.log("🚀 Submitting to PayU:", {
+      url: payuUrl,
+      params: params,
+    });
 
     const form = document.createElement("form");
     form.method = "POST";
@@ -163,6 +191,9 @@ const PricingPage = () => {
       input.name = key;
       input.value = params[key];
       form.appendChild(input);
+
+      // ✅ LOG EACH FIELD
+      console.log(`  ${key}: ${params[key]}`);
     });
 
     document.body.appendChild(form);
@@ -170,9 +201,8 @@ const PricingPage = () => {
   };
 
   /* ======================================================
-      UI BELOW — NO CHANGES AT ALL
+      UI Helper Functions
   ====================================================== */
-
   const getProgressPercentage = (current, total) => (current / total) * 100;
 
   const getProgressColor = (percentage) => {
