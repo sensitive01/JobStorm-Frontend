@@ -5,6 +5,7 @@ import {
   bookSubscription,
   getAllCandidatePlans,
 } from "../../../api/service/axiosService";
+import axios from "axios";
 
 const getAuthToken = () => {
   return localStorage.getItem("userId") || localStorage.getItem("token");
@@ -78,17 +79,24 @@ const PricingPage = () => {
     localStorage.removeItem("pending_payment_txn");
 
     if (status === "success") {
-      showNotification(
-        "Payment successful! Subscription activated.",
-        "success"
-      );
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 2000);
-    } else if (status === "failure") {
-      showNotification("Payment failed. Please try again.", "error");
-    } else if (status === "cancelled") {
-      showNotification("Payment was cancelled.", "warning");
+      axios
+        .post(`${API_BASE_URL}/payment/order/verify/${txnid}`, {
+          txnid: txnid,
+          status: status,
+        })
+        .then(() => {
+          showNotification(
+            "Payment successful! Subscription activated.",
+            "success"
+          );
+          navigate("/dashboard");
+        })
+        .catch(() => {
+          showNotification(
+            "Error verifying payment. Please contact support.",
+            "error"
+          );
+        });
     }
 
     // Clean URL
