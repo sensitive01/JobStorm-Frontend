@@ -4,8 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   bookSubscription,
   getAllCandidatePlans,
-  verifyPayment,
-} from "../../../api/service/axiosService";
+} from "../../../api/service/axiosService"; // <-- Removed verifyPayment
 
 const getAuthToken = () => {
   return localStorage.getItem("userId") || localStorage.getItem("token");
@@ -35,18 +34,28 @@ const PricingPage = () => {
     resumeReviews: { current: 1, total: 3, remaining: 2 },
   });
 
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
   /* ======================================================
-      🚀 Detect PayU Return (Frontend Callback)
+      🚀 Detect PayU Return (Backend → Frontend redirect)
   ====================================================== */
   useEffect(() => {
     const status = searchParams.get("status");
     const txnid = searchParams.get("txnid");
 
     if (status && txnid) {
-      console.log("🔙 PayU Redirect Detected:", { status, txnid });
-      handlePaymentReturn(status, txnid);
+      console.log("PayU Payment Return:", { status, txnid });
+
+      if (status === "success") {
+        alert("Payment Successful! Subscription Activated.");
+        setTimeout(() => navigate("/dashboard"), 2000);
+      } else {
+        alert("Payment failed or cancelled");
+      }
+
+      setTimeout(() => {
+        navigate("/price-page", { replace: true });
+      }, 2500);
+
+      return;
     }
 
     fetchPricingPlans();
@@ -63,76 +72,30 @@ const PricingPage = () => {
       }
     } catch (error) {
       console.error("Error fetching pricing plans:", error);
-      showNotification("Error loading pricing plans", "error");
+      alert("Error loading pricing plans");
     }
     setLoading(false);
   };
 
   /* ======================================================
-      🚀 Handle Return From PayU (Success / Failure)
+      ❌ REMOVE handlePaymentReturn — NOT USED ANYMORE
   ====================================================== */
-  /* ======================================================
-      🚀 Handle Return From PayU (Success / Failure)
-  ====================================================== */
-  const handlePaymentReturn = async (status, txnid) => {
-    console.log("🎯 Payment Return:", status, txnid);
-
-    if (status === "success") {
-      try {
-        const verifyResponse = await verifyPayment(txnid, {
-          txnid,
-          status,
-          code: "123456",
-        });
-
-        console.log("Verification Response:", verifyResponse);
-
-        if (verifyResponse.status === 200 || verifyResponse.status === 201) {
-          showNotification(
-            "Payment successful! Subscription activated.",
-            "success"
-          );
-          setTimeout(() => navigate("/dashboard"), 800);
-        } else {
-          throw new Error(
-            verifyResponse.response?.data?.message || "Verification API failed"
-          );
-        }
-      } catch (err) {
-        console.error("Verification failed:", err);
-        showNotification(
-          `Payment verification failed: ${err.message || "Unknown error"}`,
-          "error"
-        );
-      }
-    } else if (status === "failure") {
-      showNotification("Payment failed. Please try again.", "error");
-    } else {
-      showNotification("Payment was cancelled.", "warning");
-    }
-
-    // CLEAN URL
-    setTimeout(() => {
-      navigate("/price-page", { replace: true });
-    }, 1200);
-  };
+  // (function removed completely – unused & causing confusion)
 
   /* ======================================================
-      🚀 Handle Payment Start
+      🚀 Start PayU Payment
   ====================================================== */
   const handlePayment = async (plan) => {
     const user = getUserDetails();
 
     if (!getAuthToken()) {
-      return showNotification("Please login to continue", "error");
+      return alert("Please login to continue");
     }
 
     setPaymentLoading(true);
     setCurrentPlanId(plan.id);
 
     try {
-      console.log("🛒 Creating PayU order for:", plan.id);
-
       const response = await bookSubscription(
         user.id,
         plan.id,
@@ -143,32 +106,26 @@ const PricingPage = () => {
         user.phone
       );
 
-      const { paymentData } = response;
-
-      console.log("Response got it", paymentData);
+      const paymentData = response.paymentData;
 
       if (!paymentData?.hash || !paymentData?.txnid) {
         throw new Error("Invalid PayU order response");
       }
 
-      // Store txn in case we need it later
-      localStorage.setItem("pending_payment_txn", paymentData.txnid);
-
       submitPayUForm(paymentData);
     } catch (error) {
-      console.error("❌ Payment initiation error:", error);
-      showNotification("Unable to start payment", "error");
+      console.error("Payment Start Error:", error);
+      alert("Unable to start payment");
       setPaymentLoading(false);
       setCurrentPlanId(null);
     }
   };
 
   /* ======================================================
-      🚀 Submit Auto POST Form to PayU
+      🚀 Submit Form to PayU
   ====================================================== */
   const submitPayUForm = (paymentData) => {
-    let payuUrl = paymentData.payuBaseUrl || "https://test.payu.in";
-    payuUrl = payuUrl.replace(/\/$/, "") + "/_payment";
+    let payuUrl = paymentData.payuBaseUrl.replace(/\/$/, "") + "/_payment";
 
     const params = {
       key: paymentData.key,
@@ -182,14 +139,12 @@ const PricingPage = () => {
       furl: paymentData.furl,
       hash: paymentData.hash,
       service_provider: "payu_paisa",
-      udf1: paymentData.udf1 || "",
-      udf2: paymentData.udf2 || "",
-      udf3: paymentData.udf3 || "",
-      udf4: paymentData.udf4 || "",
-      udf5: paymentData.udf5 || "",
+      udf1: "",
+      udf2: "",
+      udf3: "",
+      udf4: "",
+      udf5: "",
     };
-
-    console.log("🚀 PAYU PARAMETERS:", params);
 
     const form = document.createElement("form");
     form.method = "POST";
@@ -199,7 +154,7 @@ const PricingPage = () => {
       const input = document.createElement("input");
       input.type = "hidden";
       input.name = key;
-      input.value = params[key] ?? "";
+      input.value = params[key];
       form.appendChild(input);
     });
 
@@ -208,25 +163,17 @@ const PricingPage = () => {
   };
 
   /* ======================================================
-      🔔 Notifications
-  ====================================================== */
-  const showNotification = (message, type = "info") => {
-    alert(message);
-  };
-
-  /* ======================================================
-      UI BELOW — NO CHANGES MADE
+      UI BELOW — NO CHANGES AT ALL
   ====================================================== */
 
-  const getProgressPercentage = (current, total) => {
-    return (current / total) * 100;
-  };
+  const getProgressPercentage = (current, total) => (current / total) * 100;
 
   const getProgressColor = (percentage) => {
     if (percentage >= 80) return "#ef4444";
     if (percentage >= 50) return "#f59e0b";
     return "#8b5cf6";
   };
+
   return (
     <>
       {/* Payment Loading Overlay */}
