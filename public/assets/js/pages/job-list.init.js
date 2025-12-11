@@ -1,1 +1,8 @@
-var singleCategories,singleLocation=new Choices("#choices-single-location"),singleCategorie=document.getElementById("choices-single-categories");singleCategorie&&(singleCategories=new Choices("#choices-single-categories"));
+var singleLocation = document.getElementById("choices-single-location");
+if (singleLocation) {
+    new Choices("#choices-single-location");
+}
+var singleCategorie = document.getElementById("choices-single-categories");
+if (singleCategorie) {
+    new Choices("#choices-single-categories");
+}

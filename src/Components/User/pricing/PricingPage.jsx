@@ -4,8 +4,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   bookSubscription,
   getAllCandidatePlans,
+  verifyPayment,
 } from "../../../api/service/axiosService";
-import axios from "axios";
 
 const getAuthToken = () => {
   return localStorage.getItem("userId") || localStorage.getItem("token");
@@ -28,176 +28,147 @@ const PricingPage = () => {
   const [loading, setLoading] = useState(true);
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [currentPlanId, setCurrentPlanId] = useState(null);
-  const [currentTxnId, setCurrentTxnId] = useState(null);
 
   const [usage] = useState({
-    applications: { current: 12, total: 50, resetDays: 14 },
-    profileViews: { current: 45, total: 100, status: "Good visibility!" },
+    applications: { current: 5, total: 20, resetDays: 10 },
+    profileViews: { current: 15, total: 50, status: "Active" },
     resumeReviews: { current: 1, total: 3, remaining: 2 },
   });
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+  /* ======================================================
+      🚀 Detect PayU Return (Frontend Callback)
+  ====================================================== */
   useEffect(() => {
-    fetchPricingPlans();
-
-    // Check if returning from PayU (backend redirect)
     const status = searchParams.get("status");
     const txnid = searchParams.get("txnid");
 
     if (status && txnid) {
+      console.log("🔙 PayU Redirect Detected:", { status, txnid });
       handlePaymentReturn(status, txnid);
     }
+
+    fetchPricingPlans();
   }, [searchParams]);
 
+  /* ======================================================
+      🚀 Fetch Plans
+  ====================================================== */
   const fetchPricingPlans = async () => {
     try {
       const response = await getAllCandidatePlans();
       if (response.status === 200) {
         setPlans(response.data.data);
-      } else {
-        console.error("Failed to fetch plans:", response);
-        setPlans([]);
       }
     } catch (error) {
       console.error("Error fetching pricing plans:", error);
-      setPlans([]);
-      showNotification(
-        "Failed to load pricing plans. Please try again later.",
-        "error"
-      );
-    } finally {
-      setLoading(false);
+      showNotification("Error loading pricing plans", "error");
     }
+    setLoading(false);
   };
 
-  const handlePaymentReturn = (status, txnid) => {
-    console.log("🔙 Payment return detected:", { status, txnid });
-
-    // Clear stored data
-    localStorage.removeItem("pending_payment_plan");
-    localStorage.removeItem("pending_payment_txn");
+  /* ======================================================
+      🚀 Handle Return From PayU (Success / Failure)
+  ====================================================== */
+  /* ======================================================
+      🚀 Handle Return From PayU (Success / Failure)
+  ====================================================== */
+  const handlePaymentReturn = async (status, txnid) => {
+    console.log("🎯 Payment Return:", status, txnid);
 
     if (status === "success") {
-      axios
-        .post(`${API_BASE_URL}/payment/order/verify/${txnid}`, {
-          txnid: txnid,
-          status: status,
-        })
-        .then(() => {
+      try {
+        const verifyResponse = await verifyPayment(txnid, {
+          txnid,
+          status,
+          code: "123456",
+        });
+
+        console.log("Verification Response:", verifyResponse);
+
+        if (verifyResponse.status === 200 || verifyResponse.status === 201) {
           showNotification(
             "Payment successful! Subscription activated.",
             "success"
           );
-          navigate("/dashboard");
-        })
-        .catch(() => {
-          showNotification(
-            "Error verifying payment. Please contact support.",
-            "error"
+          setTimeout(() => navigate("/dashboard"), 800);
+        } else {
+          throw new Error(
+            verifyResponse.response?.data?.message || "Verification API failed"
           );
-        });
+        }
+      } catch (err) {
+        console.error("Verification failed:", err);
+        showNotification(
+          `Payment verification failed: ${err.message || "Unknown error"}`,
+          "error"
+        );
+      }
+    } else if (status === "failure") {
+      showNotification("Payment failed. Please try again.", "error");
+    } else {
+      showNotification("Payment was cancelled.", "warning");
     }
 
-    // Clean URL
-    navigate("/price-page", { replace: true });
+    // CLEAN URL
+    setTimeout(() => {
+      navigate("/price-page", { replace: true });
+    }, 1200);
   };
 
+  /* ======================================================
+      🚀 Handle Payment Start
+  ====================================================== */
   const handlePayment = async (plan) => {
     const user = getUserDetails();
-    const token = getAuthToken();
 
-    if (!token) {
-      showNotification("Please login to purchase a plan", "error");
-      return;
-    }
-
-    if (plan.isCustom || plan.id === "special") {
-      navigate("/contact-us");
-      return;
+    if (!getAuthToken()) {
+      return showNotification("Please login to continue", "error");
     }
 
     setPaymentLoading(true);
     setCurrentPlanId(plan.id);
 
     try {
-      console.log("🛒 Starting payment for plan:", plan.id);
+      console.log("🛒 Creating PayU order for:", plan.id);
 
-      const orderResponse = await bookSubscription(
-        user.id || user._id,
+      const response = await bookSubscription(
+        user.id,
         plan.id,
-        plan.totalAmount || plan.price,
+        plan.price,
         plan.id,
         user.firstName,
         user.email,
         user.phone
       );
 
-      console.log("📦 Order response:", orderResponse);
-      const { paymentData, orderData } = orderResponse;
-      console.log("Payment Data", paymentData);
-      console.log("Order Data", orderData);
-      const {
-        key,
-        hash,
-        txnid,
-        payuBaseUrl,
-        surl,
-        furl,
-        amount,
-        productinfo,
-        firstname,
-        email,
-        phone,
-      } = paymentData;
-      console.log(
-        "Payment Data",
-        key,
-        hash,
-        txnid,
-        payuBaseUrl,
-        surl,
-        furl,
-        amount,
-        productinfo,
-        firstname,
-        email,
-        phone
-      );
+      const { paymentData } = response;
 
-      if (
-        !paymentData ||
-        !paymentData.key ||
-        !paymentData.hash ||
-        !paymentData.txnid
-      ) {
-        throw new Error("Missing payment parameters from backend");
+      console.log("Response got it", paymentData);
+
+      if (!paymentData?.hash || !paymentData?.txnid) {
+        throw new Error("Invalid PayU order response");
       }
 
-      // Store for reference
-      localStorage.setItem("pending_payment_plan", plan.id);
+      // Store txn in case we need it later
       localStorage.setItem("pending_payment_txn", paymentData.txnid);
-      setCurrentTxnId(paymentData.txnid);
 
-      // Submit form to PayU
       submitPayUForm(paymentData);
     } catch (error) {
       console.error("❌ Payment initiation error:", error);
-      showNotification(`Payment failed: ${error.message}`, "error");
+      showNotification("Unable to start payment", "error");
       setPaymentLoading(false);
       setCurrentPlanId(null);
     }
   };
 
+  /* ======================================================
+      🚀 Submit Auto POST Form to PayU
+  ====================================================== */
   const submitPayUForm = (paymentData) => {
     let payuUrl = paymentData.payuBaseUrl || "https://test.payu.in";
-    if (!payuUrl.endsWith("/_payment")) {
-      payuUrl = payuUrl.replace(/\/$/, "") + "/_payment";
-    }
-
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = payuUrl;
+    payuUrl = payuUrl.replace(/\/$/, "") + "/_payment";
 
     const params = {
       key: paymentData.key,
@@ -206,12 +177,11 @@ const PricingPage = () => {
       productinfo: paymentData.productinfo,
       firstname: paymentData.firstname,
       email: paymentData.email,
-      phone: paymentData.phone || "",
+      phone: paymentData.phone,
       surl: paymentData.surl,
       furl: paymentData.furl,
       hash: paymentData.hash,
-      service_provider: paymentData.service_provider || "payu_paisa",
-      // ✅ VITAL: Include these exactly as backend generates them
+      service_provider: "payu_paisa",
       udf1: paymentData.udf1 || "",
       udf2: paymentData.udf2 || "",
       udf3: paymentData.udf3 || "",
@@ -219,25 +189,34 @@ const PricingPage = () => {
       udf5: paymentData.udf5 || "",
     };
 
+    console.log("🚀 PAYU PARAMETERS:", params);
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = payuUrl;
+
     Object.keys(params).forEach((key) => {
-      // Allow empty strings
-      if (params[key] !== undefined && params[key] !== null) {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = key;
-        input.value = params[key];
-        form.appendChild(input);
-      }
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = key;
+      input.value = params[key] ?? "";
+      form.appendChild(input);
     });
 
     document.body.appendChild(form);
     form.submit();
   };
 
+  /* ======================================================
+      🔔 Notifications
+  ====================================================== */
   const showNotification = (message, type = "info") => {
-    // You can replace this with a proper notification library like react-toastify
     alert(message);
   };
+
+  /* ======================================================
+      UI BELOW — NO CHANGES MADE
+  ====================================================== */
 
   const getProgressPercentage = (current, total) => {
     return (current / total) * 100;
@@ -248,7 +227,6 @@ const PricingPage = () => {
     if (percentage >= 50) return "#f59e0b";
     return "#8b5cf6";
   };
-
   return (
     <>
       {/* Payment Loading Overlay */}

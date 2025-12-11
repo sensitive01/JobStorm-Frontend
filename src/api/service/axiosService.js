@@ -304,13 +304,13 @@ export const bookSubscription = async (employeeId, planId, amount, planType, fir
 
 
 
-export const verifyPayment = async (verificationData) => {
+export const verifyPayment = async (txnid, verificationData) => {
   try {
     const response = await axiosInstance.post(
-      `/payment/order/verify/:id`,
+      `/payment/order/verify/${txnid}`,
       verificationData
     );
-    return response.data;
+    return response;
   } catch (err) {
     return err;
   }
