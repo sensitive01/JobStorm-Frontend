@@ -61,7 +61,10 @@ const PricingPage = () => {
     } catch (error) {
       console.error("Error fetching pricing plans:", error);
       setPlans([]);
-      showNotification("Failed to load pricing plans. Please try again later.", "error");
+      showNotification(
+        "Failed to load pricing plans. Please try again later.",
+        "error"
+      );
     } finally {
       setLoading(false);
     }
@@ -75,7 +78,10 @@ const PricingPage = () => {
     localStorage.removeItem("pending_payment_txn");
 
     if (status === "success") {
-      showNotification("Payment successful! Subscription activated.", "success");
+      showNotification(
+        "Payment successful! Subscription activated.",
+        "success"
+      );
       setTimeout(() => {
         navigate("/dashboard");
       }, 2000);
@@ -120,9 +126,43 @@ const PricingPage = () => {
       );
 
       console.log("📦 Order response:", orderResponse);
-      const { paymentData } = orderResponse;
+      const { paymentData, orderData } = orderResponse;
+      console.log("Payment Data", paymentData);
+      console.log("Order Data", orderData);
+      const {
+        key,
+        hash,
+        txnid,
+        payuBaseUrl,
+        surl,
+        furl,
+        amount,
+        productinfo,
+        firstname,
+        email,
+        phone,
+      } = paymentData;
+      console.log(
+        "Payment Data",
+        key,
+        hash,
+        txnid,
+        payuBaseUrl,
+        surl,
+        furl,
+        amount,
+        productinfo,
+        firstname,
+        email,
+        phone
+      );
 
-      if (!paymentData || !paymentData.key || !paymentData.hash || !paymentData.txnid) {
+      if (
+        !paymentData ||
+        !paymentData.key ||
+        !paymentData.hash ||
+        !paymentData.txnid
+      ) {
         throw new Error("Missing payment parameters from backend");
       }
 
@@ -142,24 +182,15 @@ const PricingPage = () => {
   };
 
   const submitPayUForm = (paymentData) => {
-    // Get PayU URL from backend
     let payuUrl = paymentData.payuBaseUrl || "https://test.payu.in";
-
-    // Ensure proper endpoint
     if (!payuUrl.endsWith("/_payment")) {
       payuUrl = payuUrl.replace(/\/$/, "") + "/_payment";
     }
 
-    console.log("🚀 Submitting form to PayU:", payuUrl);
-    console.log("📋 Using surl:", paymentData.surl);
-    console.log("📋 Using furl:", paymentData.furl);
-
-    // Create form element
     const form = document.createElement("form");
     form.method = "POST";
     form.action = payuUrl;
 
-    // ✅ CRITICAL: Use exact params from backend - DO NOT add status
     const params = {
       key: paymentData.key,
       txnid: paymentData.txnid,
@@ -168,16 +199,20 @@ const PricingPage = () => {
       firstname: paymentData.firstname,
       email: paymentData.email,
       phone: paymentData.phone || "",
-      surl: paymentData.surl,  // ✅ Use backend URL
-      furl: paymentData.furl,  // ✅ Use backend URL
+      surl: paymentData.surl,
+      furl: paymentData.furl,
       hash: paymentData.hash,
       service_provider: paymentData.service_provider || "payu_paisa",
+      // ✅ VITAL: Include these exactly as backend generates them
+      udf1: paymentData.udf1 || "",
+      udf2: paymentData.udf2 || "",
+      udf3: paymentData.udf3 || "",
+      udf4: paymentData.udf4 || "",
+      udf5: paymentData.udf5 || "",
     };
 
-    console.log("📋 Form params:", params);
-
-    // Create hidden input fields
     Object.keys(params).forEach((key) => {
+      // Allow empty strings
       if (params[key] !== undefined && params[key] !== null) {
         const input = document.createElement("input");
         input.type = "hidden";
@@ -187,9 +222,7 @@ const PricingPage = () => {
       }
     });
 
-    // Append form to body and submit
     document.body.appendChild(form);
-    console.log("✅ Submitting form to PayU...");
     form.submit();
   };
 
@@ -378,7 +411,9 @@ const PricingPage = () => {
                             <div className="mt-auto pt-3">
                               <button
                                 onClick={() => handlePayment(plan)}
-                                disabled={paymentLoading && currentPlanId === plan.id}
+                                disabled={
+                                  paymentLoading && currentPlanId === plan.id
+                                }
                                 className={`btn w-100 ${
                                   plan.isCustom || plan.id === "special"
                                     ? "btn-soft-primary"
@@ -419,9 +454,13 @@ const PricingPage = () => {
                     ))
                   ) : (
                     <div className="col-12 text-center mt-5">
-                      <div className="alert alert-warning d-inline-block" role="alert">
+                      <div
+                        className="alert alert-warning d-inline-block"
+                        role="alert"
+                      >
                         <i className="uil uil-exclamation-triangle me-2"></i>
-                        No pricing plans available at the moment. Please check back later or contact support.
+                        No pricing plans available at the moment. Please check
+                        back later or contact support.
                       </div>
                     </div>
                   )}

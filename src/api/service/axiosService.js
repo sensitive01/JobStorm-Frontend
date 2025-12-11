@@ -307,7 +307,7 @@ export const bookSubscription = async (employeeId, planId, amount, planType, fir
 export const verifyPayment = async (verificationData) => {
   try {
     const response = await axiosInstance.post(
-      `/payment/order/verify`,
+      `/payment/order/verify/:id`,
       verificationData
     );
     return response.data;
