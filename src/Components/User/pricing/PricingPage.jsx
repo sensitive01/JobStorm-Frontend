@@ -127,10 +127,12 @@ const PricingPage = () => {
   const submitPayUForm = (paymentData) => {
     let payuUrl = paymentData.payuBaseUrl.replace(/\/$/, "") + "/_payment";
 
-    // Ensure we point to the Backend API, not Frontend
-    const backendBaseUrl = (
-      import.meta.env.VITE_BASE_ROUTE_JOBSTORM || ""
-    ).replace(/\/$/, "");
+    // ❌ OLD: Manually constructing URL (RISKY if env var is wrong)
+    // const backendBaseUrl = (import.meta.env.VITE_BASE_ROUTE_JOBSTORM || "").replace(/\/$/, "");
+
+    // ✅ NEW: Use EXACTLY what the backend sent (It knows the correct URL)
+    const surl = paymentData.surl;
+    const furl = paymentData.furl;
 
     const params = {
       key: paymentData.key,
@@ -140,11 +142,11 @@ const PricingPage = () => {
       firstname: paymentData.firstname,
       email: paymentData.email,
       phone: paymentData.phone,
-      surl: `${backendBaseUrl}/payment/payu/success`,
-      furl: `${backendBaseUrl}/payment/payu/failure`,
+      surl: surl, // <--- Use backend provided URL
+      furl: furl, // <--- Use backend provided URL
       hash: paymentData.hash,
       service_provider: "payu_paisa",
-      udf1: paymentData.udf1, // Using value from backend response
+      udf1: paymentData.udf1 || "",
       udf2: "",
       udf3: "",
       udf4: "",
