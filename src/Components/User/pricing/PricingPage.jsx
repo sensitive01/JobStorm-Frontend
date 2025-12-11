@@ -127,6 +127,11 @@ const PricingPage = () => {
   const submitPayUForm = (paymentData) => {
     let payuUrl = paymentData.payuBaseUrl.replace(/\/$/, "") + "/_payment";
 
+    // Ensure we point to the Backend API, not Frontend
+    const backendBaseUrl = (
+      import.meta.env.VITE_BASE_ROUTE_JOBSTORM || ""
+    ).replace(/\/$/, "");
+
     const params = {
       key: paymentData.key,
       txnid: paymentData.txnid,
@@ -135,11 +140,11 @@ const PricingPage = () => {
       firstname: paymentData.firstname,
       email: paymentData.email,
       phone: paymentData.phone,
-      surl: paymentData.surl,
-      furl: paymentData.furl,
+      surl: `${backendBaseUrl}/payment/payu/success`,
+      furl: `${backendBaseUrl}/payment/payu/failure`,
       hash: paymentData.hash,
       service_provider: "payu_paisa",
-      udf1: "",
+      udf1: paymentData.udf1, // Using value from backend response
       udf2: "",
       udf3: "",
       udf4: "",
