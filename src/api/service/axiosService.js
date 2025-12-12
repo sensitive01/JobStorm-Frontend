@@ -283,27 +283,20 @@ export const getAllCandidatePlans = async () => {
 };
 
 export const bookSubscription = async (
-  employeeId,
-  planId,
-  amount,
-  planType,
-  firstName,
-  email,
-  phone
+  data
 ) => {
   try {
+    // Ensure the endpoint matches your backend route structure
+    // If your backend runs on /api, this becomes /api/payment/create-order
     const response = await axiosInstance.post("/payment/create-order", {
-      employeeId,    // ✅ Matches backend
-      planType,      // ✅ Matches backend (this is the planId actually)
-      amount,        // ✅ Matches backend
-      firstName,     // ✅ Matches backend
-      email,         // ✅ Matches backend
-      phone,         // ✅ Matches backend
+      data
     });
-    return response.data;
+
+    // We must return response.data because it contains { success: true, paymentData: { ... } }
+    return response;
   } catch (err) {
     console.error("Error booking subscription:", err);
-    throw err; // ✅ Throw error instead of returning it
+    throw err;
   }
 };
 
@@ -321,3 +314,55 @@ export const verifyPayment = async (txnid, verificationData) => {
   }
 };
 
+
+export const getMyTransactionHistory = async (candidateId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/get-candidate-transaction-history/${candidateId}`
+
+    );
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+
+export const clearAllTransactions = async (candidateId) => {
+  try {
+    const response = await axiosInstance.delete(
+      `/clear-all-transactions/${candidateId}`
+
+    );
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+
+
+export const postPaymentStatus = async (txnid,  amount, planType, status,employeeId, ) => {
+  try {
+    const response = await axiosInstance.get(
+      `/payment/verify-payment?employeeId=${employeeId}&txnid=${txnid}&amount=${amount}&planType=${planType}&status=${status}`,
+
+    );
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+
+export const isCadidateSubscribed = async (candidateId) => {
+  try {
+    const response = await axiosInstance.get(
+      `/is-candidate-subscribed/${candidateId}`
+
+    );
+    return response;
+  } catch (err) {
+    return err;
+  }
+};

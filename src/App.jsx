@@ -45,6 +45,7 @@ import ChatPage from "./Components/User/chat/ChatPage";
 import TermsAndConditions from "./Components/policy/TermsAndConditions";
 import PrivacyPolicyContent from "./Components/policy/PrivacyPolicy";
 import ShareProfile from "./Components/User/shareProfile/ShareProfile";
+import TransactionHistory from "./Components/User/pricing/TransactionHistory";
 
 function App() {
   return (
@@ -108,6 +109,7 @@ function App() {
           <Route path="/saved-candidate-page" element={<SavedCandidate />} />
           <Route path="/job-list" element={<AllJobList />} />
           <Route path="/job-preview/:id" element={<JobDetails />} />
+          <Route path="/transaction-history" element={<TransactionHistory />} />
           <Route
             path="/candidate-details-page"
             element={<CandidateDetailsPage />}

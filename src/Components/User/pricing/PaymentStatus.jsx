@@ -1,109 +1,95 @@
+// cspell:ignore txnid
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import "./PaymentStatus.css";
+import { postPaymentStatus } from "../../../api/service/axiosService";
 
-const PaymentStatus = () => {
+const PaymentSuccess = () => {
+  const userId = localStorage.getItem("userId");
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [status, setStatus] = useState("processing");
-  const [details, setDetails] = useState({});
+  const [countdown, setCountdown] = useState(5);
+
+  const txnid = searchParams.get("txnid");
+  const amount = searchParams.get("amount");
+  const planType = searchParams.get("planType") || searchParams.get("planId");
+  const status = searchParams.get("status") || "success";
+  const employeeId = searchParams.get("employeeId") || userId;
 
   useEffect(() => {
-    // PayU sends data via POST usually, but for local testing sometimes it comes as query params
-    // depending on integration. However, standard PayU POSTs to the URL.
-    // If it's a POST response, React Router won't catch the body directly on client-side navigation
-    // unless the backend redirects with query params.
-
-    // IF your backend 'furl'/'surl' redirects to frontend with query params:
-    const txnid = searchParams.get("txnid");
-    const amount = searchParams.get("amount");
-    const statusParam = searchParams.get("status");
-    const error = searchParams.get("error"); // Custom param if your backend adds it
-
-    if (statusParam === "success") {
-      setStatus("success");
-    } else if (statusParam === "failure") {
-      setStatus("failure");
-    } else {
-      // If no params, it might be a direct POST to this URL from PayU (which 404s in pure React dev server usually)
-      // OR the backend redirected without params.
-      setStatus("unknown");
-    }
-
-    setDetails({ txnid, amount, error });
-  }, [searchParams]);
+    // only run once when component mounts and when txnid exists
+    const postData = async () => {
+      try {
+        // post a single well-formed payload
+        await postPaymentStatus(
+          txnid,
+          amount,
+          planType,
+          status,
+          employeeId,
+        );
+      } catch (e) {
+        console.error("postPaymentStatus error:", e);
+      }
+    };
+    postData();
+  }, [txnid, employeeId, planType, amount, status, navigate]);
 
   return (
-    <div className="container mt-5 pt-5 text-center">
-      <div className="card shadow p-5 mx-auto" style={{ maxWidth: "600px" }}>
-        {status === "success" && (
-          <>
-            <i
-              className="uil uil-check-circle text-success"
-              style={{ fontSize: "5rem" }}
-            ></i>
-            <h2 className="mt-3 text-success">Payment Successful!</h2>
-            <p className="text-muted">Thank you for your subscription.</p>
-            {details.txnid && (
-              <p>
-                Transaction ID: <strong>{details.txnid}</strong>
-              </p>
-            )}
-            <button
-              className="btn btn-primary mt-4"
-              onClick={() => navigate("/my-profile")}
-            >
-              Go to Dashboard
-            </button>
-          </>
-        )}
+    <div className="payment-status-container">
+      <div className="payment-status-card success">
+        <div className="status-icon success-icon">
+          <i className="uil uil-check-circle"></i>
+        </div>
 
-        {status === "failure" && (
-          <>
-            <i
-              className="uil uil-times-circle text-danger"
-              style={{ fontSize: "5rem" }}
-            ></i>
-            <h2 className="mt-3 text-danger">Payment Failed</h2>
-            <p className="text-muted">
-              Unfortunately, your transaction could not be processed.
-            </p>
-            {details.error && <p className="text-danger">{details.error}</p>}
-            {details.txnid && (
-              <p>
-                Transaction ID: <strong>{details.txnid}</strong>
-              </p>
-            )}
-            <button
-              className="btn btn-secondary mt-4"
-              onClick={() => navigate("/price-page")}
-            >
-              Try Again
-            </button>
-          </>
-        )}
+        <h1 className="status-title">Payment Successful!</h1>
 
-        {status === "unknown" && (
-          <>
-            <i
-              className="uil uil-question-circle text-warning"
-              style={{ fontSize: "5rem" }}
-            ></i>
-            <h2 className="mt-3">Payment Status Unknown</h2>
-            <p>
-              We received a callback but couldn't determine the status. Please
-              check your dashboard.
-            </p>
-            <button
-              className="btn btn-primary mt-4"
-              onClick={() => navigate("/my-profile")}
-            >
-              Check Dashboard
-            </button>
-          </>
-        )}
+        <p className="status-message">
+          Your subscription has been activated successfully.
+        </p>
+
+        <div className="payment-details">
+          {txnid && (
+            <div className="detail-row">
+              <span className="detail-label">Transaction ID:</span>
+              <span className="detail-value">{txnid}</span>
+            </div>
+          )}
+          {amount && (
+            <div className="detail-row">
+              <span className="detail-label">Amount Paid:</span>
+              <span className="detail-value">₹{amount}</span>
+            </div>
+          )}
+          {planType && (
+            <div className="detail-row">
+              <span className="detail-label">Plan:</span>
+              <span className="detail-value">{planType}</span>
+            </div>
+          )}
+        </div>
+
+        <div className="status-actions">
+          <button
+            onClick={() => navigate("/my-profile")}
+            className="btn btn-primary btn-lg"
+          >
+            Go to Dashboard
+          </button>
+          <button
+            onClick={() => navigate("/transaction-history")}
+            className="btn btn-outline-secondary btn-lg"
+          >
+            View Transaction History
+          </button>
+        </div>
+
+        <p className="redirect-info">
+          Redirecting to dashboard in {countdown} seconds...
+        </p>
       </div>
     </div>
   );
 };
 
-export default PaymentStatus;
+export default PaymentSuccess;

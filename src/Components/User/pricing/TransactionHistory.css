@@ -1,0 +1,89 @@
+.page-title-box {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding-top: 140px;
+  padding-bottom: 50px;
+  position: relative;
+  margin-bottom: 0 !important; /* Override default margin */
+}
+
+/* Shape Divider Styles - Scoped to this component if strictly needed, 
+   but "shape" class is what the SVG uses. 
+   We ensure the fill matches the background of the next section if needed, 
+   but typically this shape logic relies on the path fill matching the section below it 
+   OR being white if the next section is white. 
+   In PricingPage, the fill was empty string in JSX, handled by CSS or default. 
+   The path d draws the shape. 
+   Usually "shape" class positions it absolute at bottom.
+*/
+
+.shape {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  pointer-events: none;
+  left: 0;
+}
+
+.shape svg {
+  width: 100%;
+  height: auto;
+  min-height: 100px;
+  display: block;
+}
+
+.shape path {
+  fill: #ffffff; /* White to blend with the card section background */
+}
+
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.table td {
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+.badge {
+  font-weight: 500;
+  padding: 0.5em 0.8em;
+  border-radius: 6px;
+}
+
+/* Pagination Styles override if needed */
+.page-link {
+    color: #6366f1;
+    border: none;
+    border-radius: 50%;
+    margin: 0 3px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+}
+
+.page-item.active .page-link {
+    background-color: #6366f1;
+    border-color: #6366f1;
+    color: white;
+}
+
+.page-item.disabled .page-link {
+    color: #cbd5e1;
+    background-color: transparent;
+}
+
+.page-link:focus {
+    box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.25);
+}

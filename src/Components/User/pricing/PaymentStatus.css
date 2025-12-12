@@ -1,0 +1,194 @@
+.payment-status-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 16px;
+}
+
+.payment-status-card {
+  background: white;
+  border-radius: 12px;
+  padding: 30px 24px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.status-icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+  animation: scaleIn 0.6s ease-out 0.2s both;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.success-icon {
+  color: #10b981;
+}
+
+.failure-icon {
+  color: #ef4444;
+}
+
+.status-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.status-message {
+  font-size: 15px;
+  color: #6b7280;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.payment-details {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.detail-value {
+  font-size: 14px;
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.status-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.status-actions .btn {
+  min-width: 140px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.status-actions .btn-primary {
+  background: #6366f1;
+  border: none;
+  color: white;
+}
+
+.status-actions .btn-primary:hover {
+  background: #4f46e5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+.status-actions .btn-outline-secondary {
+  background: transparent;
+  border: 1px solid #d1d5db;
+  color: #6b7280;
+}
+
+.status-actions .btn-outline-secondary:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+  color: #374151;
+}
+
+.redirect-info {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: 12px;
+}
+
+.help-section {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.help-text {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.help-text a {
+  color: #6366f1;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.help-text a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .payment-status-card {
+    padding: 40px 24px;
+  }
+
+  .status-icon {
+    font-size: 60px;
+  }
+
+  .status-title {
+    font-size: 24px;
+  }
+
+  .status-message {
+    font-size: 16px;
+  }
+
+  .status-actions {
+    flex-direction: column;
+  }
+
+  .status-actions .btn {
+    width: 100%;
+  }
+}

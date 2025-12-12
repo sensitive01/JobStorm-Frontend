@@ -1,28 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./IntegratedPricing.css";
-import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   bookSubscription,
   getAllCandidatePlans,
 } from "../../../api/service/axiosService";
 
-const getAuthToken = () => {
-  return localStorage.getItem("userId") || localStorage.getItem("token");
-};
-
-const getUserDetails = () => {
-  return {
-    firstName: localStorage.getItem("firstName") || "User",
-    email: localStorage.getItem("email") || "user@example.com",
-    phone: localStorage.getItem("phone") || "9999999999",
-    id: localStorage.getItem("userId"),
-  };
-};
+const API_BASE_URL = import.meta.env.VITE_BASE_ROUTE_JOBSTORM;
 
 const PricingPage = () => {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-
+  const userId = localStorage.getItem("userId");
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [paymentLoading, setPaymentLoading] = useState(false);
@@ -34,175 +20,163 @@ const PricingPage = () => {
     resumeReviews: { current: 1, total: 3, remaining: 2 },
   });
 
-  /* ======================================================
-      🚀 Detect PayU Return (Backend → Frontend redirect)
-  ====================================================== */
   useEffect(() => {
-    const status = searchParams.get("status");
-    const txnid = searchParams.get("txnid");
-    const error = searchParams.get("error");
-
-    if (status && txnid) {
-      console.log("PayU Payment Return:", { status, txnid, error });
-
-      switch (status) {
-        case "success":
-          alert("✅ Payment Successful! Subscription Activated.");
-          setTimeout(() => {
-            navigate("/dashboard", { replace: true });
-          }, 2000);
-          break;
-
-        case "failed":
-        case "failure":
-          alert(
-            `❌ Payment Failed! ${
-              error ? `Error: ${error}` : "Please try again."
-            }`
-          );
-          break;
-
-        case "pending":
-          alert("⏳ Payment is pending. We'll update you once confirmed.");
-          break;
-
-        case "error":
-          alert(`⚠️ An error occurred: ${error || "Unknown error"}`);
-          break;
-
-        default:
-          alert("Payment status unknown. Please contact support.");
-      }
-
-      // Clean URL after showing message
-      setTimeout(() => {
-        navigate("/price-page", { replace: true });
-      }, 2500);
-
-      return;
-    }
-
     fetchPricingPlans();
-  }, [searchParams, navigate]);
+  }, []);
 
-  /* ======================================================
-      🚀 Fetch Plans
-  ====================================================== */
   const fetchPricingPlans = async () => {
     try {
       const response = await getAllCandidatePlans();
       if (response.status === 200) {
-        setPlans(response.data.data);
+        // ✅ Normalize the data: convert _id to id for consistency
+        const normalizedPlans = response.data.data.map((plan) => ({
+          ...plan,
+          id: plan._id || plan.id, // Use _id as id
+        }));
+        setPlans(normalizedPlans);
       }
     } catch (error) {
       console.error("Error fetching pricing plans:", error);
       alert("Error loading pricing plans");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
-  /* ======================================================
-      🚀 Start PayU Payment
-  ====================================================== */
-  const handlePayment = async (plan) => {
-    const user = getUserDetails();
+  const initiatePayment = async (plan, paymentData) => {
+    console.log("paymentData", paymentData);
+    setPaymentLoading(true);
+    setCurrentPlanId(plan._id); // ✅ Use _id consistently
 
-    if (!getAuthToken()) {
-      return alert("Please login to continue");
+    try {
+      const txnid = paymentData.txnId;
+      const productinfo = plan.name;
+      const firstname = paymentData.firstname;
+      const email = paymentData.email;
+      const phone = paymentData.phone;
+      const amount = plan.totalAmount;
+
+      const surl = `${API_BASE_URL}/payment/success?`;
+      const furl = `${API_BASE_URL}/payment/failure`;
+
+      const response = await fetch(`${API_BASE_URL}/api/generate-hash`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          txnid,
+          amount: String(amount),
+          productinfo,
+          firstname,
+          email,
+          phone,
+          surl,
+          furl,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        alert("Error generating hash: " + data.error);
+        setPaymentLoading(false);
+        setCurrentPlanId(null);
+        return;
+      }
+
+      const { hash, key } = data;
+
+      const form = document.createElement("form");
+      form.action = "https://test.payu.in/_payment";
+      form.method = "POST";
+
+      const params = {
+        key: key,
+        txnid: txnid,
+        amount: amount,
+        productinfo: productinfo,
+        firstname: firstname,
+        email: email,
+        phone: phone,
+        surl: surl,
+        furl: furl,
+        hash: hash,
+      };
+
+      console.log("🚀 Submitting to PayU:", params);
+
+      for (const key in params) {
+        const hiddenField = document.createElement("input");
+        hiddenField.type = "hidden";
+        hiddenField.name = key;
+        hiddenField.value = params[key];
+        form.appendChild(hiddenField);
+      }
+
+      document.body.appendChild(form);
+      form.submit();
+    } catch (error) {
+      console.error("Payment initiation failed:", error);
+      alert("Something went wrong! Please try again.");
+      setPaymentLoading(false);
+      setCurrentPlanId(null);
+    }
+  };
+
+  const handleSubscribe = async (plan) => {
+    console.log("Selected plan:", plan);
+    console.log("Plan ID (_id):", plan.id); // ✅ Debug log
+
+    if (!userId) {
+      alert("Please login to continue");
+      return;
     }
 
-    // Check if it's a custom plan
-    if (plan.isCustom || plan.id === "special") {
+    // ✅ Check using _id instead of id
+    if (plan.isCustom || plan._id === "special") {
       alert("Please contact support for custom pricing");
       return;
     }
 
-    setPaymentLoading(true);
-    setCurrentPlanId(plan.id);
+    if (!plan.price || plan.price <= 0) {
+      alert("Invalid plan price");
+      return;
+    }
+
+    // ✅ Use _id consistently
+    const data = {
+      planId: plan.id,
+      userId,
+      txnid: `TXN${Date.now()}${userId.substring(0, 5)}`,
+      productinfo: plan.name,
+      amount: plan.totalAmount,
+      surl: `${API_BASE_URL}/payment/success`,
+      furl: `${API_BASE_URL}/payment/failure`,
+    };
+
+    console.log("Booking subscription with data:", data); // ✅ Debug log
 
     try {
-      const response = await bookSubscription(
-        user.id,
-        plan.id,
-        plan.price,
-        plan.id,
-        user.firstName,
-        user.email,
-        user.phone
-      );
+      const response = await bookSubscription(data);
+      console.log("Subscription booking response:", response); // ✅ Debug log
 
-      const paymentData = response.paymentData;
-
-      if (!paymentData?.hash || !paymentData?.txnid) {
-        throw new Error("Invalid PayU order response");
+      if (response.status === 200) {
+        const { paymentData } = response.data;
+        initiatePayment(plan, paymentData);
+      } else {
+        alert("Failed to book subscription. Please try again.");
+        setPaymentLoading(false);
+        setCurrentPlanId(null);
       }
-
-      console.log("Payment initiated:", paymentData.txnid);
-      submitPayUForm(paymentData);
     } catch (error) {
-      console.error("Payment Start Error:", error);
+      console.error("Error booking subscription:", error);
       alert(
-        error.response?.data?.message ||
-          "Unable to start payment. Please try again."
+        "Error booking subscription: " + (error.message || "Please try again")
       );
       setPaymentLoading(false);
       setCurrentPlanId(null);
     }
   };
 
-  /* ======================================================
-      🚀 Submit Form to PayU
-  ====================================================== */
-  const submitPayUForm = (paymentData) => {
-    const payuUrl = paymentData.payuBaseUrl.replace(/\/$/, "") + "/_payment";
-
-    const params = {
-      key: paymentData.key,
-      txnid: paymentData.txnid,
-      amount: paymentData.amount,
-      productinfo: paymentData.productinfo,
-      firstname: paymentData.firstname,
-      email: paymentData.email,
-      phone: paymentData.phone,
-      surl: paymentData.surl,
-      furl: paymentData.furl,
-      hash: paymentData.hash,
-      service_provider: "payu_paisa",
-      udf1: paymentData.udf1 || "",
-      udf2: paymentData.udf2 || "",
-      udf3: "",
-      udf4: "",
-      udf5: "",
-    };
-
-    // ✅ LOG ALL PARAMETERS
-    console.log("🚀 Submitting to PayU:", {
-      url: payuUrl,
-      params: params,
-    });
-
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = payuUrl;
-
-    Object.keys(params).forEach((key) => {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = key;
-      input.value = params[key];
-      form.appendChild(input);
-
-      // ✅ LOG EACH FIELD
-      console.log(`  ${key}: ${params[key]}`);
-    });
-
-    document.body.appendChild(form);
-    form.submit();
-  };
-
-  /* ======================================================
-      UI Helper Functions
-  ====================================================== */
   const getProgressPercentage = (current, total) => (current / total) * 100;
 
   const getProgressColor = (percentage) => {
@@ -213,7 +187,6 @@ const PricingPage = () => {
 
   return (
     <>
-      {/* Payment Loading Overlay */}
       {paymentLoading && (
         <div className="payment-loading-overlay">
           <div className="payment-loading-spinner">
@@ -222,7 +195,7 @@ const PricingPage = () => {
             </div>
             <p className="mt-3">Redirecting to payment gateway...</p>
             {currentPlanId && (
-              <p className="text-muted">Plan: {currentPlanId}</p>
+              <p className="text-muted">Processing plan: {currentPlanId}</p>
             )}
           </div>
         </div>
@@ -231,7 +204,6 @@ const PricingPage = () => {
       <div>
         <div className="main-content">
           <div className="page-content">
-            {/* Page Title */}
             <section className="page-title-box">
               <div className="container">
                 <div className="row justify-content-center">
@@ -265,7 +237,6 @@ const PricingPage = () => {
               </div>
             </section>
 
-            {/* Shape */}
             <div className="position-relative" style={{ zIndex: 1 }}>
               <div className="shape">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
@@ -278,14 +249,25 @@ const PricingPage = () => {
               </div>
             </div>
 
-            {/* Pricing Plans */}
-            <section className="section">
+            <section
+              className="section"
+              style={{ backgroundColor: "#f8f9fc", padding: "80px 0" }}
+            >
               <div className="container">
                 <div className="row justify-content-center">
                   <div className="col-lg-8">
-                    <div className="text-center">
-                      <h3>Pricing & Plans</h3>
-                      <p className="text-muted">
+                    <div className="text-center mb-5">
+                      <h3 className="fw-bold mb-3" style={{ color: "#1e293b" }}>
+                        Pricing & Plans
+                      </h3>
+                      <p
+                        className="text-muted"
+                        style={{
+                          fontSize: "16px",
+                          maxWidth: "600px",
+                          margin: "0 auto",
+                        }}
+                      >
                         With lots of unique blocks, you can easily build a page
                         without coding. Build your next consultancy website
                         within few minutes.
@@ -294,7 +276,7 @@ const PricingPage = () => {
                   </div>
                 </div>
 
-                <div className="row mt-4">
+                <div className="row align-items-center justify-content-center">
                   {loading ? (
                     <div className="col-12 text-center mt-5">
                       <div
@@ -303,125 +285,306 @@ const PricingPage = () => {
                       >
                         <span className="visually-hidden">Loading...</span>
                       </div>
+                      <p className="mt-3 text-muted">
+                        Loading pricing plans...
+                      </p>
                     </div>
                   ) : plans.length > 0 ? (
-                    plans.map((plan) => (
-                      <div key={plan.id} className="col-lg-4 col-md-6 mt-4">
+                    plans.map((plan, index) => {
+                      const isPopular = index === 1; // Assuming 2nd plan is popular
+                      const isSpecial = plan.isCustom || plan._id === "special";
+
+                      // Card accent colors
+                      let accentColor = "#3b82f6"; // Default Blue
+                      if (isPopular) accentColor = "#764ba2"; // Purple for Popular
+                      if (isSpecial) accentColor = "#10b981"; // Green for custom
+                      if (index === 2) accentColor = "#f59e0b"; // Orange/Gold for premium
+
+                      return (
                         <div
-                          className="pricing-box card bg-white border-0 shadow-sm h-100"
-                          style={{ borderRadius: "12px" }}
+                          key={plan._id || plan.id || index}
+                          className={`col-lg-4 col-md-6 mb-4 ${
+                            isPopular ? "z-index-1" : ""
+                          }`}
                         >
-                          <div className="card-body p-4">
-                            <div className="pricing-name mb-3">
-                              <h6 className="text-uppercase fw-bold text-primary mb-0">
-                                {plan.name}
-                              </h6>
-                            </div>
+                          <div
+                            className={`pricing-box card bg-white h-100 ${
+                              isPopular ? "popular-plan" : ""
+                            }`}
+                            style={{
+                              borderRadius: "20px",
+                              transform: isPopular ? "scale(1.05)" : "none",
+                              zIndex: isPopular ? 2 : 1,
+                              transition: "all 0.3s ease",
+                              border: "none",
+                              boxShadow: isPopular
+                                ? "0 20px 40px rgba(0,0,0,0.12)"
+                                : "0 5px 20px rgba(0,0,0,0.05)",
+                              overflow: "hidden",
+                            }}
+                          >
+                            {/* Colored Top Bar */}
+                            <div
+                              style={{
+                                height: "6px",
+                                background: accentColor,
+                                width: "100%",
+                              }}
+                            ></div>
 
-                            <div className="pricing-price">
-                              {plan.isCustom || plan.id === "special" ? (
-                                <h2 className="fw-bold text-dark mb-0">
-                                  Custom Price{" "}
-                                  <span className="fs-16 text-muted fw-normal">
-                                    / month
-                                  </span>
-                                </h2>
-                              ) : (
-                                <h2 className="fw-bold text-dark mb-0">
-                                  ₹
-                                  {plan.price
-                                    ? plan.price.toLocaleString("en-IN")
-                                    : 0}{" "}
-                                  <span className="text-dark">+ GST</span>
-                                  <span className="fs-16 text-muted fw-normal">
-                                    {plan.validity ? ` / ${plan.validity}` : ""}
-                                  </span>
-                                </h2>
-                              )}
-                              <p className="text-muted fs-13 mb-0">
-                                {plan.billingType === "monthly"
-                                  ? "billed monthly"
-                                  : "billed One time"}
-                              </p>
-                            </div>
-
-                            <hr className="my-4" style={{ opacity: 0.1 }} />
-
-                            <ul className="list-unstyled pricing-details text-muted">
-                              {plan.features && Array.isArray(plan.features)
-                                ? plan.features.map((feature, index) => (
-                                    <li
-                                      key={index}
-                                      className="pricing-item d-flex align-items-center mb-3"
-                                    >
-                                      <i className="uil uil-check text-success fs-18 me-2" />
-                                      <span>{feature}</span>
-                                    </li>
-                                  ))
-                                : plan.featuresList &&
-                                  Array.isArray(plan.featuresList)
-                                ? plan.featuresList.map((feature, index) => (
-                                    <li
-                                      key={index}
-                                      className="pricing-item d-flex align-items-center mb-3"
-                                    >
-                                      <i
-                                        className={`uil ${
-                                          feature.included
-                                            ? "uil-check text-success"
-                                            : "uil-times text-muted"
-                                        } fs-18 me-2`}
-                                      />
-                                      <span>{feature.text}</span>
-                                    </li>
-                                  ))
-                                : null}
-                            </ul>
-
-                            <div className="mt-auto pt-3">
-                              <button
-                                onClick={() => handlePayment(plan)}
-                                disabled={
-                                  paymentLoading && currentPlanId === plan.id
-                                }
-                                className={`btn w-100 ${
-                                  plan.isCustom || plan.id === "special"
-                                    ? "btn-soft-primary"
-                                    : "btn-primary"
-                                } rounded-pill py-2 fw-medium`}
+                            {isPopular && (
+                              <div
+                                className="popular-ribbon"
+                                style={{ background: accentColor }}
                               >
-                                {paymentLoading && currentPlanId === plan.id ? (
-                                  <>
-                                    <span
-                                      className="spinner-border spinner-border-sm me-2"
-                                      role="status"
-                                      aria-hidden="true"
-                                    ></span>
-                                    Processing...
-                                  </>
-                                ) : (
-                                  <>
-                                    {plan.isCustom || plan.id === "special"
-                                      ? "Request Us"
-                                      : "Subscribe Now"}
-                                    {!(
-                                      plan.isCustom || plan.id === "special"
-                                    ) && (
-                                      <i className="uil uil-arrow-right ms-1" />
-                                    )}
-                                  </>
+                                POPULAR
+                              </div>
+                            )}
+
+                            <div className="card-body p-0 d-flex flex-column">
+                              {/* Header Section */}
+                              <div
+                                className="p-4 text-center"
+                                style={{
+                                  backgroundColor: isPopular
+                                    ? "rgba(118, 75, 162, 0.03)"
+                                    : "rgba(248, 249, 252, 0.5)",
+                                  borderBottom: "1px solid rgba(0,0,0,0.03)",
+                                }}
+                              >
+                                <div
+                                  className="d-inline-block px-3 py-1 rounded-pill mb-3"
+                                  style={{
+                                    backgroundColor: `${accentColor}15`,
+                                    color: accentColor,
+                                    fontSize: "12px",
+                                    fontWeight: "700",
+                                    letterSpacing: "0.5px",
+                                    textTransform: "uppercase",
+                                  }}
+                                >
+                                  {plan.name}
+                                </div>
+
+                                <div className="pricing-price">
+                                  {isSpecial ? (
+                                    <div>
+                                      <h2
+                                        className="fw-bold text-dark mb-0"
+                                        style={{ fontSize: "28px" }}
+                                      >
+                                        Custom Price
+                                      </h2>
+                                      <p className="text-muted fs-13 mt-2 mb-0">
+                                        Tailored for you
+                                      </p>
+                                    </div>
+                                  ) : (
+                                    <div>
+                                      <div className="d-flex justify-content-center align-items-baseline">
+                                        <span
+                                          className="fw-bold text-dark"
+                                          style={{
+                                            fontSize: "36px",
+                                            lineHeight: 1,
+                                          }}
+                                        >
+                                          ₹
+                                          {plan.price
+                                            ? plan.price.toLocaleString("en-IN")
+                                            : 0}
+                                        </span>
+                                        <span
+                                          className="text-muted fw-medium ms-1"
+                                          style={{ fontSize: "15px" }}
+                                        >
+                                          {" "}
+                                          + GST
+                                        </span>
+                                      </div>
+                                      <p className="text-muted fs-13 mt-2 mb-0">
+                                        {plan.validity
+                                          ? `Valid for ${plan.validity}`
+                                          : ""}{" "}
+                                        •{" "}
+                                        {plan.billingType === "monthly"
+                                          ? "Billed monthly"
+                                          : "One time"}
+                                      </p>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Features Section */}
+                              <div className="p-4 flex-grow-1">
+                                <ul className="list-unstyled pricing-details mb-0">
+                                  {plan.features &&
+                                  Array.isArray(plan.features) ? (
+                                    plan.features.map((feature, idx) => (
+                                      <li
+                                        key={idx}
+                                        className="pricing-item d-flex align-items-start mb-3"
+                                      >
+                                        <div
+                                          className="rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0"
+                                          style={{
+                                            width: "20px",
+                                            height: "20px",
+                                            backgroundColor: `${accentColor}20`,
+                                            marginTop: "2px",
+                                          }}
+                                        >
+                                          <i
+                                            className="uil uil-check"
+                                            style={{
+                                              fontSize: "10px",
+                                              color: accentColor,
+                                            }}
+                                          />
+                                        </div>
+                                        <span
+                                          style={{
+                                            fontSize: "14px",
+                                            color: "#475569",
+                                            lineHeight: "1.5",
+                                          }}
+                                        >
+                                          {feature}
+                                        </span>
+                                      </li>
+                                    ))
+                                  ) : plan.featuresList &&
+                                    Array.isArray(plan.featuresList) ? (
+                                    plan.featuresList.map((feature, idx) => (
+                                      <li
+                                        key={idx}
+                                        className="pricing-item d-flex align-items-start mb-3"
+                                      >
+                                        <div
+                                          className="rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0"
+                                          style={{
+                                            width: "20px",
+                                            height: "20px",
+                                            backgroundColor: feature.included
+                                              ? `${accentColor}20`
+                                              : "#f1f5f9",
+                                            marginTop: "2px",
+                                          }}
+                                        >
+                                          <i
+                                            className={`uil ${
+                                              feature.included
+                                                ? "uil-check"
+                                                : "uil-times"
+                                            }`}
+                                            style={{
+                                              fontSize: "10px",
+                                              color: feature.included
+                                                ? accentColor
+                                                : "#cbd5e1",
+                                            }}
+                                          />
+                                        </div>
+                                        <span
+                                          style={{
+                                            fontSize: "14px",
+                                            color: feature.included
+                                              ? "#475569"
+                                              : "#94a3b8",
+                                            lineHeight: "1.5",
+                                          }}
+                                        >
+                                          {feature.text}
+                                        </span>
+                                      </li>
+                                    ))
+                                  ) : (
+                                    <li className="pricing-item text-muted">
+                                      No features available
+                                    </li>
+                                  )}
+                                </ul>
+                              </div>
+
+                              {/* Action Button Section */}
+                              <div className="p-4 pt-0 mt-auto">
+                                <button
+                                  onClick={() => handleSubscribe(plan)}
+                                  disabled={
+                                    paymentLoading && currentPlanId === plan._id
+                                  }
+                                  className="btn w-100 rounded-pill py-3 fw-bold btn-hover"
+                                  style={{
+                                    background: isSpecial
+                                      ? "transparent"
+                                      : isPopular
+                                      ? `linear-gradient(135deg, ${accentColor}, #5b21b6)`
+                                      : "white",
+                                    color: isSpecial
+                                      ? accentColor
+                                      : isPopular
+                                      ? "white"
+                                      : accentColor,
+                                    border: isSpecial
+                                      ? `1px dashed ${accentColor}`
+                                      : isPopular
+                                      ? "none"
+                                      : `2px solid ${accentColor}`,
+                                    boxShadow: isPopular
+                                      ? "0 10px 20px rgba(118, 75, 162, 0.25)"
+                                      : "none",
+                                    fontSize: "14px",
+                                    letterSpacing: "0.5px",
+                                    transition: "all 0.3s ease",
+                                  }}
+                                  onMouseOver={(e) => {
+                                    if (!isPopular && !isSpecial) {
+                                      e.currentTarget.style.background =
+                                        accentColor;
+                                      e.currentTarget.style.color = "white";
+                                    }
+                                  }}
+                                  onMouseOut={(e) => {
+                                    if (!isPopular && !isSpecial) {
+                                      e.currentTarget.style.background =
+                                        "white";
+                                      e.currentTarget.style.color = accentColor;
+                                    }
+                                  }}
+                                >
+                                  {paymentLoading &&
+                                  currentPlanId === plan._id ? (
+                                    <>
+                                      <span
+                                        className="spinner-border spinner-border-sm me-2"
+                                        role="status"
+                                        aria-hidden="true"
+                                      ></span>
+                                      Processing...
+                                    </>
+                                  ) : (
+                                    <>
+                                      {isSpecial
+                                        ? "Request Pricing"
+                                        : "Subscribe Now"}
+                                      {!isSpecial && (
+                                        <i className="uil uil-arrow-right ms-2" />
+                                      )}
+                                    </>
+                                  )}
+                                </button>
+                                {isSpecial && (
+                                  <p className="text-center text-muted fs-12 mt-2 mb-0">
+                                    No credit card required
+                                  </p>
                                 )}
-                              </button>
-                              {(plan.isCustom || plan.id === "special") && (
-                                <p className="text-center text-muted fs-12 mt-2 mb-0">
-                                  No credit card required
-                                </p>
-                              )}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))
+                      );
+                    })
                   ) : (
                     <div className="col-12 text-center mt-5">
                       <div
@@ -429,8 +592,7 @@ const PricingPage = () => {
                         role="alert"
                       >
                         <i className="uil uil-exclamation-triangle me-2"></i>
-                        No pricing plans available at the moment. Please check
-                        back later or contact support.
+                        No pricing plans available at the moment.
                       </div>
                     </div>
                   )}
@@ -438,7 +600,7 @@ const PricingPage = () => {
               </div>
             </section>
 
-            {/* Plan Usage Section */}
+            {/* Plan Usage Section - Keep as is */}
             <section className="section pt-2">
               <div className="container">
                 <div className="usage-card-wrapper">
@@ -540,7 +702,6 @@ const PricingPage = () => {
               </div>
             </section>
 
-            {/* CTA Section */}
             <section className="section bg-light">
               <div className="container">
                 <div className="pricing-counter text-white">

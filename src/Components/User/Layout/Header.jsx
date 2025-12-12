@@ -76,24 +76,26 @@ const Header = () => {
     isNavigatingRef.current = true;
 
     const closeOpenUI = () => {
-      const dropdowns = document.querySelectorAll('.dropdown-menu.show');
+      const dropdowns = document.querySelectorAll(".dropdown-menu.show");
       dropdowns.forEach((dropdown) => {
-        dropdown.classList.remove('show');
+        dropdown.classList.remove("show");
       });
 
-      const dropdownParents = document.querySelectorAll('.dropdown.show');
+      const dropdownParents = document.querySelectorAll(".dropdown.show");
       dropdownParents.forEach((parent) => {
-        parent.classList.remove('show');
+        parent.classList.remove("show");
       });
 
-      const toggles = document.querySelectorAll('[data-bs-toggle="dropdown"][aria-expanded="true"]');
+      const toggles = document.querySelectorAll(
+        '[data-bs-toggle="dropdown"][aria-expanded="true"]'
+      );
       toggles.forEach((toggle) => {
-        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute("aria-expanded", "false");
       });
 
-      const collapse = document.getElementById('navbarCollapse');
-      if (collapse && collapse.classList.contains('show')) {
-        collapse.classList.remove('show');
+      const collapse = document.getElementById("navbarCollapse");
+      if (collapse && collapse.classList.contains("show")) {
+        collapse.classList.remove("show");
       }
     };
 
@@ -438,8 +440,8 @@ const Header = () => {
                         </a>
                       </li>
                       <li>
-                        <a className="dropdown-item" href="/price-page">
-                          Plans &amp; Pricing
+                        <a className="dropdown-item" href="#">
+                          Freelance Corner
                         </a>
                       </li>
                       <li>
@@ -486,7 +488,9 @@ const Header = () => {
                                 key={index}
                                 className="dropdown-item"
                                 href="#"
-                                onClick={(e) => handleJobSearch(e, { category })}
+                                onClick={(e) =>
+                                  handleJobSearch(e, { category })
+                                }
                               >
                                 {category}
                               </a>
@@ -507,7 +511,9 @@ const Header = () => {
                                 key={index}
                                 className="dropdown-item"
                                 href="#"
-                                onClick={(e) => handleJobSearch(e, { location })}
+                                onClick={(e) =>
+                                  handleJobSearch(e, { location })
+                                }
                               >
                                 {location}
                               </a>
@@ -526,42 +532,54 @@ const Header = () => {
                             <a
                               className="dropdown-item"
                               href="#"
-                              onClick={(e) => handleJobSearch(e, { experience: 'Fresher' })}
+                              onClick={(e) =>
+                                handleJobSearch(e, { experience: "Fresher" })
+                              }
                             >
                               Fresher
                             </a>
                             <a
                               className="dropdown-item"
                               href="#"
-                              onClick={(e) => handleJobSearch(e, { experience: '0-2' })}
+                              onClick={(e) =>
+                                handleJobSearch(e, { experience: "0-2" })
+                              }
                             >
                               0 to 2 Years
                             </a>
                             <a
                               className="dropdown-item"
                               href="#"
-                              onClick={(e) => handleJobSearch(e, { experience: '2-5' })}
+                              onClick={(e) =>
+                                handleJobSearch(e, { experience: "2-5" })
+                              }
                             >
                               2 to 5 Years
                             </a>
                             <a
                               className="dropdown-item"
                               href="#"
-                              onClick={(e) => handleJobSearch(e, { experience: '5-10' })}
+                              onClick={(e) =>
+                                handleJobSearch(e, { experience: "5-10" })
+                              }
                             >
                               5 to 10 Years
                             </a>
                             <a
                               className="dropdown-item"
                               href="#"
-                              onClick={(e) => handleJobSearch(e, { experience: '10-15' })}
+                              onClick={(e) =>
+                                handleJobSearch(e, { experience: "10-15" })
+                              }
                             >
                               10 to 15 Years
                             </a>
                             <a
                               className="dropdown-item"
                               href="#"
-                              onClick={(e) => handleJobSearch(e, { experience: '15+' })}
+                              onClick={(e) =>
+                                handleJobSearch(e, { experience: "15+" })
+                              }
                             >
                               15 + Years
                             </a>
@@ -670,8 +688,8 @@ const Header = () => {
                   )}
 
                   <li className="nav-item">
-                    <a href="#" className="nav-link">
-                      Freelance Corner
+                    <a href="/price-page" className="nav-link">
+                      Plans &amp; Pricing
                     </a>
                   </li>
                   <li className="nav-item">
@@ -684,8 +702,7 @@ const Header = () => {
                       Events &amp; Ads
                     </a>
                   </li>
-                </ul >
-
+                </ul>
                 <div className="ms-auto d-none d-lg-block">
                   {userId ? (
                     <ul className="header-menu list-inline d-flex align-items-center mb-0">
@@ -758,11 +775,14 @@ const Header = () => {
                               My Chats
                             </a>
                           </li>
-                           <li>
-                            <a className="dropdown-item" href="/price-page">
+                          <li>
+                            <a
+                              className="dropdown-item"
+                              href="/transaction-history"
+                            >
                               My Subscription
                             </a>
-                          </li> 
+                          </li>
 
                           <li>
                             <a
@@ -777,14 +797,14 @@ const Header = () => {
                               Logout
                             </a>
                           </li>
-                        </ul >
-                      </li >
-                    </ul >
+                        </ul>
+                      </li>
+                    </ul>
                   ) : (
                     <HeaderAuthButtons />
                   )}
-                </div >
-              </div >
+                </div>
+              </div>
 
               <div className="d-lg-none mobile-auth-section">
                 {userId ? (
@@ -826,6 +846,32 @@ const Header = () => {
                           <li>
                             <a
                               className="dropdown-item"
+                              href="/my-applied-jobs"
+                            >
+                              Applied Jobs
+                            </a>
+                          </li>
+                          <li>
+                            <a className="dropdown-item" href="/my-saved-jobs">
+                              Saved Jobs
+                            </a>
+                          </li>
+                          <li>
+                            <a className="dropdown-item" href="/my-chats">
+                              My Chats
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              className="dropdown-item"
+                              href="/transaction-history"
+                            >
+                              My Subscription
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              className="dropdown-item"
                               href="#"
                               onClick={(e) => {
                                 e.preventDefault();
@@ -838,7 +884,7 @@ const Header = () => {
                           </li>
                         </ul>
                       </li>
-                    </ul >
+                    </ul>
                     <button
                       className="navbar-toggler"
                       type="button"
@@ -865,55 +911,66 @@ const Header = () => {
                     </button>
                   </>
                 )}
-              </div >
-            </div >
-          </nav >
+              </div>
+            </div>
+          </nav>
 
           {/* Region Job Buttons - Desktop */}
-          <div className="d-none d-lg-flex align-items-center ms-3" style={{ gap: '8px' }}>
+          <div
+            className="d-none d-lg-flex align-items-center ms-3"
+            style={{ gap: "8px" }}
+          >
             <button
               className="btn btn-sm btn-warning"
-              onClick={(e) => handleJobSearch(e, { location: 'Middle East' })}
-              style={{ whiteSpace: 'nowrap' }}
+              onClick={(e) => handleJobSearch(e, { location: "Middle East" })}
+              style={{ whiteSpace: "nowrap" }}
             >
               Middle East
             </button>
             <button
               className="btn btn-sm btn-info text-white"
-              onClick={(e) => handleJobSearch(e, { location: 'Europe' })}
-              style={{ whiteSpace: 'nowrap' }}
+              onClick={(e) => handleJobSearch(e, { location: "Europe" })}
+              style={{ whiteSpace: "nowrap" }}
             >
               Europe
             </button>
             <button
               className="btn btn-sm btn-success"
-              onClick={(e) => handleJobSearch(e, { location: 'Asia' })}
-              style={{ whiteSpace: 'nowrap' }}
+              onClick={(e) => handleJobSearch(e, { location: "Asia" })}
+              style={{ whiteSpace: "nowrap" }}
             >
               Asia
             </button>
           </div>
 
           {/* Region Job Buttons - Mobile */}
-          <div className="d-lg-none mobile-job-buttons-bar" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', padding: '8px' }}>
+          <div
+            className="d-lg-none mobile-job-buttons-bar"
+            style={{
+              display: "flex",
+              gap: "8px",
+              flexWrap: "wrap",
+              padding: "8px",
+            }}
+          >
             <button
               className="btn btn-sm btn-warning"
-              onClick={(e) => handleJobSearch(e, { location: 'Middle East' })}
-              style={{ flex: '1', minWidth: '120px' }}
+              onClick={(e) => handleJobSearch(e, { location: "Middle East" })}
+              style={{ flex: "1", minWidth: "120px" }}
             >
               Middle East Jobs
             </button>
             <button
               className="btn btn-sm btn-info text-white"
-              onClick={(e) => handleJobSearch(e, { location: 'Europe' })}
-              style={{ flex: '1', minWidth: '120px' }}
+              onClick={(e) => handleJobSearch(e, { location: "Europe" })}
+              style={{ flex: "1", minWidth: "120px" }}
             >
               Europe Jobs
             </button>
             <button
               className="btn btn-sm btn-success"
-              onClick={(e) => handleJobSearch(e, { location: 'Asia' })}
-              style={{ flex: '1', minWidth: '120px' }}
+              onClick={(e) => handleJobSearch(e, { location: "Asia" })}
+              style={{ flex: "1", minWidth: "120px" }}
             >
               Asia Jobs
             </button>
@@ -1032,12 +1089,12 @@ const Header = () => {
                     </div>
                   </div>
                 </div>
-              </div >
-            </div >
-          </div >
-        </div >
+              </div>
+            </div>
+          </div>
+        </div>
       </>
-    </div >
+    </div>
   );
 };
 
