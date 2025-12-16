@@ -26,7 +26,8 @@ const EditProfilePage = ({ formData, profileImages }) => {
 
   const getLastName = () => {
     if (formData?.lastName) return formData.lastName;
-    if (formData?.userName) return formData.userName.split(" ").slice(1).join(" ") || "";
+    if (formData?.userName)
+      return formData.userName.split(" ").slice(1).join(" ") || "";
     return "";
   };
 
@@ -66,7 +67,9 @@ const EditProfilePage = ({ formData, profileImages }) => {
   // Array states
   const [skills, setSkills] = useState(formData?.skills || []);
   const [education, setEducation] = useState(formData?.education || []);
-  const [workExperience, setWorkExperience] = useState(formData?.workExperience || []);
+  const [workExperience, setWorkExperience] = useState(
+    formData?.workExperience || []
+  );
 
   // File states
   const [profileImage, setProfileImage] = useState(profileImages);
@@ -76,7 +79,9 @@ const EditProfilePage = ({ formData, profileImages }) => {
   const [documents, setDocuments] = useState({
     passport: {
       file: null,
-      expiryDate: formData?.passportExpiryDate ? new Date(formData.passportExpiryDate).toISOString().split('T')[0] : ""
+      expiryDate: formData?.passportExpiryDate
+        ? new Date(formData.passportExpiryDate).toISOString().split("T")[0]
+        : "",
     },
     educationCertificate: { file: null },
     policeClearance: { file: null },
@@ -103,12 +108,14 @@ const EditProfilePage = ({ formData, profileImages }) => {
 
           // Update documents with expiry date from user data
           if (data.passportExpiryDate) {
-            setDocuments(prev => ({
+            setDocuments((prev) => ({
               ...prev,
               passport: {
                 ...prev.passport,
-                expiryDate: new Date(data.passportExpiryDate).toISOString().split('T')[0]
-              }
+                expiryDate: new Date(data.passportExpiryDate)
+                  .toISOString()
+                  .split("T")[0],
+              },
             }));
           }
 
@@ -187,11 +194,11 @@ const EditProfilePage = ({ formData, profileImages }) => {
         ...prev,
         [documentType]: {
           ...prev[documentType],
-          ...(file ? { file } : {}),  // Only include file if it exists
-          ...additionalData
-        }
+          ...(file ? { file } : {}), // Only include file if it exists
+          ...additionalData,
+        },
       };
-      console.log('Document state after update:', newState);
+      console.log("Document state after update:", newState);
       return newState;
     });
   };
@@ -263,7 +270,7 @@ const EditProfilePage = ({ formData, profileImages }) => {
     submitData.append("linkedin", formState.linkedin);
     submitData.append("portfolio", formState.portfolio);
 
-    // Files
+    // Files - Profile Image
     if (profileImageFile) {
       submitData.append("userProfilePic", profileImageFile);
     }
@@ -274,7 +281,10 @@ const EditProfilePage = ({ formData, profileImages }) => {
       submitData.append("passportExpiryDate", documents.passport.expiryDate);
     }
     if (documents.educationCertificate.file) {
-      submitData.append("educationCertificate", documents.educationCertificate.file);
+      submitData.append(
+        "educationCertificate",
+        documents.educationCertificate.file
+      );
     }
     if (documents.policeClearance.file) {
       submitData.append("policeClearance", documents.policeClearance.file);
@@ -315,9 +325,6 @@ const EditProfilePage = ({ formData, profileImages }) => {
     <div className="edit-profile-page">
       <form onSubmit={handleSubmit}>
         <div className="profile-layout">
-
-
-
           {/* Main Content */}
           <main className="profile-main-content">
             {/* Personal Details */}
@@ -348,10 +355,7 @@ const EditProfilePage = ({ formData, profileImages }) => {
             />
 
             {/* Skills Section - Now in main content after Professional Details */}
-            <SkillsSection
-              skills={skills}
-              setSkills={setSkills}
-            />
+            <SkillsSection skills={skills} setSkills={setSkills} />
 
             {/* Education */}
             <EducationSection

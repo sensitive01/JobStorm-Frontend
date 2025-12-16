@@ -46,6 +46,7 @@ import TermsAndConditions from "./Components/policy/TermsAndConditions";
 import PrivacyPolicyContent from "./Components/policy/PrivacyPolicy";
 import ShareProfile from "./Components/User/shareProfile/ShareProfile";
 import TransactionHistory from "./Components/User/pricing/TransactionHistory";
+import PaymentFailure from "./Components/User/pricing/PaymentFailure";
 
 function App() {
   return (
@@ -87,7 +88,7 @@ function App() {
           <Route path="/jobs-details-page" element={<JobDetailsPage />} />
           <Route path="/price-page" element={<PricingPage />} />
           <Route path="/payment/success" element={<PaymentStatus />} />
-          <Route path="/payment/failure" element={<PaymentStatus />} />
+          <Route path="/payment/failure" element={<PaymentFailure />} />
           <Route
             path="/terms-and-conditions"
             element={<TermsAndConditions />}

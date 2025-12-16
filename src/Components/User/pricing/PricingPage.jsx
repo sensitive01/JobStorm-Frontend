@@ -86,7 +86,7 @@ const PricingPage = () => {
       const { hash, key } = data;
 
       const form = document.createElement("form");
-      form.action = "https://test.payu.in/_payment";
+      form.action = "https://secure.payu.in/_payment";
       form.method = "POST";
 
       const params = {
