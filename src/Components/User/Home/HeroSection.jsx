@@ -7,7 +7,7 @@ import germanyImage from "../../../assets/images/germany.jpg";
 import polandImage from "../../../assets/images/poland.jpg";
 import euImage from "../../../assets/images/Europe.jpg";
 import netherlandsImage from "../../../assets/images/Netherlands.jpg"; // Fixed casing
-import jobsstormLogo from "../../../../public/assets/images/favicon.ico";
+const jobsstormLogo = "/assets/images/favicon.ico";
 import asiaImage from "../../../assets/images/Asia.png";
 
 const HeroSection = () => {

@@ -342,7 +342,7 @@ export const clearAllTransactions = async (candidateId) => {
 
 
 
-export const postPaymentStatus = async (txnid,  amount, planType, status,employeeId, ) => {
+export const postPaymentStatus = async (txnid, amount, planType, status, employeeId,) => {
   try {
     const response = await axiosInstance.get(
       `/payment/verify-payment?employeeId=${employeeId}&txnid=${txnid}&amount=${amount}&planType=${planType}&status=${status}`,
@@ -361,6 +361,15 @@ export const isCadidateSubscribed = async (candidateId) => {
       `/is-candidate-subscribed/${candidateId}`
 
     );
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const submitContactForm = async (data) => {
+  try {
+    const response = await axiosInstance.post(`/api/contact-us`, data);
     return response;
   } catch (err) {
     return err;

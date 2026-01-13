@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./LearningPage.css";
 import CareerCTA from "../Home/CareerCTA";
+import { submitContactForm } from "../../../api/service/axiosService";
 import image1 from "../../../assets/images/12.png";
 import image2 from "../../../assets/images/10.png";
 import image3 from "../../../assets/images/11.png";
@@ -15,6 +16,144 @@ import image10 from "../../../assets/images/bannerImage.png";
 const LearningPage = () => {
   const [activeTab, setActiveTab] = useState("Technology");
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
+  const [activeModule, setActiveModule] = useState(0);
+  const scrollRef = useRef(null);
+
+  // Form State
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    course: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    // Mapping fields as requested: Phone -> Subject, Course -> Message/Description
+    const payload = {
+      name: formData.name,
+      email: formData.email,
+      subject: formData.phone,
+      message: `Course Interest: ${formData.course}`,
+    };
+
+    try {
+      const response = await submitContactForm(payload);
+      if (response && response.data && response.data.success) {
+        alert("Thank you for your interest! We will get back to you shortly.");
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          course: "",
+        });
+      } else {
+        // Fallback or specific error handling
+        alert("Something went wrong. Please try again later.");
+        console.error("Submission failed:", response);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("Error submitting form. Please check your connection.");
+    }
+  };
+
+  const moduleDetails = [
+    {
+      desc: "Security Operations Center (SOC) Analysts are the first line of defense against cyber threats. They monitor networks, detect potential security incidents, and ensure timely response to mitigate risks.",
+      points: [
+        "Monitor, analyze, and interpret security alerts using industry-standard tools",
+        "Investigate incidents, understand attack patterns, and follow structured response workflows",
+        "Communicate findings clearly to stakeholders to support timely, informed security decisions",
+      ],
+    },
+    {
+      desc: "As organizations increasingly depend on cloud infrastructure, securing cloud environments has become a critical business requirement. Effective cloud security ensures stability, compliance, and operational trust.",
+      points: [
+        "Identify security risks across cloud infrastructure, identities, and configurations",
+        "Analyze access controls, permissions, and security policies to prevent misconfigurations",
+        "Align cloud security controls with organizational and compliance needs",
+      ],
+    },
+    {
+      desc: "With artificial intelligence becoming central to modern cybersecurity, safeguarding data, models, and systems is increasingly important. AI-enabled security allows teams to anticipate threats and respond proactively.",
+      points: [
+        "Understand how AI and machine learning are applied to threat detection and risk analysis",
+        "Analyze behavioral and security data to identify anomalies and emerging threats",
+        "Translate AI-driven insights into actionable decisions that strengthen security outcomes",
+      ],
+    },
+    // Default for others
+    ...Array(7).fill({
+      desc: "This module provides comprehensive training on essential cybersecurity concepts, tools, and methodologies, tailored to industry standards and practical application.",
+      points: [
+        "Gain in-depth knowledge of core concepts and tools",
+        "Apply theoretical learning to practical, real-world scenarios",
+        "Develop industry-relevant skills for career advancement",
+      ],
+    }),
+  ];
+
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      const { current } = scrollRef;
+      // Scroll amount approx equal to card width + gap
+      const scrollAmount = 600;
+      if (direction === "left") {
+        current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+      } else {
+        current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+      }
+    }
+  };
+
+  const differentSteps = [
+    {
+      id: "01",
+      prefix: "Self-Curated",
+      highlight: "Curriculum",
+      desc: "Learners build a personalized learning path aligned to their chosen career role, focusing only on what truly matters.",
+      image: image1,
+      bgClass: "purple-bg",
+      isHighlightLast: true,
+    },
+    {
+      id: "02",
+      prefix: "Role-Specific",
+      highlight: "Certification",
+      desc: "Every certification clearly reflects the learner's specialization, backed by role-mapped projects and assessments.",
+      image: image2,
+      bgClass: "pink-bg",
+      isHighlightLast: true,
+    },
+    {
+      id: "03",
+      prefix: "Industry-Aligned",
+      highlight: "Learning",
+      desc: "Curriculum and tasks are designed around real industry workflows, tools, and expectations to make you as professional",
+      image: image4,
+      bgClass: "purple-bg",
+      isHighlightLast: true,
+    },
+    {
+      id: "04",
+      highlight: "JobStorm",
+      prefix: "Career Alignment",
+      desc: "Learning outcomes are directly connected to career visibility and opportunity through the JobStorm ecosystem.",
+      image: image3,
+      bgClass: "pink-bg",
+      isHighlightLast: false, // Highlight first: "JobStorm Career Alignment"
+    },
+  ];
 
   const faqData = [
     {
@@ -56,6 +195,17 @@ const LearningPage = () => {
         image: image3,
       },
       {
+        title: "Data Science",
+        desc: "Master the art of turning data into actionable business insights using statistics, machine learning, and visualization. The course focuses on real-world data analysis, predictive modeling, and decision-driven analytics.",
+        format: "Online (Some Residential)",
+        eligibility: "Class 12th Students & Pass-outs",
+        duration: "8 Months (Excluding the 2 months Internship)",
+        deadline: "Round 2: 23 Feb '26",
+        image: image4, // Reusing image4 or consider a new one if available
+      },
+    ],
+    "Human Resources": [
+      {
         title: "Success Factor",
         desc: "A 4-year, practitioner-led programme to learn business by running one. Includes internship and domestic + global immersions.",
         format: "Online (Some Residential)",
@@ -65,7 +215,6 @@ const LearningPage = () => {
         image: image4,
       },
     ],
-    "Human Resources": [], // Add placeholders if needed
     Marketing: [],
     Design: [],
   };
@@ -139,12 +288,16 @@ const LearningPage = () => {
               <div className="consultation-form-card">
                 <h3>Get Free Career Advice</h3>
                 <p>Please contact us in case of any query.</p>
-                <form>
+                <form onSubmit={handleFormSubmit}>
                   <div className="form-group mb-3">
                     <input
                       type="text"
                       className="form-control"
                       placeholder="Your name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
                     />
                   </div>
                   <div className="form-group mb-3">
@@ -152,6 +305,10 @@ const LearningPage = () => {
                       type="email"
                       className="form-control"
                       placeholder="Your email address"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
                     />
                   </div>
                   <div className="form-group mb-3">
@@ -159,11 +316,26 @@ const LearningPage = () => {
                       type="tel"
                       className="form-control"
                       placeholder="Your phone number"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      required
                     />
                   </div>
                   <div className="form-group mb-4">
-                    <select className="form-control">
-                      <option>Select Course</option>
+                    <select
+                      className="form-control"
+                      name="course"
+                      value={formData.course}
+                      onChange={handleChange}
+                      required
+                    >
+                      <option value="">Select Course</option>
+                      <option value="AI in Cyber Security">
+                        AI in Cyber Security
+                      </option>
+                      <option value="Data Science">Data Science</option>
+                      <option value="Cloud Security">Cloud Security</option>
                     </select>
                   </div>
                   <button
@@ -215,52 +387,89 @@ const LearningPage = () => {
       {/* Why Different Section */}
       <section className="why-different-section">
         <div className="container custom-container">
-          <h2 className="section-title mb-5">
-            Why This Learning Model Is{" "}
-            <span className="text-purple">Different</span>
-          </h2>
-          <div className="row">
-            <div className="col-md-6 mb-4">
-              <div className="diff-card purple-bg">
-                <img src={image1} alt="Self-Curated" className="card-img-top" />
-                <div className="card-body">
-                  <h3>
-                    01{" "}
-                    <span className="subtitle">
-                      Self-Curated{" "}
-                      <span className="text-purple">Curriculum</span>
-                    </span>
-                  </h3>
-                  <p>
-                    Learners build a personalized learning path aligned to their
-                    chosen career role, focusing only on what truly matters.
-                  </p>
+          <div className="d-flex justify-content-between align-items-end mb-4">
+            <h2 className="section-title mb-0">
+              Why This Learning Model Is{" "}
+              <span className="text-purple">Different</span>
+            </h2>
+            <div className="scroll-arrows d-flex gap-2">
+              <button
+                className="btn btn-light rounded-circle shadow-sm border"
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                onClick={() => scroll("left")}
+              >
+                <i className="mdi mdi-arrow-left text-dark"></i>
+              </button>
+              <button
+                className="btn btn-light rounded-circle shadow-sm border"
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                onClick={() => scroll("right")}
+              >
+                <i className="mdi mdi-arrow-right text-dark"></i>
+              </button>
+            </div>
+          </div>
+
+          <div
+            className="diff-cards-container d-flex gap-4 pb-4"
+            ref={scrollRef}
+            style={{
+              overflowX: "auto",
+              scrollbarWidth: "none",
+              scrollSnapType: "x mandatory",
+              scrollBehavior: "smooth",
+            }}
+          >
+            {differentSteps.map((step, index) => (
+              <div
+                className="col-12 col-md-6 flex-shrink-0"
+                key={index}
+                style={{ scrollSnapAlign: "start" }}
+              >
+                <div className={`diff-card ${step.bgClass} h-100`}>
+                  <img
+                    src={step.image}
+                    alt={step.title}
+                    className="card-img-top"
+                  />
+                  <div className="card-body">
+                    <h3>
+                      {step.id}{" "}
+                      <span className="subtitle ms-2">
+                        {step.isHighlightLast ? (
+                          <>
+                            {step.prefix}{" "}
+                            <span className="text-purple">
+                              {step.highlight}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="text-purple">
+                              {step.highlight}
+                            </span>{" "}
+                            {step.prefix}
+                          </>
+                        )}
+                      </span>
+                    </h3>
+                    <p>{step.desc}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col-md-6 mb-4">
-              <div className="diff-card pink-bg">
-                <img
-                  src={image2}
-                  alt="Role-Specific"
-                  className="card-img-top"
-                />
-                <div className="card-body">
-                  <h3>
-                    02{" "}
-                    <span className="subtitle">
-                      Role-Specific{" "}
-                      <span className="text-purple">Certification</span>
-                    </span>
-                  </h3>
-                  <p>
-                    Every certification clearly reflects the learner's
-                    specialization, backed by role-mapped projects and
-                    assessments.
-                  </p>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -361,8 +570,32 @@ const LearningPage = () => {
               {/* Purple Box with Numbered List */}
               <div className="module-list flex-grow-1">
                 {modules.map((mod, i) => (
-                  <div className="module-item" key={i}>
-                    <span className="mod-num">{i + 1}</span>
+                  <div
+                    className={`module-item ${
+                      i === activeModule ? "active" : ""
+                    }`}
+                    key={i}
+                    onClick={() => setActiveModule(i)}
+                    style={{
+                      cursor: "pointer",
+                      transition: "all 0.3s",
+                      backgroundColor:
+                        i === activeModule ? "rgba(0,0,0,0.2)" : "transparent",
+                      color: i === activeModule ? "#fde047" : "white", // Yellow text for active
+                      fontWeight: i === activeModule ? "700" : "500",
+                    }}
+                  >
+                    <span
+                      className="mod-num"
+                      style={{
+                        color:
+                          i === activeModule
+                            ? "#fde047"
+                            : "rgba(255,255,255,0.7)",
+                      }}
+                    >
+                      {i + 1}
+                    </span>
                     <span>{mod}</span>
                   </div>
                 ))}
@@ -383,28 +616,21 @@ const LearningPage = () => {
               {/* Text Content */}
               <div className="core-text-content mb-4 ps-lg-4">
                 <p>
-                  As organizations increasingly depend on cloud infrastructure,
-                  securing cloud environments has become a critical business
-                  requirement. Effective cloud security ensures stability,
-                  compliance, and operational trust.
+                  {moduleDetails[activeModule]
+                    ? moduleDetails[activeModule].desc
+                    : moduleDetails[0].desc}
                 </p>
                 <p className="highlight-text">
                   At <span className="text-purple">JobsStorm</span>, by the end
                   of the program, you will:
                 </p>
                 <ul className="core-benefits-list">
-                  <li>
-                    Monitor, analyze, and interpret security alerts using
-                    industry-standard tools
-                  </li>
-                  <li>
-                    Investigate incidents, understand attack patterns, and
-                    follow structured response workflows
-                  </li>
-                  <li>
-                    Communicate findings clearly to stakeholders to support
-                    timely, informed security decisions
-                  </li>
+                  {(moduleDetails[activeModule]
+                    ? moduleDetails[activeModule].points
+                    : moduleDetails[0].points
+                  ).map((point, idx) => (
+                    <li key={idx}>{point}</li>
+                  ))}
                 </ul>
               </div>
 
@@ -852,16 +1078,28 @@ const LearningPage = () => {
             {/* Right Image Grid */}
             <div className="col-lg-8">
               <div className="collage-grid">
-                <img src={image8} alt="Dubai" />
-                <img
-                  src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                  alt="Singapore"
-                />
-                <img src={image9} alt="Kuala Lumpur" />
-                <img
-                  src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                  alt="London"
-                />
+                <div className="country-card">
+                  <img src={image8} alt="Dubai" />
+                  <div className="country-overlay">Dubai</div>
+                </div>
+                <div className="country-card">
+                  <img
+                    src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                    alt="Singapore"
+                  />
+                  <div className="country-overlay">Singapore</div>
+                </div>
+                <div className="country-card">
+                  <img src={image9} alt="Kuala Lumpur" />
+                  <div className="country-overlay">Kuala Lumpur</div>
+                </div>
+                <div className="country-card">
+                  <img
+                    src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                    alt="London"
+                  />
+                  <div className="country-overlay">London</div>
+                </div>
               </div>
             </div>
           </div>
