@@ -1,0 +1,209 @@
+/* Internship Page CSS */
+
+.internship-page {
+    font-family: 'Inter', sans-serif;
+    color: #111827;
+}
+
+/* 1. Hero Section */
+.internship-hero {
+    text-align: center;
+    padding: 80px 20px;
+    background-color: #fcf6ff; /* Very light purple/pink bg from image */
+}
+
+.badge-pill {
+    border: 1px solid #8b5cf6;
+    color: #8b5cf6;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: inline-block;
+    margin-bottom: 20px;
+    background: white;
+}
+
+.internship-hero h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #8b5cf6; /* Main Purple */
+}
+
+.internship-hero h1 .text-dark-purple {
+    color: #4c1d95;
+}
+
+.internship-hero .subtitle {
+    color: #6b7280;
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+}
+
+.hero-collage {
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.hero-collage img {
+    border-radius: 20px;
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
+}
+
+/* 2. Positions Section */
+.open-positions-section {
+    padding: 80px 0;
+    background: white;
+}
+
+.positions-header .tabs {
+    background: #4a044e; /* Dark purple bg for tabs */
+    display: inline-flex;
+    padding: 5px;
+    border-radius: 30px;
+    margin: 0 auto;
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
+}
+
+.positions-header .tabs button {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.7);
+    padding: 10px 25px;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.positions-header .tabs button.active {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.position-filter-list {
+    list-style: none;
+    padding: 0;
+    border-left: 3px solid #f3f4f6;
+}
+
+.position-filter-list li {
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #6b7280;
+    font-weight: 500;
+    position: relative;
+}
+
+.position-filter-list li.active {
+    color: #2563eb; /* Blue active text */
+    font-weight: 700;
+}
+
+.position-filter-list li.active::before {
+    content: '';
+    position: absolute;
+    left: -3px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #2563eb;
+}
+
+.job-item {
+    margin-bottom: 50px;
+    border-bottom: 1px solid #f3f4f6;
+    padding-bottom: 40px;
+}
+
+.job-item:last-child {
+    border-bottom: none;
+}
+
+.job-item h3 {
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.badge-outline {
+    border: 1px solid #d1d5db;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin-right: 10px;
+    display: inline-block;
+    color: #374151;
+}
+
+.btn-black {
+    background: #111827;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 30px;
+    font-weight: 600;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-black:hover {
+    background: #000;
+    color: white;
+}
+
+/* 3. Gallery Section */
+.gallery-section h2 {
+    font-weight: 700;
+    margin-bottom: 40px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    padding: 0 20px;
+}
+
+.gallery-grid img {
+    width: 100%;
+    height: 300px; /* fixed height for standardized look */
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Make grid irregular based on image 2 if needed e.g. span rows */
+.gallery-grid img:nth-child(2) {
+    grid-column: span 1;
+}
+/* For simplicity, basic grid is safe start. */
+
+
+/* 4. Testimonial Section */
+.testimonial-section {
+    padding: 80px 0;
+}
+
+.testimonial-card-wrapper {
+    background: white;
+    border-radius: 16px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
+}
+
+.testimonial-img {
+    height: 100%;
+    min-height: 400px;
+    object-fit: cover;
+}
+
+.quote-icon {
+    font-size: 3rem;
+    color: #e5e7eb;
+    line-height: 1;
+}

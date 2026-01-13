@@ -1,0 +1,76 @@
+.career-cta-section {
+    padding: 20px 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #fff;
+}
+
+.cta-banner-wrapper {
+    background-color: #8e24aa; /* Custom Purple */
+    background-image: url('/assets/images/generated/career_cta_bg_wireframe.png');
+    background-size: cover;
+    background-position: right center;
+    background-repeat: no-repeat;
+    
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    /* Height based on content + padding, but min-height ensures presence */
+    min-height: 180px; 
+}
+
+.cta-content {
+    position: relative;
+    z-index: 2;
+    padding-left: 20px;
+}
+
+.cta-title {
+    color: rgba(255, 255, 255, 0.6); /* Transparent white for first line */
+    font-size: 2rem;
+    line-height: 1.2;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.cta-title span {
+    display: block; /* Force new line */
+    color: #fff; /* Solid white */
+    font-weight: 800; /* Extra bold */
+}
+
+/* Button Styling */
+.btn-outline-light-custom {
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.5); /* Slightly more visible border */
+    background-color: transparent;
+    padding: 12px 36px;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: 500;
+}
+
+.btn-outline-light-custom:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 768px) {
+    .cta-banner-wrapper {
+        background-position: center; /* Center image on mobile */
+    }
+    
+    .cta-title {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+    
+    .cta-content {
+        text-align: center;
+        padding-left: 0;
+    }
+}

@@ -1,0 +1,22 @@
+.assessment-promo-section {
+    padding: 20px 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #fff;
+}
+
+.promo-img-full-wrapper {
+    width: 100%;
+    /* Optional: shadow or hover effect for the image banner itself */
+    transition: transform 0.3s ease;
+}
+
+.promo-img-full-wrapper img {
+    max-height: 200px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.promo-img-full-wrapper:hover {
+    transform: translateY(-5px);
+}

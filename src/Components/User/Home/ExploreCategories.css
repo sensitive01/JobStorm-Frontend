@@ -1,0 +1,88 @@
+.explore-categories-section {
+    padding: 30px 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #fff;
+}
+
+.explore-categories-section .show-all-link {
+    color: #7e22ce;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.explore-categories-section .show-all-link:hover {
+    color: #581c87;
+    text-decoration: underline;
+}
+
+.categories-grid-wrapper {
+    /* Using a distinct border styles to match the reference image */
+    /* border: 2px dashed #3b82f6; Removed wrapper border */
+    overflow: hidden; /* Ensure content stays within border radius if any */
+}
+
+/* Individual Card Styling */
+.category-card {
+    transition: all 0.3s ease;
+    border: 1px solid #e5e7eb; /* Full border for separate card look */
+    background-color: #fff;
+    cursor: pointer;
+    min-height: 220px;
+}
+
+/* Remove right borders for the last item in each row (logic handled via specific classes or we can rely on row g-0 if simple)
+   Bootstrap's row handles wrapping, but borders are tricky. 
+   We will keep it simple: internal borders. The wrapper has the dashed border.
+*/
+
+.category-card:hover {
+    border-color: #7e22ce;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transform: translateY(-5px);
+    background-color: #fff;
+}
+
+.category-card.active-card:hover {
+    background-color: #8b5cf6; /* Keep it purple, maybe slightly lighter/darker */
+    border-color: #8b5cf6;
+    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+}
+
+.category-card .icon-wrapper {
+    color: #7e22ce; /* Purple icon default */
+}
+
+.category-card .cat-title {
+    font-size: 1.25rem;
+    color: #1f2937;
+}
+
+.category-card .cat-subtitle {
+    font-size: 0.9rem;
+}
+
+.category-card .arrow-icon {
+    font-size: 1.2rem;
+    color: #1f2937;
+    transition: transform 0.3s;
+}
+
+.category-card:hover .arrow-icon {
+    transform: translateX(5px);
+}
+
+/* Active Card (Purple) Styling */
+.category-card.active-card {
+    background-color: #9333ea; /* Bright Purple */
+    border-color: #9333ea;
+}
+
+.category-card.active-card .icon-wrapper,
+.category-card.active-card .cat-title,
+.category-card.active-card .cat-subtitle,
+.category-card.active-card .arrow-icon {
+    color: #fff !important;
+}
+
+

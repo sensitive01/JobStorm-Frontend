@@ -1,0 +1,251 @@
+.featured-jobs-section {
+    padding: 30px 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #fff;
+}
+
+.featured-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+.featured-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-right: auto;
+}
+
+/* Tabs */
+.region-tabs {
+    display: flex;
+    gap: 15px;
+    margin: 0 20px;
+    flex-wrap: wrap;
+}
+
+.region-tab-btn {
+    padding: 8px 24px;
+    border: 1px solid #e5e7eb;
+    background-color: #fff;
+    color: #6b7280;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.region-tab-btn:hover {
+    border-color: #9333ea;
+    color: #9333ea;
+}
+
+.region-tab-btn.active {
+    background-color: #7e22ce;
+    color: #fff;
+    border-color: #7e22ce;
+}
+
+.view-all-btn {
+    padding: 8px 24px;
+    border: 1px solid #e5e7eb;
+    color: #7e22ce;
+    background-color: #fff;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s;
+}
+
+.view-all-btn:hover {
+    background-color: #f3e8ff;
+    border-color: #d8b4fe;
+}
+
+/* Job Card */
+.feat-job-card {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px; /* Smooth rounded corners */
+    padding: 25px;
+    margin-bottom: 20px; /* Space between cards */
+    transition: all 0.3s ease;
+    flex-wrap: wrap;
+}
+
+.feat-job-card:hover {
+    border-color: #a855f7;
+    box-shadow: 0 10px 30px rgba(168, 85, 247, 0.15);
+    transform: translateY(-5px);
+}
+
+.feat-job-card:hover .apply-btn {
+    background-color: #9333ea;
+    color: #fff;
+}
+
+/* Active Card Style (Purple Border) */
+.feat-job-card.active-job,
+.feat-job-card:focus-within {
+    border: 1.5px solid #a855f7; /* Purple border */
+    box-shadow: 0 4px 20px rgba(168, 85, 247, 0.1);
+}
+
+/* Logo Section */
+.job-logo-box {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px; /* Rounded square */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 25px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.job-logo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Content Middle */
+.job-content-middle {
+    flex-grow: 1;
+    margin-right: 20px;
+}
+
+.job-title-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.job-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0;
+    text-decoration: none;
+}
+
+.job-type-badge {
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+/* Badge Colors */
+.badge-purple-light {
+    background-color: #f3e8ff;
+    color: #9333ea;
+}
+.badge-green-light {
+    background-color: #dcfce7;
+    color: #16a34a;
+}
+/* Add more if needed */
+
+.job-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    color: #9ca3af;
+    font-size: 0.9rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Right Actions */
+.job-actions-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.bookmark-icon {
+    font-size: 1.5rem;
+    color: #d1d5db;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.bookmark-icon:hover {
+    color: #9333ea;
+}
+
+.apply-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-size: 0.95rem;
+    background-color: transparent; /* Default transparent or white */
+    color: #7e22ce;
+    cursor: pointer;
+    border: none;
+}
+
+.apply-btn:hover {
+    color: #581c87;
+}
+
+/* Active Card Button Style - Solid Purple */
+.feat-job-card.active-job .apply-btn {
+    background-color: #9333ea;
+    color: #fff;
+}
+
+.feat-job-card.active-job .apply-btn:hover {
+    background-color: #7e22ce;
+}
+
+@media (max-width: 768px) {
+    .feat-job-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .job-logo-box {
+        margin-bottom: 15px;
+    }
+    
+    .job-actions-right {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 15px;
+    }
+
+    .featured-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+    
+    .region-tabs {
+        margin: 0;
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+}

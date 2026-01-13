@@ -1,0 +1,115 @@
+.how-it-works-section {
+    padding: 30px 0;
+    font-family: 'Inter', sans-serif;
+    position: relative;
+    overflow: visible; /* Allowing badge to float if needed */
+}
+
+.how-it-works-section .sub-title {
+    letter-spacing: 1px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.how-it-works-section .title {
+    font-size: 2.2rem;
+    color: #333;
+    line-height: 1.2;
+}
+
+.how-it-works-section .description {
+    font-size: 1.1rem;
+    max-width: 90%;
+}
+
+.steps-container {
+    border-left: 2px solid #e5e7eb; /* Light border line */
+    padding-left: 40px;
+    margin-left: 10px;
+    position: relative;
+}
+
+.step-item {
+    position: relative;
+}
+
+.step-number {
+    font-size: 2rem;
+    line-height: 1;
+    color: #374151;
+}
+
+.step-title {
+    font-size: 1.2rem;
+    color: #374151;
+    margin-bottom: 10px;
+}
+
+.step-content p {
+    margin-bottom: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Colors */
+.text-purple {
+    color: #7e22ce !important; /* Deep Purple */
+}
+
+/* Right Side Box */
+.how-it-works-img {
+    height: 450px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 4px; /* Slight rounding or sharp as per image */
+}
+
+/* Floating Badge */
+.experience-badge {
+    position: absolute;
+    top: 50%;
+    left: -60px; /* Pull it to the left to overlap the center */
+    transform: translateY(-50%);
+    width: 160px;
+    height: 160px;
+    background-color: #6b21a8; /* Darker Purple */
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(107, 33, 168, 0.3);
+    z-index: 10;
+}
+
+.experience-badge .years {
+    font-size: 2.5rem;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.experience-badge .text {
+    font-size: 0.85rem;
+    line-height: 1.2;
+    opacity: 0.9;
+}
+
+@media (max-width: 991px) {
+    .experience-badge {
+        position: relative;
+        left: 0;
+        top: 0;
+        transform: none;
+        margin: 40px auto;
+    }
+    
+    .steps-container {
+        margin-bottom: 40px;
+    }
+
+    .image-placeholder-box {
+        height: 300px;
+    }
+}

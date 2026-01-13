@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import TopHeader from "./TopHeader";
+// TopHeader import removed
 import { getDistictValues, getMyName } from "../../../api/service/axiosService";
 import accountImage from "../../../../public/assets/images/account.jpg";
 import HeaderAuthButtons from "./HeaderAuthButtons";
@@ -204,6 +204,7 @@ const Header = () => {
         .navbar {
           padding: 0.5rem 0;
           z-index: 1050;
+          margin-top: 0 !important;
         }
 
         .navbar-brand {
@@ -382,11 +383,25 @@ const Header = () => {
           pointer-events: none;
           opacity: 0.7;
         }
+
+        /* Nav Link Typography matching Design */
+        .navbar-nav .nav-link {
+          font-weight: 600;
+          color: #1f2937 !important; /* Dark gray for high contrast */
+          font-size: 15px;
+          padding-left: 1rem !important;
+          padding-right: 1rem !important;
+          text-transform: none !important;
+        }
+        
+        .navbar-nav .nav-link:hover {
+          color: #6366f1 !important; /* Primary color on hover */
+        }
       `}</style>
 
       <>
         <div>
-          <TopHeader />
+          {/* <TopHeader /> removed as per user request */}
 
           <nav className="navbar navbar-expand-lg fixed-top sticky" id="navbar">
             <div className="container-fluid custom-container">
@@ -403,55 +418,33 @@ const Header = () => {
                 />
               </a>
 
-              <div className="collapse navbar-collapse" id="navbarCollapse">
-                <ul className="navbar-nav navbar-center">
-                  <li className="nav-item">
-                    <a href="/" className="nav-link">
-                      Home
-                    </a>
-                  </li>
+              <div
+                className="collapse navbar-collapse justify-content-end gap-4"
+                id="navbarCollapse"
+              >
+                <ul
+                  className="navbar-nav m-0 flex-grow-0 w-auto"
+                  style={{ gap: "24px" }}
+                >
+                  {/* New Design Layout Links */}
+                  {/* About Us Dropdown */}
                   <li className="nav-item dropdown dropdown-hover">
                     <a
                       className="nav-link"
                       href="#"
-                      id="jobsdropdown"
+                      id="aboutDropdown"
                       role="button"
                       data-bs-toggle="dropdown"
                     >
-                      JobsStorm <div className="arrow-down" />
+                      About Us <div className="arrow-down" />
                     </a>
                     <ul
                       className="dropdown-menu dropdown-menu-center"
-                      aria-labelledby="jobsdropdown"
+                      aria-labelledby="aboutDropdown"
                     >
                       <li>
                         <a className="dropdown-item" href="/about-us">
-                          About Us
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          Careers
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="/blogs-pages">
-                          Blog
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          Freelance Corner
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="/privacy-policy">
-                          Privacy &amp; Policy
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="/faq-pages">
-                          Faqs
+                          About JobsStorm
                         </a>
                       </li>
                       <li>
@@ -461,20 +454,21 @@ const Header = () => {
                       </li>
                     </ul>
                   </li>
+
+                  {/* Jobs Dropdown (Existing Logic Preserved) */}
                   <li className="nav-item dropdown dropdown-hover">
                     <a
                       className="nav-link"
                       href="#"
-                      id="pagesdoropdown"
+                      id="jobsDropdown"
                       role="button"
                       data-bs-toggle="dropdown"
                     >
-                      Jobs
-                      <div className="arrow-down" />
+                      Jobs <div className="arrow-down" />
                     </a>
                     <div
                       className="dropdown-menu dropdown-menu-lg dropdown-menu-center"
-                      aria-labelledby="pagesdoropdown"
+                      aria-labelledby="jobsDropdown"
                     >
                       <div className="row">
                         <div className="col-lg-4">
@@ -483,7 +477,7 @@ const Header = () => {
                           </span>
                           <hr />
                           <div>
-                            {categories.map((category, index) => (
+                            {categories.slice(0, 5).map((category, index) => (
                               <a
                                 key={index}
                                 className="dropdown-item"
@@ -496,7 +490,7 @@ const Header = () => {
                               </a>
                             ))}
                             <a className="dropdown-item" href="/job-list">
-                              All Other Jobs
+                              View All Categories
                             </a>
                           </div>
                         </div>
@@ -506,7 +500,7 @@ const Header = () => {
                           </span>
                           <hr />
                           <div>
-                            {locations.map((location, index) => (
+                            {locations.slice(0, 5).map((location, index) => (
                               <a
                                 key={index}
                                 className="dropdown-item"
@@ -529,181 +523,101 @@ const Header = () => {
                           </span>
                           <hr />
                           <div>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                              onClick={(e) =>
-                                handleJobSearch(e, { experience: "Fresher" })
-                              }
-                            >
-                              Fresher
-                            </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                              onClick={(e) =>
-                                handleJobSearch(e, { experience: "0-2" })
-                              }
-                            >
-                              0 to 2 Years
-                            </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                              onClick={(e) =>
-                                handleJobSearch(e, { experience: "2-5" })
-                              }
-                            >
-                              2 to 5 Years
-                            </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                              onClick={(e) =>
-                                handleJobSearch(e, { experience: "5-10" })
-                              }
-                            >
-                              5 to 10 Years
-                            </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                              onClick={(e) =>
-                                handleJobSearch(e, { experience: "10-15" })
-                              }
-                            >
-                              10 to 15 Years
-                            </a>
-                            <a
-                              className="dropdown-item"
-                              href="#"
-                              onClick={(e) =>
-                                handleJobSearch(e, { experience: "15+" })
-                              }
-                            >
-                              15 + Years
-                            </a>
+                            {[
+                              "Fresher",
+                              "0-2",
+                              "2-5",
+                              "5-10",
+                              "10-15",
+                              "15+",
+                            ].map((exp, i) => (
+                              <a
+                                key={i}
+                                className="dropdown-item"
+                                href="#"
+                                onClick={(e) =>
+                                  handleJobSearch(e, { experience: exp })
+                                }
+                              >
+                                {exp === "Fresher" ? "Fresher" : `${exp} Years`}
+                              </a>
+                            ))}
                           </div>
                         </div>
                       </div>
                     </div>
                   </li>
 
-                  {/* <li className="nav-item dropdown">
+                  {/* Companies Dropdown */}
+                  <li className="nav-item dropdown dropdown-hover">
                     <a
-                      className="nav-link dropdown-toggle"
+                      className="nav-link"
                       href="#"
-                      id="categoriesDropdown"
+                      id="companiesDropdown"
                       role="button"
                       data-bs-toggle="dropdown"
-                      aria-expanded="false"
                     >
-                      Categories
+                      Companies <div className="arrow-down" />
                     </a>
                     <ul
-                      className="dropdown-menu"
-                      aria-labelledby="categoriesDropdown"
+                      className="dropdown-menu dropdown-menu-center"
+                      aria-labelledby="companiesDropdown"
                     >
-                      {categories.map((category, index) => (
-                        <li key={index}>
-                          <a
-                            className="dropdown-item"
-                            href={`/jobs?category=${encodeURIComponent(category)}`}
-                          >
-                            {category}
-                          </a>
-                        </li>
-                      ))}
+                      <li>
+                        <a
+                          className="dropdown-item"
+                          href="/associated-company-list"
+                        >
+                          Browse Companies
+                        </a>
+                      </li>
+                      <li>
+                        <a className="dropdown-item" href="/employer-login">
+                          Post a Job
+                        </a>
+                      </li>
                     </ul>
-                  </li> */}
+                  </li>
 
-                  {/* <li className="nav-item dropdown">
+                  {/* Learn Link */}
+                  <li className="nav-item">
+                    <a href="/learn" className="nav-link">
+                      Learn
+                    </a>
+                  </li>
+
+                  {/* Resources Link */}
+                  <li className="nav-item">
+                    {/* Using FAQ/Pricing/Policy as Resources */}
+                    <a href="/faq-pages" className="nav-link">
+                      Resources
+                    </a>
+                  </li>
+
+                  {/* Internship Dropdown */}
+                  <li className="nav-item dropdown dropdown-hover">
                     <a
-                      className="nav-link dropdown-toggle"
+                      className="nav-link"
                       href="#"
-                      id="locationsDropdown"
+                      id="internshipDropdown"
                       role="button"
                       data-bs-toggle="dropdown"
-                      aria-expanded="false"
                     >
-                      Locations
+                      Internship <div className="arrow-down" />
                     </a>
                     <ul
-                      className="dropdown-menu"
-                      aria-labelledby="locationsDropdown"
+                      className="dropdown-menu dropdown-menu-center"
+                      aria-labelledby="internshipDropdown"
                     >
-                      {locations.map((location, index) => (
-                        <li key={index}>
-                          <a
-                            className="dropdown-item"
-                            href={`/jobs?location=${encodeURIComponent(location)}`}
-                          >
-                            {location}
-                          </a>
-                        </li>
-                      ))}
+                      <li>
+                        <a className="dropdown-item" href="/internship">
+                          Internship Program
+                        </a>
+                      </li>
                     </ul>
-                  </li> */}
-
-                  {!userId && (
-                    <li className="nav-item dropdown dropdown-hover">
-                      <a
-                        className="nav-link"
-                        href="#"
-                        id="productdropdown"
-                        role="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      >
-                        Employers
-                        <div className="arrow-down" />
-                      </a>
-                      <ul
-                        className="dropdown-menu dropdown-menu-center"
-                        aria-labelledby="productdropdown"
-                      >
-                        <li>
-                          <a className="dropdown-item" href="/employer-login">
-                            Login | Signup
-                          </a>
-                        </li>
-                        {/* <li>
-                          <a
-                            className="dropdown-item"
-                            href="/associated-company-list"
-                          >
-                            Associated Companies
-                          </a>
-                        </li> */}
-                        {/* <li>
-                          <a
-                            className="dropdown-item"
-                            href="/saved-candidate-page"
-                          >
-                            Search Candidates
-                          </a>
-                        </li> */}
-                      </ul>
-                    </li>
-                  )}
-
-                  <li className="nav-item">
-                    <a href="/price-page" className="nav-link">
-                      Plans &amp; Pricing
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a href="#" className="nav-link">
-                      Hiring Assist
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a href="/contact-us" className="nav-link">
-                      Events &amp; Ads
-                    </a>
                   </li>
                 </ul>
-                <div className="ms-auto d-none d-lg-block">
+                <div className="d-none d-lg-block">
                   {userId ? (
                     <ul className="header-menu list-inline d-flex align-items-center mb-0">
                       <li className="list-inline-item dropdown me-3">
@@ -915,183 +829,7 @@ const Header = () => {
             </div>
           </nav>
 
-          {/* Region Job Buttons - Desktop */}
-          <div
-            className="d-none d-lg-flex align-items-center ms-3"
-            style={{ gap: "8px" }}
-          >
-            <button
-              className="btn btn-sm btn-warning"
-              onClick={(e) => handleJobSearch(e, { location: "Middle East" })}
-              style={{ whiteSpace: "nowrap" }}
-            >
-              Middle East
-            </button>
-            <button
-              className="btn btn-sm btn-info text-white"
-              onClick={(e) => handleJobSearch(e, { location: "Europe" })}
-              style={{ whiteSpace: "nowrap" }}
-            >
-              Europe
-            </button>
-            <button
-              className="btn btn-sm btn-success"
-              onClick={(e) => handleJobSearch(e, { location: "Asia" })}
-              style={{ whiteSpace: "nowrap" }}
-            >
-              Asia
-            </button>
-          </div>
-
-          {/* Region Job Buttons - Mobile */}
-          <div
-            className="d-lg-none mobile-job-buttons-bar"
-            style={{
-              display: "flex",
-              gap: "8px",
-              flexWrap: "wrap",
-              padding: "8px",
-            }}
-          >
-            <button
-              className="btn btn-sm btn-warning"
-              onClick={(e) => handleJobSearch(e, { location: "Middle East" })}
-              style={{ flex: "1", minWidth: "120px" }}
-            >
-              Middle East Jobs
-            </button>
-            <button
-              className="btn btn-sm btn-info text-white"
-              onClick={(e) => handleJobSearch(e, { location: "Europe" })}
-              style={{ flex: "1", minWidth: "120px" }}
-            >
-              Europe Jobs
-            </button>
-            <button
-              className="btn btn-sm btn-success"
-              onClick={(e) => handleJobSearch(e, { location: "Asia" })}
-              style={{ flex: "1", minWidth: "120px" }}
-            >
-              Asia Jobs
-            </button>
-          </div>
-
-          <div
-            className="modal fade"
-            id="signupModal"
-            tabIndex={-1}
-            aria-hidden="true"
-          >
-            <div className="modal-dialog modal-dialog-centered">
-              <div className="modal-content">
-                <div className="modal-body p-5">
-                  <div className="position-absolute end-0 top-0 p-3">
-                    <button
-                      type="button"
-                      className="btn-close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    />
-                  </div>
-                  <div className="auth-content">
-                    <div className="w-100">
-                      <p align="center">
-                        <img
-                          src="assets/images/logo-dark.png"
-                          height={60}
-                          alt=""
-                          className="logo-dark"
-                        />
-                      </p>
-                      <hr />
-                      <div className="text-center mb-4">
-                        <h5>Sign Up</h5>
-                        <p className="text-muted">
-                          Sign Up and get access to all the features of
-                          JobsStorm
-                        </p>
-                      </div>
-                      <form action="#" className="auth-form">
-                        <div className="mb-3">
-                          <label htmlFor="usernameInput" className="form-label">
-                            Username
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="usernameInput"
-                            placeholder="Enter your username"
-                          />
-                        </div>
-                        <div className="mb-3">
-                          <label htmlFor="passwordInput" className="form-label">
-                            Email
-                          </label>
-                          <input
-                            type="email"
-                            className="form-control"
-                            id="emailInput"
-                            placeholder="Enter your email"
-                          />
-                        </div>
-                        <div className="mb-3">
-                          <label htmlFor="emailInput" className="form-label">
-                            Password
-                          </label>
-                          <input
-                            type="password"
-                            className="form-control"
-                            id="passwordInput"
-                            placeholder="Password"
-                          />
-                        </div>
-                        <div className="mb-4">
-                          <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              id="flexCheckDefault"
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="flexCheckDefault"
-                            >
-                              I agree to the{" "}
-                              <a
-                                href="/terms-and-conditions"
-                                className="text-primary form-text text-decoration-underline"
-                              >
-                                Terms and conditions
-                              </a>
-                            </label>
-                          </div>
-                        </div>
-                        <div className="text-center">
-                          <button
-                            type="submit"
-                            className="btn btn-primary w-100"
-                          >
-                            Sign Up
-                          </button>
-                        </div>
-                      </form>
-                      <div className="mt-3 text-center">
-                        <p className="mb-0">
-                          Already a member ?{" "}
-                          <a
-                            href="/candidate-signup"
-                            className="form-text text-primary text-decoration-underline"
-                          >
-                            <b>Login</b>
-                          </a>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Region Job Buttons removed */}
         </div>
       </>
     </div>

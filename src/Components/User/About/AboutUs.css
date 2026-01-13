@@ -1,0 +1,381 @@
+/* Dark Theme for About Us Page */
+.about-us-page {
+    background-color: #1a0b2e; /* Deep purple/black background */
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+}
+
+.about-us-page .container-medium {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Hero Section */
+.about-hero {
+    padding: 160px 0 80px 0;
+    position: relative;
+    background: radial-gradient(circle at 70% 30%, #2d1b4e 0%, #1a0b2e 70%);
+}
+
+.about-hero .stars {
+    color: #fca522;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.about-hero h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.about-hero p.lead {
+    color: #b0a0d0;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin-bottom: 40px;
+}
+
+/* Stats Row */
+.stats-row {
+    display: flex;
+    gap: 40px;
+    margin-top: 60px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 30px;
+}
+
+.stat-item h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.stat-item p {
+    color: #b0a0d0;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Mission Bar */
+.mission-bar {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: left;
+    margin: 40px 0 80px 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mission-bar h4 {
+    margin: 0;
+    font-weight: 500;
+    color: #d1c4e9;
+}
+
+/* Achievements Section */
+.achievements-section {
+    padding: 60px 0;
+}
+
+.achievements-section h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.achievements-section p {
+    color: #b0a0d0;
+    max-width: 500px;
+    margin-bottom: 40px;
+}
+
+.history-card {
+    background: #fff;
+    color: #333;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    /* Mocking the graph look */
+    position: relative;
+    overflow: hidden;
+}
+
+.history-card .graph-mock {
+    height: 150px;
+    background: linear-gradient(180deg, rgba(99, 102, 241, 0.2) 0%, rgba(255,255,255,0) 100%);
+    border-bottom: 2px solid #6366f1;
+    position: relative;
+    margin-top: 20px;
+}
+
+.history-card .graph-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    /* Simplified curve mock */
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,100 C20,80 40,90 60,40 S80,20 100,10" stroke="%236366f1" stroke-width="2" fill="none"/></svg>');
+    background-size: 100% 100%;
+}
+
+/* Testimonials Section */
+.testimonials-section {
+    padding: 80px 0;
+    text-align: center;
+    position: relative;
+}
+
+.testimonials-section h2 {
+    margin-bottom: 60px;
+    color: #fff;
+}
+
+.testimonial-swiper {
+    padding: 20px 0 60px 0;
+    width: 100%;
+    /* 
+       Strict Layout Calculation:
+       Center Active: 700px
+       Container: 1100px
+       Remaining: 400px (200px per side)
+       Visible Side Card: 200px (clipped by 100px)
+       
+       4th Card Position:
+       Starts at: 350 (half center) + 30 (gap) + 300 (full side) + 30 (gap) = 710px from center.
+       Container Edge: 550px from center.
+       Safety Margin: 160px completely hidden.
+    */
+    max-width: 1100px; 
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+/* Base Slide (Visible by default again for smooth transitions) */
+.swiper-slide {
+    width: 300px !important;
+    height: 360px !important; /* Taller inactive cards */
+    margin-right: 30px; /* Manual spacing for robustness */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s ease;
+    border-radius: 20px;
+    overflow: hidden;
+    /* Inactive Styling */
+    opacity: 0.5; /* Keeping them dim but visible */
+    transform: scale(1);
+    z-index: 1;
+}
+
+/* Visibility Logic - Removed glitchy opacity toggle */
+.swiper-slide-active {
+    opacity: 1;
+    z-index: 10;
+}
+
+/* Inactive styling handles itself via base class */
+.swiper-slide-prev, .swiper-slide-next {
+    opacity: 0.6;
+}
+
+.testimonial-card {
+    width: 100%;
+    height: 100%;
+    background: #6B6B80; /* Slightly darker grey-purple */
+    color: #fff;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transition: all 0.5s ease;
+}
+
+/* Active Slide - The Big One */
+.swiper-slide-active {
+    width: 700px !important;
+    height: 400px !important;
+}
+
+.swiper-slide-active .testimonial-card {
+    background: #ffffff;
+    color: #333;
+    padding: 0;
+    flex-direction: row;
+    align-items: stretch;
+    border: none;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+}
+
+/* Content Visibility Logic */
+
+/* Inactive State Content */
+.swiper-slide:not(.swiper-slide-active) .quote-icon {
+    color: #fca522;
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.swiper-slide:not(.swiper-slide-active) .testimonial-text-content p {
+    font-size: 0.85rem;
+    color: #e0e0e0;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Hide detailed elements on inactive slides */
+.swiper-slide:not(.swiper-slide-active) .testimonial-image,
+.swiper-slide:not(.swiper-slide-active) h6,
+.swiper-slide:not(.swiper-slide-active) small {
+    display: none;
+}
+
+.swiper-slide:not(.swiper-slide-active) .testimonial-text-content {
+    padding: 0;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Align to top */
+    width: 100%;
+}
+
+/* Active State Content */
+/* Active State Content */
+.testimonial-text-content {
+    flex: 1; /* Should take 50% if image is fixed width, but lets be explicit */
+    width: 50%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    min-width: 0;
+    position: relative; /* For pagination positioning if needed */
+}
+
+.swiper-slide-active .quote-icon {
+    font-size: 3rem;
+    color: #fca522;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.swiper-slide-active .testimonial-text-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #4b5563;
+    margin-bottom: 30px;
+    display: block;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+    overflow: visible;
+}
+
+.swiper-slide-active h6 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.swiper-slide-active small {
+    color: #6b7280;
+    font-size: 0.95rem;
+    display: block;
+}
+
+/* Image on the right for Active slide */
+.swiper-slide-active .testimonial-image {
+    width: 50%; /* Equal 50% split */
+    min-width: unset; /* Allow flexibility */
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: block;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+/* Pagination */
+.swiper-pagination-bullet {
+    background: #6b7280;
+    opacity: 0.5;
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    transition: all 0.3s;
+}
+
+.swiper-pagination-bullet-active {
+    background: #9333ea;
+    opacity: 1;
+    width: 30px;
+    border-radius: 5px;
+}
+
+/* Force Pagination Centering relative to the WHOLE slider */
+.testimonials-section .swiper-pagination {
+    bottom: 0px !important; /* Move it down below the card */
+    position: relative;
+    margin-top: 30px;
+    text-align: center;
+    width: 100%;
+}
+
+/* Pagination */
+.swiper-pagination-bullet {
+    background: #6b7280;
+    opacity: 0.5;
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+}
+
+.swiper-pagination-bullet-active {
+    background: #9333ea;
+    opacity: 1;
+    width: 30px;
+    border-radius: 5px;
+}
+
+.swiper-wrapper {
+    align-items: center;
+}
+
+/* Helpers */
+.avatars-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.avatars-group img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid white;
+    margin-right: -15px;
+}
+
+/* Override backgrounds for reused components in About Us page to remove white boxes */
+.about-us-page .assessment-promo-section,
+.about-us-page .career-cta-section {
+    background-color: transparent !important;
+    padding-left: 0;
+    padding-right: 0;
+}

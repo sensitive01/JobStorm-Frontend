@@ -1,0 +1,149 @@
+.upcoming-courses-section {
+    padding: 30px 0;
+    font-family: 'Inter', sans-serif;
+}
+
+.course-title {
+    font-weight: 700;
+    font-size: 2rem;
+    color: #1f2937;
+    line-height: 1.2;
+}
+
+.text-purple {
+    color: #8b5cf6; /* Adjust color code to match image exactly if needed */
+}
+
+.course-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #6b7280;
+    max-width: 90%;
+}
+
+.btn-outline-purple {
+    color: #5b5b5b;
+    border: 1px solid #dba6f3;
+    background-color: transparent;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.btn-outline-purple:hover {
+    background-color: #8b5cf6;
+    border-color: #8b5cf6;
+    color: #fff;
+}
+
+/* Right Side Grid */
+.courses-grid {
+    display: flex;
+    gap: 20px;
+    height: 300px; /* Fixed height for consistency */
+}
+
+.course-card {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.course-card:hover {
+    transform: translateY(-5px);
+}
+
+.course-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.course-card:hover .course-img {
+    transform: scale(1.05); /* Subtle zoom on hover */
+}
+
+/* Large Card Specifics */
+.large-card {
+    flex: 2; /* Takes up more space */
+    border-radius: 30px; /* Slightly more rounded for the big card */
+}
+
+/* Pill Card Specifics */
+.pill-card {
+    flex: 1; /* Takes up less space */
+    border-radius: 50px; /* Highly rounded corners for pill shape */
+}
+
+/* Overlay & Content */
+.card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 60%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+}
+
+.card-content {
+    color: white;
+    z-index: 2;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.card-duration {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    background: rgba(255,255,255,0.2);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.card-subtitle {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Arrow Icon on Large Card */
+.card-arrow {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: white;
+    font-size: 24px;
+    z-index: 2;
+}
+
+/* Vertical Text for Pill Cards */
+.vertical-text {
+    transform: rotate(-90deg);
+    transform-origin: bottom left;
+    position: absolute;
+    bottom: 25px;
+    left: 75px;
+    width: 300px; /* Ensure wide enough to not wrap */
+    text-align: left;
+}
+
+.pill-card .card-title {
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+    white-space: nowrap;
+}
+
+.pill-card .card-duration {
+    display: block;
+    margin-left: 0;
+    width: fit-content;
+}
