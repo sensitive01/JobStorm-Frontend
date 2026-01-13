@@ -1,5 +1,6 @@
 import React from "react";
 import "./GlobalHiringHub.css";
+import jobsStormBuildingimage from "../../../assets/images/buildingImage.jpeg";
 
 const GlobalHiringHub = () => {
   const links = [
@@ -38,7 +39,7 @@ const GlobalHiringHub = () => {
           <div className="col-lg-5 mb-4 mb-lg-0 text-center">
             <div className="image-container">
               <img
-                src="/assets/images/generated/jobsstorm_skyscraper.png"
+                src={jobsStormBuildingimage}
                 alt="JobsStorm Global Hub"
                 className="img-fluid rounded-4 hub-image"
               />

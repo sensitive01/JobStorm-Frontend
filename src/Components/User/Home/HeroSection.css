@@ -11,26 +11,29 @@
 }
 
 .hero-badge {
-  display: inline-block;
-  background-color: #fff;
-  border: 1px solid #d4ccec;
-  padding: 6px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #f3e8ff; /* Light Lavender */
+  border: 2px solid #e9d5ff; /* Soft Purple Border */
+  padding: 5px 6px; /* Tight padding to hug the inner pill */
+  padding-right: 20px; /* More space on right for text */
   border-radius: 50px;
   margin-bottom: 24px;
-  color: #7e22ce; /* Purple */
-  font-weight: 500;
+  color: #7e22ce; /* Deep Purple text */
+  font-weight: 600;
   font-size: 14px;
-  box-shadow: 0 4px 12px rgba(126, 34, 206, 0.05);
+  box-shadow: 0 4px 6px -1px rgba(126, 34, 206, 0.1);
 }
 
 .hero-badge span {
-  background-color: #8b5cf6;
+  background-color: #7e22ce; /* Deep Purple Pill */
   color: white;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-weight: bold;
-  margin-right: 8px;
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-weight: 700;
   font-size: 12px;
+  letter-spacing: 0.5px;
 }
 
 .hero-heading {
@@ -132,10 +135,11 @@
 }
 
 .country-flag {
-  width: 20px;
-  height: 15px;
+  width: 32px;
+  height: 22px;
   object-fit: cover;
-  border-radius: 2px;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0; /* Add border to define edges especially for white stripes */
 }
 
 .search-btn {

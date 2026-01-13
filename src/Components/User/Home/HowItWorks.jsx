@@ -1,5 +1,6 @@
 import React from "react";
 import "./HowItWorks.css";
+import jonsStomMeetingImage from "./../../../assets/images/WhatsApp Image 2026-01-13 at 7.38.20 PM.jpeg";
 
 const HowItWorks = () => {
   return (
@@ -63,7 +64,7 @@ const HowItWorks = () => {
           {/* Right Side Image Box */}
           <div className="col-lg-6 position-relative">
             <img
-              src="/assets/images/generated/job_service_concept_jobstorm.png"
+              src={jonsStomMeetingImage}
               alt="How Jobsstorm Works"
               className="how-it-works-img img-fluid rounded"
             />

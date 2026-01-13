@@ -38,25 +38,30 @@
     font-weight: 800; /* Extra bold */
 }
 
-/* Button Styling */
+/* Button Styling with Glassmorphism */
 .btn-outline-light-custom {
     color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.5); /* Slightly more visible border */
-    background-color: transparent;
+    background: rgba(255, 255, 255, 0.15); /* Glassy background */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
     padding: 12px 36px;
-    border-radius: 8px;
+    border-radius: 12px;
     font-size: 1rem;
     transition: all 0.3s ease;
     text-decoration: none;
     display: inline-block;
     font-weight: 500;
+    letter-spacing: 0.5px;
 }
 
 .btn-outline-light-custom:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: #fff;
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+    transform: translateY(-2px);
     color: #fff;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
 
 @media (max-width: 768px) {

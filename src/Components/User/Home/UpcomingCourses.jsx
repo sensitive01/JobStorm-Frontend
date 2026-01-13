@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./UpcomingCourses.css";
 import courseImage from "../../../assets/images/courseimage.jpg";
 import courseImage2 from "../../../assets/images/couseImage2.jpg";
 import courseImage3 from "../../../assets/images/courseImage3.jpg";
 
 const UpcomingCourses = () => {
+  const navigate = useNavigate();
+  const [activeIndex, setActiveIndex] = useState(0);
   return (
     <section className="section upcoming-courses-section">
       <div className="container-medium">
@@ -19,67 +22,77 @@ const UpcomingCourses = () => {
               help students, freshers, and working professionals build job-ready
               skills and advance their careers in today's competitive market.
             </p>
-            <a
-              href="#"
+            <button
+              onClick={() => navigate("/candidate-signup")}
               className="btn btn-outline-purple rounded-pill px-4 py-2"
             >
               Register Now
-            </a>
+            </button>
           </div>
 
           {/* Right Side Cards */}
           <div className="col-lg-7">
             <div className="courses-grid">
-              {/* Main Large Card */}
-              <div className="course-card large-card">
-                <img
-                  src={courseImage}
-                  alt="AI in Cyber Security"
-                  className="course-img"
-                />
-                <div className="card-overlay">
-                  <div className="card-content">
-                    <h4 className="card-title">AI in Cyber Security</h4>
-                    <span className="card-duration">6 Months</span>
-                    <p className="card-subtitle mt-2">
-                      Self made Curriculum based Learning
-                    </p>
+              {[
+                {
+                  id: 0,
+                  title: "AI in Cyber Security",
+                  duration: "6 Months",
+                  subtitle: "Self made Curriculum based Learning",
+                  image: courseImage,
+                },
+                {
+                  id: 1,
+                  title: "SuccessFactor - HRM",
+                  duration: "6 Months",
+                  subtitle: "Industry Aligned Training",
+                  image: courseImage2,
+                },
+                {
+                  id: 2,
+                  title: "Data Science",
+                  duration: "8 Months",
+                  subtitle: "Practical Data Skills",
+                  image: courseImage3,
+                },
+              ].map((course, index) => {
+                const isActive = activeIndex === index;
+                return (
+                  <div
+                    key={course.id}
+                    className={`course-card ${
+                      isActive ? "large-card" : "pill-card"
+                    }`}
+                    onMouseEnter={() => setActiveIndex(index)}
+                  >
+                    <img
+                      src={course.image}
+                      alt={course.title}
+                      className="course-img"
+                    />
+                    <div className="card-overlay">
+                      <div
+                        className={`card-content ${
+                          !isActive ? "vertical-text" : ""
+                        }`}
+                      >
+                        <h4 className="card-title">{course.title}</h4>
+                        <span className="card-duration">{course.duration}</span>
+                        {isActive && (
+                          <p className="card-subtitle mt-2">
+                            {course.subtitle}
+                          </p>
+                        )}
+                      </div>
+                      {isActive && (
+                        <div className="card-arrow">
+                          <i className="mdi mdi-arrow-top-right"></i>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className="card-arrow">
-                    <i className="mdi mdi-arrow-top-right"></i>
-                  </div>
-                </div>
-              </div>
-
-              {/* Vertical Pill Card 1 */}
-              <div className="course-card pill-card">
-                <img
-                  src={courseImage2}
-                  alt="SuccessFactor - HRM"
-                  className="course-img"
-                />
-                <div className="card-overlay">
-                  <div className="card-content vertical-text">
-                    <h5 className="card-title">SuccessFactor - HRM</h5>
-                    <span className="card-duration">6 Months</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Vertical Pill Card 2 */}
-              <div className="course-card pill-card">
-                <img
-                  src={courseImage3}
-                  alt="Data Science"
-                  className="course-img"
-                />
-                <div className="card-overlay">
-                  <div className="card-content vertical-text">
-                    <h5 className="card-title">Data Science</h5>
-                    <span className="card-duration">8 Months</span>
-                  </div>
-                </div>
-              </div>
+                );
+              })}
             </div>
           </div>
         </div>

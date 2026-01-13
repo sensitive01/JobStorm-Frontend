@@ -1,5 +1,14 @@
 import React from "react";
 import "./HeroSection.css";
+import indiaImage from "../../../assets/images/india.jpg";
+import uaeImage from "../../../assets/images/uae.jpg";
+import ukImage from "../../../assets/images/uk.jpg";
+import germanyImage from "../../../assets/images/germany.jpg";
+import polandImage from "../../../assets/images/poland.jpg";
+import euImage from "../../../assets/images/Europe.jpg";
+import netherlandsImage from "../../../assets/images/Netherlands.jpg"; // Fixed casing
+import jobsstormLogo from "../../../../public/assets/images/favicon.ico";
+import asiaImage from "../../../assets/images/Asia.png";
 
 const HeroSection = () => {
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -35,11 +44,7 @@ const HeroSection = () => {
                   (window.location.href = "/job-list?location=Europe")
                 }
               >
-                <img
-                  src="/assets/images/flags/germany.jpg"
-                  className="region-flag"
-                  alt="Europe"
-                />
+                <img src={euImage} className="region-flag" alt="Europe" />
                 Europe
               </button>
               <button
@@ -48,11 +53,7 @@ const HeroSection = () => {
                   (window.location.href = "/job-list?location=Middle East")
                 }
               >
-                <img
-                  src="/assets/images/flags/uae.webp"
-                  className="region-flag"
-                  alt="Middle East"
-                />
+                <img src={uaeImage} className="region-flag" alt="Middle East" />
                 Middle East
               </button>
               <button
@@ -61,11 +62,8 @@ const HeroSection = () => {
                   (window.location.href = "/job-list?location=Asia")
                 }
               >
-                <img
-                  src="/assets/images/flags/russia.jpg"
-                  className="region-flag"
-                  alt="Asia"
-                />
+                {/* Visual placeholder for Asia using India for now as China flag is missing */}
+                <img src={asiaImage} className="region-flag" alt="Asia" />
                 Asia
               </button>
             </div>
@@ -81,13 +79,9 @@ const HeroSection = () => {
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 />
               </div>
-              <div className="country-select border-start ps-3">
+              <div className="country-select border-start ps-4">
                 {/* Using US flag as placeholder for India if India not found */}
-                <img
-                  src="/assets/images/flags/india.png"
-                  className="country-flag"
-                  alt="India"
-                />
+                <img src={indiaImage} className="country-flag" alt="India" />
                 <span className="fw-semibold">India</span>
                 <i className="uil uil-angle-down text-muted"></i>
               </div>
@@ -107,56 +101,44 @@ const HeroSection = () => {
           <div className="col-lg-5 d-none d-lg-block">
             {/* Orbit Animation */}
             <div className="orbit-container">
-              <div className="orbit-center-logo">
-                <i className="mdi mdi-twitter"></i>
+              <div
+                className="orbit-center-logo bg-transparent shadow-none"
+                style={{ padding: 0 }}
+              >
+                {/* User can replace this src with their logo */}
+                <img
+                  src={jobsstormLogo}
+                  alt="Center Logo"
+                  className="w-100 h-100 rounded-4 object-fit-cover"
+                />
               </div>
 
               <div className="orbit-ring-1">
-                {/* Inner Ring: India (Top), UK (Left), UAE (Right) */}
+                {/* Inner Ring: UAE, UK, India */}
                 <div className="orbit-item item-1-1">
-                  <img
-                    src="/assets/images/flags/india.png"
-                    alt="India"
-                    title="India"
-                  />
+                  <img src={uaeImage} alt="UAE" />
                 </div>
                 <div className="orbit-item item-1-2">
-                  <img
-                    src="/assets/images/flags/us.jpg"
-                    alt="UK"
-                    title="UK (Proxy)"
-                  />
+                  <img src={ukImage} alt="UK" />
                 </div>
                 <div className="orbit-item item-1-3">
-                  <img src="/assets/images/flags/uae.webp" alt="UAE" />
+                  <img src={indiaImage} alt="India" />
                 </div>
               </div>
 
               <div className="orbit-ring-2">
-                {/* Outer Ring: EU (Top), Neth (Right), Pol (Bottom), Ger (Left) */}
+                {/* Outer Ring: Netherlands, Poland, Germany, EU */}
                 <div className="orbit-item item-2-1">
-                  <img
-                    src="/assets/images/flags/germany.jpg"
-                    alt="EU"
-                    title="EU (Proxy)"
-                  />
+                  <img src={netherlandsImage} alt="Netherlands" />
                 </div>
                 <div className="orbit-item item-2-2">
-                  <img
-                    src="/assets/images/flags/spain.jpg"
-                    alt="Netherlands"
-                    title="Netherlands (Proxy)"
-                  />
+                  <img src={polandImage} alt="Poland" />
                 </div>
                 <div className="orbit-item item-2-3">
-                  <img
-                    src="/assets/images/flags/russia.jpg"
-                    alt="Poland"
-                    title="Poland (Proxy)"
-                  />
+                  <img src={germanyImage} alt="Germany" />
                 </div>
                 <div className="orbit-item item-2-4">
-                  <img src="/assets/images/flags/germany.jpg" alt="Germany" />
+                  <img src={euImage} alt="EU" />
                 </div>
               </div>
             </div>

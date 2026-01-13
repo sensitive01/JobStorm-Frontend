@@ -11,10 +11,11 @@
 }
 
 .promo-img-full-wrapper img {
-    max-height: 200px;
     width: 100%;
-    object-fit: cover;
+    height: 300px; /* Adjusted to medium size */
+    object-fit: contain;
     border-radius: 8px;
+    background-color: transparent;
 }
 
 .promo-img-full-wrapper:hover {
