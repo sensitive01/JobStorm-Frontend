@@ -26,6 +26,7 @@ const LearningPage = () => {
     phone: "",
     course: "",
   });
+  const [showModal, setShowModal] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -285,7 +286,7 @@ const LearningPage = () => {
               </div>
             </div>
             <div className="col-lg-5">
-              <div className="consultation-form-card">
+              <div className="consultation-form-card" id="consultation-form">
                 <h3>Get Free Career Advice</h3>
                 <p>Please contact us in case of any query.</p>
                 <form onSubmit={handleFormSubmit}>
@@ -534,7 +535,10 @@ const LearningPage = () => {
                           </div>
                         </div>
                       </div>
-                      <button className="btn btn-dark mt-3">
+                      <button
+                        className="btn btn-dark mt-3"
+                        onClick={() => setShowModal(true)}
+                      >
                         Explore Programme ↗
                       </button>
                     </div>
@@ -1199,6 +1203,53 @@ const LearningPage = () => {
       {/* Final CTA */}
       {/* Final CTA */}
       <CareerCTA />
+      {/* Explore Popup Modal */}
+      {showModal && (
+        <div
+          className="modal show d-block"
+          tabIndex="-1"
+          style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Program Enquiry</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowModal(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p>
+                  Please fill the form and our team will contact you shortly.
+                </p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowModal(false)}
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-purple"
+                  onClick={() => {
+                    setShowModal(false);
+                    document
+                      .getElementById("consultation-form")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
+                  Go to Form
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
