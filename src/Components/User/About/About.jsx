@@ -6,12 +6,42 @@ import CareerCTA from "../Home/CareerCTA";
 
 // Swiper imports
 import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectCoverflow, Pagination, Autoplay } from "swiper/modules";
+import {
+  EffectCoverflow,
+  Pagination,
+  Autoplay,
+  Navigation,
+} from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
+import "swiper/css/navigation";
+
+
+import missionImage from "../../../assets/images/26.png"
+import visionImage from "../../../assets/images/27.jpg"
 
 const About = () => {
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    const sections = document.querySelectorAll(
+      ".vision-section, .mission-section, .timeline-item"
+    );
+    sections.forEach((section) => observer.observe(section));
+
+    return () => sections.forEach((section) => observer.unobserve(section));
+  }, []);
+
   return (
     <Fragment>
       <div className="about-us-page">
@@ -20,14 +50,21 @@ const About = () => {
           <div className="container-medium">
             <div className="row align-items-center">
               <div className="col-lg-7">
-                <div className="stars">
-                  <i className="mdi mdi-star"></i>
-                  <i className="mdi mdi-star"></i>
-                  <i className="mdi mdi-star"></i>
-                  <i className="mdi mdi-star"></i>
-                  <i className="mdi mdi-star"></i>
-                  <span className="ms-2 text-white-50">
-                    Trusted by 4000+ companies
+                {/* Removed Stars Section to match design */}
+
+                <div className="d-flex align-items-center mb-3">
+                  <div className="me-2 text-warning">
+                    <i className="mdi mdi-star"></i>
+                    <i className="mdi mdi-star"></i>
+                    <i className="mdi mdi-star"></i>
+                    <i className="mdi mdi-star"></i>
+                    <i className="mdi mdi-star"></i>
+                  </div>
+                  <span
+                    className="text-white-50"
+                    style={{ fontSize: "0.9rem" }}
+                  >
+                    5.0 (from 200+ reviews)
                   </span>
                 </div>
 
@@ -43,10 +80,14 @@ const About = () => {
                 </p>
 
                 <div className="avatars-group">
-                  <button className="btn-purple-glow me-4">
-                    Create Account For Free{" "}
-                    <i className="mdi mdi-arrow-right ms-1"></i>
-                  </button>
+                  <div className="d-flex align-items-center">
+                    <button className="btn-purple-glow">
+                      Create Account For Free
+                    </button>
+                    <div className="btn-arrow-circle me-4">
+                      <i className="mdi mdi-arrow-right"></i>
+                    </div>
+                  </div>
 
                   <div className="d-flex align-items-center">
                     <img
@@ -75,231 +116,299 @@ const About = () => {
                     <h3>1000 +</h3>
                     <p>Clients</p>
                   </div>
-                  <div className="stat-item border-start ps-4 border-secondary">
+                  <div className="stat-item">
                     <h3>15 +</h3>
                     <p>Years</p>
                   </div>
-                  <div className="stat-item border-start ps-4 border-secondary">
+                  <div className="stat-item">
                     <h3>2000 +</h3>
                     <p>Candidates</p>
                   </div>
                 </div>
               </div>
-              <div className="col-lg-5 d-none d-lg-block">
-                {/* World Map or abstract graphic placeholder */}
-                <div
-                  style={{
-                    width: "100%",
-                    height: "400px",
-                    backgroundImage:
-                      'url("https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg")',
-                    backgroundSize: "contain",
-                    backgroundRepeat: "no-repeat",
-                    backgroundPosition: "center",
-                    opacity: 0.1,
-                    filter: "invert(1)",
-                  }}
-                ></div>
-              </div>
+
+              {/* Removed col-lg-5 as map is now absolute background of section */}
             </div>
 
-            {/* MISSION BAR */}
-            <div className="mission-bar">
-              <h4>Defining the Future of Global Career Access</h4>
-            </div>
+            {/* Removed Mission Bar, now a dedicated section */}
           </div>
+
+          {/* World Map Background */}
+          <div className="world-map-bg"></div>
         </section>
 
-        {/* ACHIEVEMENTS SECTION */}
-        <section className="achievements-section">
+        {/* NEW IDENTITY SECTION: VISION & MISSION */}
+        <section className="vision-mission-wrapper">
           <div className="container-medium">
-            <div className="row align-items-center">
-              <div className="col-lg-6">
-                <h2>Our Achievements Over The Years!</h2>
-                <p>
-                  Powerful, self-serve product and growth analytics to help you
-                  convert, engage, and retain more users. Trusted by over 4,000
-                  startups.
-                </p>
+            {/* VISION ROW */}
+            <div className="vision-section" id="vision-row">
+              <div className="row align-items-center">
+                <div className="col-lg-6">
+                  <div className="section-label-pill">
+                    <div className="section-icon-circle">
+                      <i className="mdi mdi-account-group-outline"></i>
+                    </div>
+                    OUR VISION
+                  </div>
 
-                <div className="mb-4">
-                  <span className="badge bg-secondary mb-2">History</span>
-                  <div
-                    style={{
-                      height: "4px",
-                      width: "50px",
-                      background: "#6366f1",
-                    }}
-                  ></div>
-                </div>
-
-                <div className="history-card" style={{ maxWidth: "300px" }}>
-                  <h6 className="mb-0">Users</h6>
-                  <h3 className="mb-0">140,000</h3>
-                  <span className="text-success text-small">
-                    <i className="mdi mdi-arrow-up"></i> 12% vs last month
+                  <h2 className="vision-heading text-white">
+                    Enable Global Careers
+                  </h2>
+                  <span className="vision-subheading">
+                    Through Process & Integrity
                   </span>
 
-                  <div className="graph-mock">
-                    <div className="graph-line"></div>
+                  <p className="text-desc">
+                    Build a trusted ecosystem where international career access
+                    is structured and outcome-driven — not driven by shortcuts
+                    or false promise.
+                  </p>
+
+                  <ul className="feature-list">
+                    <li>
+                      <div className="number-badge">1</div>
+                      <span>Enable structured access to global careers</span>
+                    </li>
+                    <li>
+                      <div className="number-badge">2</div>
+                      <span>
+                        Make international hiring transparent & trustworthy
+                      </span>
+                    </li>
+                    <li>
+                      <div className="number-badge">3</div>
+                      <span>
+                        Build long-term career impact, not short-term promises
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="col-lg-6">
+                  {/* Image Card */}
+                  <div className="visual-card">
+                    <img
+                      src={missionImage}
+                      alt="Vision Binoculars"
+                    />
                   </div>
                 </div>
               </div>
-              <div className="col-lg-6">
-                {/* Placeholder for right side visual if needed, currently leaving generous dark space as per design */}
+            </div>
+
+            {/* SPACER REMOVED FOR OPTIMIZATION */}
+
+            {/* MISSION ROW */}
+            <div className="mission-section" id="mission-row">
+              <div className="row align-items-center">
+                {/* Fixed: Removed flex-row-reverse to keep Text Left, Image Right consistent for both sections */}
+
+                <div className="col-lg-6">
+                  <div className="section-label-pill">
+                    <div className="section-icon-circle">
+                      <i className="mdi mdi-trending-up"></i>
+                    </div>
+                    OUR MISSION
+                  </div>
+
+                  <h2 className="vision-heading text-white">
+                    Create Real International Opportunities
+                  </h2>
+                  <span className="mission-subheading">
+                    Through Verified Processes
+                  </span>
+
+                  <p className="text-desc">
+                    Support professionals with compliant career services,
+                    employer facilitation, and guided execution.
+                  </p>
+
+                  <ul className="feature-list">
+                    <li>
+                      <div className="number-badge">1</div>
+                      <span>
+                        Provide process-driven overseas career support
+                      </span>
+                    </li>
+                    <li>
+                      <div className="number-badge">2</div>
+                      <span>
+                        Connect candidates with verified global employers
+                      </span>
+                    </li>
+                    <li>
+                      <div className="number-badge">3</div>
+                      <span>
+                        Deliver clarity, compliance & real outcomes at every
+                        stage
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="col-lg-6">
+                  {/* Image Card for Mission */}
+                  <div className="visual-card mission-visual">
+                    <img
+                      src={visionImage}
+                      alt="Mission Target"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* TESTIMONIALS */}
+        {/* TIMELINE ACHIEVEMENTS SECTION */}
+        <section className="achievements-section timeline-wrapper">
+          <div className="container-medium">
+            <div className="mb-5">
+              <h2 className="vision-heading text-white">
+                Our Achievements Over The Years!
+              </h2>
+              <p className="lead text-muted" style={{ maxWidth: "600px" }}>
+                Powerful, self-serve product and growth analytics to help you
+                convert, engage, and retain more users. Trusted by over 4,000
+                startups.
+              </p>
+            </div>
+
+            <div className="timeline-container">
+              {/* Horizontal Line Connector */}
+              <div className="timeline-line"></div>
+
+              <div className="row">
+                {/* Item 1 */}
+                <div className="col-lg-3 col-md-6 mb-4 timeline-item fade-in-up delay-0">
+                  <div className="timeline-tag">Meetings</div>
+                  <div className="timeline-dot"></div>
+                  <div className="visual-card-small"></div>
+                  <h5 className="mt-4 text-white">
+                    Notes with an AI assistant
+                  </h5>
+                  <p className="text-small text-muted">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                    do eiusmod tempor incididunt.
+                  </p>
+                </div>
+
+                {/* Item 2 */}
+                <div className="col-lg-3 col-md-6 mb-4 timeline-item fade-in-up delay-200">
+                  <div className="timeline-tag">Meetings</div>
+                  <div className="timeline-dot"></div>
+                  <div className="visual-card-small"></div>
+                  <h5 className="mt-4 text-white">
+                    Notes with an AI assistant
+                  </h5>
+                  <p className="text-small text-muted">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                    do eiusmod tempor incididunt.
+                  </p>
+                </div>
+
+                {/* Item 3 */}
+                <div className="col-lg-3 col-md-6 mb-4 timeline-item fade-in-up delay-400">
+                  <div className="timeline-tag">Meetings</div>
+                  <div className="timeline-dot"></div>
+                  <div className="visual-card-small"></div>
+                  <h5 className="mt-4 text-white">
+                    Notes with an AI assistant
+                  </h5>
+                  <p className="text-small text-muted">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                    do eiusmod tempor incididunt.
+                  </p>
+                </div>
+
+                {/* Item 4 */}
+                <div className="col-lg-3 col-md-6 mb-4 timeline-item fade-in-up delay-600">
+                  <div className="timeline-tag">Meetings</div>
+                  <div className="timeline-dot"></div>
+                  <div className="visual-card-small"></div>
+                  <h5 className="mt-4 text-white">
+                    Notes with an AI assistant
+                  </h5>
+                  <p className="text-small text-muted">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                    do eiusmod tempor incididunt.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* TESTIMONIALS SECTION */}
         <section className="testimonials-section">
           <div className="container-medium">
-            <h2>Listen to What Our Client Says!</h2>
+            <h2 className="vision-heading text-white text-center mb-5">
+              Listen to What Our Client Says!
+            </h2>
 
             <Swiper
               grabCursor={true}
               centeredSlides={true}
               slidesPerView={"auto"}
+              spaceBetween={40} /* Physical gap for arrows */
               loop={true}
-              loopedSlides={8} /* Increased buffer for stability */
-              loopAdditionalSlides={4}
-              initialSlide={4}
-              autoplay={{
-                delay: 3000,
-                disableOnInteraction: false,
-              }}
-              spaceBetween={
-                0
-              } /* Handled via CSS margin for better dynamic width stability */
-              breakpoints={{
-                640: {
-                  centeredSlides: true,
-                },
-                1024: {
-                  centeredSlides: true,
-                },
-              }}
-              onSlideChange={() => console.log("slide change")}
               pagination={{ clickable: true }}
-              modules={[Pagination, Autoplay]}
+              navigation={true}
+              modules={[Pagination, Navigation]}
               className="testimonial-swiper"
             >
               {[
-                // Set 1
                 {
-                  text: "Fantastic platform for global reach. Simplified our recruitment process significantly.",
-                  name: "Sarah Jenkins",
-                  role: "Talent Acquisition, GlobalTech",
-                  image: "https://randomuser.me/api/portraits/women/44.jpg",
-                },
-                {
-                  text: "Aludiah, under the umbrella of Zanalat Pro, has completely transformed our approach to learning and development. Their tailored solutions have not only improved employee engagement but have also driven tangible business results.",
+                  text: "Abodah, under the umbrella of Zennial Pro, has completely transformed our approach to learning and development. Their tailored solutions have not only improved employee engagement but also boosted productivity.",
                   name: "David Lee",
-                  role: "HR Director, TechWorld Inc.",
+                  role: "HR Director, Tech Innovations Inc.",
                   image: "https://randomuser.me/api/portraits/men/32.jpg",
                 },
                 {
-                  text: "Great service and reliable support. Highly recommended for international hiring.",
+                  text: "The strategic insights provided by the team helped us navigate complex international markets with ease. A truly invaluable partner for global expansion.",
+                  name: "Sarah Jenkins",
+                  role: "VP of Operations, GlobalReach",
+                  image: "https://randomuser.me/api/portraits/women/44.jpg",
+                },
+                {
+                  text: "Exceptional service and a platform that delivers real results. Hiring international talent has never been this streamlined and secure.",
                   name: "Michael Chen",
                   role: "CEO, StartUp Hub",
                   image: "https://randomuser.me/api/portraits/men/45.jpg",
                 },
+                // Duplicates for Loop Stability
                 {
-                  text: "The best decision we made for our offshore expansion.",
-                  name: "Emily Davis",
-                  role: "Director, Creative Solutions",
-                  image: "https://randomuser.me/api/portraits/women/68.jpg",
-                },
-                // Set 2
-                {
-                  text: "Fantastic platform for global reach. Simplified our recruitment process significantly.",
-                  name: "Sarah Jenkins",
-                  role: "Talent Acquisition, GlobalTech",
-                  image: "https://randomuser.me/api/portraits/women/44.jpg",
-                },
-                {
-                  text: "Aludiah, under the umbrella of Zanalat Pro, has completely transformed our approach to learning and development. Their tailored solutions have not only improved employee engagement but have also driven tangible business results.",
+                  text: "Abodah, under the umbrella of Zennial Pro, has completely transformed our approach to learning and development. Their tailored solutions have not only improved employee engagement but also boosted productivity.",
                   name: "David Lee",
-                  role: "HR Director, TechWorld Inc.",
+                  role: "HR Director, Tech Innovations Inc.",
                   image: "https://randomuser.me/api/portraits/men/32.jpg",
                 },
                 {
-                  text: "Great service and reliable support. Highly recommended for international hiring.",
-                  name: "Michael Chen",
-                  role: "CEO, StartUp Hub",
-                  image: "https://randomuser.me/api/portraits/men/45.jpg",
-                },
-                {
-                  text: "The best decision we made for our offshore expansion.",
-                  name: "Emily Davis",
-                  role: "Director, Creative Solutions",
-                  image: "https://randomuser.me/api/portraits/women/68.jpg",
-                },
-                // Set 3
-                {
-                  text: "Fantastic platform for global reach. Simplified our recruitment process significantly.",
+                  text: "The strategic insights provided by the team helped us navigate complex international markets with ease. A truly invaluable partner for global expansion.",
                   name: "Sarah Jenkins",
-                  role: "Talent Acquisition, GlobalTech",
+                  role: "VP of Operations, GlobalReach",
                   image: "https://randomuser.me/api/portraits/women/44.jpg",
                 },
                 {
-                  text: "Aludiah, under the umbrella of Zanalat Pro, has completely transformed our approach to learning and development. Their tailored solutions have not only improved employee engagement but have also driven tangible business results.",
-                  name: "David Lee",
-                  role: "HR Director, TechWorld Inc.",
-                  image: "https://randomuser.me/api/portraits/men/32.jpg",
-                },
-                {
-                  text: "Great service and reliable support. Highly recommended for international hiring.",
+                  text: "Exceptional service and a platform that delivers real results. Hiring international talent has never been this streamlined and secure.",
                   name: "Michael Chen",
                   role: "CEO, StartUp Hub",
                   image: "https://randomuser.me/api/portraits/men/45.jpg",
-                },
-                {
-                  text: "The best decision we made for our offshore expansion.",
-                  name: "Emily Davis",
-                  role: "Director, Creative Solutions",
-                  image: "https://randomuser.me/api/portraits/women/68.jpg",
-                },
-                // Set 4
-                {
-                  text: "Fantastic platform for global reach. Simplified our recruitment process significantly.",
-                  name: "Sarah Jenkins",
-                  role: "Talent Acquisition, GlobalTech",
-                  image: "https://randomuser.me/api/portraits/women/44.jpg",
-                },
-                {
-                  text: "Aludiah, under the umbrella of Zanalat Pro, has completely transformed our approach to learning and development. Their tailored solutions have not only improved employee engagement but have also driven tangible business results.",
-                  name: "David Lee",
-                  role: "HR Director, TechWorld Inc.",
-                  image: "https://randomuser.me/api/portraits/men/32.jpg",
-                },
-                {
-                  text: "Great service and reliable support. Highly recommended for international hiring.",
-                  name: "Michael Chen",
-                  role: "CEO, StartUp Hub",
-                  image: "https://randomuser.me/api/portraits/men/45.jpg",
-                },
-                {
-                  text: "The best decision we made for our offshore expansion.",
-                  name: "Emily Davis",
-                  role: "Director, Creative Solutions",
-                  image: "https://randomuser.me/api/portraits/women/68.jpg",
                 },
               ].map((testimonial, index) => (
                 <SwiperSlide key={index}>
-                  <div className="testimonial-card">
-                    <div className="testimonial-text-content">
-                      <span className="quote-icon">❝</span>
-                      <p className="mb-4">{testimonial.text}</p>
-                      <h6 className="mb-0">{testimonial.name}</h6>
-                      <small className="text-muted">{testimonial.role}</small>
+                  <div className="testimonial-card-split">
+                    <div className="card-left-content">
+                      <i className="mdi mdi-format-quote-open quote-icon-large"></i>
+                      <p className="testimonial-body">{testimonial.text}</p>
+                      <div className="testimonial-author">
+                        <h5>{testimonial.name}</h5>
+                        <small>{testimonial.role}</small>
+                      </div>
                     </div>
                     <div
-                      className="testimonial-image"
-                      style={{
-                        backgroundImage: `url("${testimonial.image}")`,
-                      }}
+                      className="card-right-image"
+                      style={{ backgroundImage: `url(${testimonial.image})` }}
                     ></div>
                   </div>
                 </SwiperSlide>

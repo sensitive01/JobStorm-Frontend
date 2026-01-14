@@ -6,167 +6,356 @@
 }
 
 /* 1. Hero Section */
-.internship-hero {
+/* 1. Hero Section - Carousel Redesign */
+.internship-hero-carousel {
     text-align: center;
-    padding: 80px 20px;
-    background-color: #fcf6ff; /* Very light purple/pink bg from image */
+    padding: 140px 0 40px 0; /* Reduced bottom padding from 100px */
+    background: linear-gradient(180deg, #F3E8FF 0%, #FFFFFF 100%); 
+    overflow: hidden;
 }
 
-.badge-pill {
-    border: 1px solid #8b5cf6;
-    color: #8b5cf6;
-    padding: 8px 20px;
-    border-radius: 30px;
-    font-size: 0.9rem;
-    font-weight: 500;
+.badge-pill-purple {
+    border: 1px solid #d8b4fe; /* Light purple border */
+    color: #9333ea; /* Purple text */
+    padding: 8px 24px;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    background: white;
+    box-shadow: 0 4px 10px rgba(147, 51, 234, 0.1);
     display: inline-block;
-    margin-bottom: 20px;
-    background: white;
 }
 
-.internship-hero h1 {
-    font-size: 3.5rem;
-    font-weight: 700;
-    margin-bottom: 15px;
-    color: #8b5cf6; /* Main Purple */
+/* Swiper Configuration */
+.carousel-container {
+    margin-top: 40px;
+    width: 100%;
 }
 
-.internship-hero h1 .text-dark-purple {
-    color: #4c1d95;
+.internship-swiper {
+    padding-bottom: 50px !important; 
+    width: 100%;
+    overflow: visible !important; 
 }
 
-.internship-hero .subtitle {
-    color: #6b7280;
-    font-size: 1.1rem;
-    margin-bottom: 40px;
-}
-
-.hero-collage {
-    max-width: 1000px;
-    margin: 0 auto;
-    position: relative;
-}
-
-.hero-collage img {
+.internship-slide {
+    width: 700px; /* Reduced from 800px */
+    max-width: 70vw;
+    height: 380px; /* Reduced from 450px */
     border-radius: 20px;
-    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: all 0.4s ease;
+    opacity: 0.4;
+    transform: scale(0.85); 
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
 }
 
-/* 2. Positions Section */
+.internship-swiper .swiper-slide-active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 10;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.25); /* Lifted shadow */
+}
+
+.slide-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Swiper Pagination */
+.internship-swiper .swiper-pagination-bullet {
+    background: #d1d5db;
+    opacity: 1;
+    width: 10px;
+    height: 10px;
+    margin: 0 6px !important;
+}
+
+.internship-swiper .swiper-pagination-bullet-active {
+    background: #9333ea !important; /* Purple active */
+    transform: scale(1.2);
+}
+
+/* Swiper Navigation Arrows */
+.internship-swiper .swiper-button-next,
+.internship-swiper .swiper-button-prev {
+    color: #6b7280; 
+    transform: scale(0.6); 
+    font-weight: bold;
+}
+
+.internship-swiper .swiper-button-next:after,
+.internship-swiper .swiper-button-prev:after {
+    font-size: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .internship-slide {
+        width: 85vw;
+        height: 300px;
+    }
+}
+
+/* 2. Positions Section Redesign */
 .open-positions-section {
-    padding: 80px 0;
+    padding: 40px 0 80px 0; /* Reduced top padding from 80px */
     background: white;
 }
 
+/* Tabs */
 .positions-header .tabs {
-    background: #4a044e; /* Dark purple bg for tabs */
+    background: #4a044e; /* Deep purple background */
     display: inline-flex;
-    padding: 5px;
-    border-radius: 30px;
+    padding: 8px;
+    border-radius: 50px;
     margin: 0 auto;
-    left: 50%;
     position: relative;
-    transform: translateX(-50%);
+    /* Center alignment is handled by parent text-center */
 }
 
 .positions-header .tabs button {
     background: transparent;
     border: none;
-    color: rgba(255,255,255,0.7);
-    padding: 10px 25px;
-    border-radius: 25px;
+    color: rgba(255,255,255,0.8);
+    padding: 12px 30px;
+    border-radius: 40px;
     font-weight: 600;
+    font-size: 1rem;
     transition: all 0.3s;
 }
 
 .positions-header .tabs button.active {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.15); /* Lighter pill for active */
     color: white;
-    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.positions-header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin-top: 40px;
+}
+
+/* Sidebar Filter */
+.sidebar-title {
+    font-weight: 800;
+    font-size: 1.25rem;
+    padding-left: 20px;
+    border-left: 5px solid #2563eb; /* Thick blue border line */
+    margin-bottom: 25px;
+    color: #111827;
 }
 
 .position-filter-list {
     list-style: none;
     padding: 0;
-    border-left: 3px solid #f3f4f6;
+    margin-left: 20px;
 }
 
 .position-filter-list li {
-    padding: 10px 20px;
+    padding: 12px 0;
     cursor: pointer;
-    color: #6b7280;
+    color: #4b5563; /* Slate 600 */
     font-weight: 500;
-    position: relative;
+    font-size: 1.1rem;
+    transition: color 0.2s;
 }
 
-.position-filter-list li.active {
-    color: #2563eb; /* Blue active text */
-    font-weight: 700;
+.position-filter-list li:hover, .position-filter-list li.active {
+    color: #2563eb; /* Blue highlight */
 }
 
-.position-filter-list li.active::before {
-    content: '';
-    position: absolute;
-    left: -3px;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: #2563eb;
-}
-
+/* Job Items */
 .job-item {
-    margin-bottom: 50px;
-    border-bottom: 1px solid #f3f4f6;
-    padding-bottom: 40px;
-}
-
-.job-item:last-child {
-    border-bottom: none;
+    margin-bottom: 60px;
 }
 
 .job-item h3 {
-    font-weight: 700;
+    font-weight: 800;
+    font-size: 1.75rem;
+    color: #111827;
     margin-bottom: 15px;
 }
 
-.badge-outline {
-    border: 1px solid #d1d5db;
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    margin-right: 10px;
-    display: inline-block;
-    color: #374151;
+.tags {
+    display: flex;
+    gap: 12px;
 }
 
-.btn-black {
-    background: #111827;
+.badge-outline-rounded {
+    border: 1px solid #e5e7eb;
+    padding: 6px 20px;
+    border-radius: 50px; /* Fully rounded pill */
+    font-size: 0.9rem;
+    color: #111827;
+    font-weight: 600;
+    background: transparent;
+}
+
+.job-desc {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #4b5563;
+    max-width: 90%;
+}
+
+/* See Positions Button */
+.btn-black-pill {
+    background: #000000;
     color: white;
-    padding: 10px 25px;
-    border-radius: 30px;
+    padding: 12px 30px;
+    border-radius: 50px;
     font-weight: 600;
     border: none;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    font-size: 1rem;
+    transition: transform 0.2s;
 }
 
-.btn-black:hover {
-    background: #000;
+.btn-black-pill:hover {
+    transform: translateX(5px); /* Subtly move right on hover */
     color: white;
 }
 
-/* 3. Gallery Section */
-.gallery-section h2 {
-    font-weight: 700;
-    margin-bottom: 40px;
+/* 3. Internship Process Timeline */
+.process-timeline-section {
+    padding: 20px 0;
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    animation: fadeInSimple 0.6s ease-out forwards;
 }
 
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-    padding: 0 20px;
+@keyframes fadeInSimple {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.process-header {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 60px auto;
+}
+
+.process-header h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.process-header p {
+    color: #6b7280;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+/* Timeline Container */
+.timeline-vertical {
+    position: relative;
+    padding: 20px 0;
+}
+
+/* Central Line */
+.timeline-vertical::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 4px;
+    background: #e5e7eb; /* Light grey line */
+    transform: translateX(-50%);
+    border-radius: 4px;
+}
+
+.timeline-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 60px;
+    position: relative;
+}
+
+.timeline-row:last-child {
+    margin-bottom: 0;
+}
+
+/* The Node (Number Circle) */
+.timeline-number {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 60px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08); /* Soft shadow */
+    z-index: 2;
+    border: 4px solid #fff; 
+}
+
+
+
+/* Content Blocks */
+.timeline-content {
+    width: 42%; /* Leave space for center */
+    position: relative;
+}
+
+/* Alternating Logic */
+.timeline-row.left-align .timeline-content {
+    text-align: right;
+    margin-right: auto;
+}
+
+.timeline-row.right-align .timeline-content {
+    text-align: left;
+    margin-left: auto; /* Push to right */
+}
+
+/* Typography */
+.timeline-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 10px;
+}
+
+.timeline-desc {
+    color: #58647a; /* Slate-ish blue from image */
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Mobile Responsive for Timeline */
+@media (max-width: 768px) {
+    .timeline-vertical::before {
+        left: 30px; /* Line moves to left */
+    }
+    .timeline-number {
+        left: 30px;
+    }
+    .timeline-row {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-left: 80px; /* Space for line */
+    }
+    .timeline-content {
+        width: 100%;
+        text-align: left !important;
+    }
 }
 
 .gallery-grid img {
@@ -209,4 +398,407 @@
 }
 
 
-/* Internship Promo Grid */
+/* 4. Top Companies Section */
+.internship-companies-section {
+    padding: 60px 0;
+    text-align: left; /* Changed from center */
+    background: #fdfbff; 
+    margin-top: 60px;
+    border-radius: 20px;
+    overflow: hidden; 
+}
+
+/* ... existing h4 styles ... */
+.internship-companies-section h4 {
+    color: #9333ea; /* Keeping vibrant purple */
+    font-weight: 800; /* Extra bold */
+    font-size: 1.75rem; /* Slightly larger */
+    margin-bottom: 40px;
+    padding-left: 40px; /* Align with content, assuming visual padding */
+    letter-spacing: -0.5px;
+}
+
+/* Marquee Container (Hidden Overflow) */
+.company-marquee-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    white-space: nowrap;
+}
+
+/* The Sliding Track */
+.company-marquee-track {
+    display: flex;
+    align-items: center;
+    gap: 80px; /* Larger gap for clear separation */
+    width: max-content;
+    animation: marquee-scroll 30s linear infinite;
+    padding-left: 20px; /* Start offset */
+}
+
+/* Individual Item */
+.company-logo-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0.6;
+    transition: all 0.3s;
+    cursor: default;
+    flex-shrink: 0; /* Prevent squishing */
+}
+
+.company-logo-item:hover {
+    opacity: 1;
+    transform: scale(1.1); /* Pop instead of move up */
+}
+
+@keyframes marquee-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } /* Scrolls half if we duplicate content */
+}
+
+/* Keeping typography essentially the same */
+.company-logo-item i {
+    font-size: 2.2rem;
+    color: #a855f7; 
+}
+
+.company-logo-item span {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #cebcf5; 
+    font-family: 'Inter', sans-serif;
+}
+
+
+
+/* 5. Gallery Section */
+.gallery-section {
+    padding: 60px 0;
+    width: 100%;
+    margin-top: 40px;
+}
+
+.gallery-section h2 {
+    font-size: 2.5rem;
+    font-weight: 500;
+    color: #111827;
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+/* Using Column Flex with Exact Ratios */
+.gallery-grid-bento {
+    display: flex;
+    gap: 20px;
+    height: 650px; /* Fixed height to force alignment */
+    width: 100%;
+}
+
+/* Columns */
+/* Left is wider */
+.gallery-col-left {
+    flex: 1.4;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;
+}
+
+/* Mid and Right are narrower */
+.gallery-col-mid,
+.gallery-col-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;
+}
+
+/* Flex Ratios for Children to Create Bento Look */
+/* Left Col: Top ~60%, Bottom ~40% */
+.gallery-col-left > .gallery-item:nth-child(1) {
+    flex: 6; /* 60% */
+}
+.gallery-col-left > .gallery-split-row {
+    flex: 4; /* 40% */
+}
+
+/* Mid Col: Top ~40%, Bottom ~60% (Inverted split) */
+.gallery-col-mid > .gallery-item:nth-child(1) {
+    flex: 4; /* 40% */
+}
+.gallery-col-mid > .gallery-item:nth-child(2) {
+    flex: 6; /* 60% */
+}
+
+/* Right Col: Top ~60%, Bottom ~40% (Like Left) */
+.gallery-col-right > .gallery-item:nth-child(1) {
+    flex: 6;
+}
+.gallery-col-right > .explore-card {
+    flex: 4;
+    height: auto !important; /* Override fixed height */
+}
+
+/* Image Items Default */
+.gallery-item {
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    width: 100%;
+    /* No fixed height, let flex-grow handle it */
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.03);
+}
+
+/* Split Row Internals */
+.gallery-split-row {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    /* Height handled by parent flex */
+}
+
+.gallery-split-row .gallery-item {
+    flex: 1;
+    height: 100%; /* Fill the row height */
+}
+
+.explore-card {
+    background: #f3f4f6;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 30px;
+    cursor: pointer;
+    transition: background 0.3s;
+    border-radius: 20px;
+    width: 100%;
+}
+
+.explore-card:hover {
+    background: #e5e7eb;
+}
+
+/* 6. Testimonials Section */
+.testimonials-section {
+    padding: 80px 0;
+    background: #fff;
+    overflow: hidden; /* For the side strip clipping */
+}
+
+.testimonials-section h2 {
+    font-size: 2.5rem;
+    font-weight: 500;
+    color: #000;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.testimonials-subtext {
+    text-align: center;
+    color: #6b7280;
+    font-size: 1.1rem;
+    margin-bottom: 60px;
+}
+
+/* Layout Container */
+.testimonials-container {
+    display: flex;
+    align-items: stretch;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    min-height: 500px;
+}
+
+/* Left: Main Active Card */
+.testimonial-main-card {
+    flex: 3;
+    background: #fff;
+    /* Box shadow to lift it above background/strip? 
+       Actually user image shows it floating.
+       We'll give it a subtle shadow. 
+    */
+    box-shadow: 0 20px 50px rgba(0,0,0,0.08); 
+    display: flex;
+    flex-direction: row;
+    border-radius: 4px; /* Sharp or slight radius? Image looks sharpish */
+    overflow: hidden;
+    position: relative;
+    z-index: 2; /* Above the strip overlap if any */
+}
+
+.testimonial-main-img {
+    flex: 1;
+    min-width: 300px;
+    object-fit: cover;
+}
+
+.testimonial-content {
+    flex: 1.5;
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #fff;
+}
+
+.quote-icon {
+    font-size: 3rem;
+    color: #d1d5db; /* Light grey quote */
+    margin-bottom: 20px;
+    line-height: 1;
+}
+
+.testimonial-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #1f2937;
+    margin-bottom: 30px;
+}
+
+.testimonial-author-box h5 {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #000;
+    margin: 0;
+}
+
+.testimonial-author-box p {
+    font-size: 0.9rem;
+    color: #4b5563;
+    margin: 5px 0 20px 0;
+}
+
+.linkedin-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #6b7280;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.linkedin-badge i {
+    font-size: 1.2rem;
+    color: #0077b5; /* LinkedIn Blue */
+}
+
+/* Right: Preview Strip */
+.testimonial-preview-strip {
+    flex: 1.2; 
+    display: flex;
+    gap: 0; /* They touch each other */
+}
+
+.preview-slice {
+    flex: 1;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.preview-slice img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.8); /* Slightly dark */
+}
+
+.preview-slice:hover img {
+    filter: brightness(1);
+}
+
+/* Controls Bottom */
+.testimonial-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+    padding: 0 20px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.progress-indicator {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.progress-text {
+    font-size: 0.9rem;
+    color: #374151;
+    font-weight: 500;
+}
+
+.progress-bar-bg {
+    width: 150px;
+    height: 2px;
+    background: #e5e7eb;
+    position: relative;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: #111827;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: width 0.3s ease;
+}
+
+.next-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    color: #111827;
+    cursor: pointer;
+    font-weight: 500;
+    transition: gap 0.2s;
+}
+
+.next-btn:hover {
+    gap: 15px;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .testimonials-container {
+        flex-direction: column;
+    }
+    
+    .testimonial-preview-strip {
+        display: none; /* Hide strip on mobile */
+    }
+
+    .testimonial-main-card {
+        flex-direction: column;
+    }
+
+    .testimonial-main-img {
+        height: 300px;
+        width: 100%;
+    }
+}
