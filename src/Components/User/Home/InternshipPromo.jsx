@@ -1,8 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./InternshipPromo.css";
 
 const InternshipPromo = () => {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const userId = localStorage.getItem("userId");
@@ -34,7 +36,12 @@ const InternshipPromo = () => {
                     Global Work.
                   </p>
                   {!isLoggedIn && (
-                    <button className="btn-register-promo">Register Now</button>
+                    <button
+                      className="btn-register-promo"
+                      onClick={() => navigate("/candidate-signup")}
+                    >
+                      Register Now
+                    </button>
                   )}
                 </div>
               </div>
