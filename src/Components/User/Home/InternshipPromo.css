@@ -1,0 +1,127 @@
+.internship-promo-section {
+  padding: 60px 0;
+  background-color: #fff;
+}
+
+.section-header-title {
+  color: #333;
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.internship-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 21/8; /* Cinema-style ratio to fit banner correctly */
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(76, 29, 149, 0.15);
+}
+
+/* Restoring missing styles */
+.internship-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  z-index: 1;
+}
+
+.internship-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background: linear-gradient(
+    90deg,
+    rgba(76, 29, 149, 0) 0%,
+    rgba(76, 29, 149, 0) 45%, 
+    rgba(88, 28, 135, 0.7) 60%, 
+    rgba(76, 29, 149, 0.95) 100%
+  );
+  display: block;
+  padding: 0;
+}
+
+.internship-content-box {
+  width: 100%;
+  position: relative;
+  z-index: 3;
+  color: #fff;
+  padding-left: 0;
+  mix-blend-mode: normal; 
+}
+
+.internship-title {
+  font-size: 3.2rem;
+  font-weight: 800;
+  margin-bottom: 0.8rem;
+  line-height: 1.2;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+}
+
+.internship-desc {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: #ffffff !important;
+  font-weight: 500;
+  max-width: 480px; 
+  opacity: 1 !important;
+}
+
+.btn-register-promo {
+  background: #ffffff; /* Solid white background */
+  color: #4c1d95; /* Deep purple text */
+  border: none;
+  padding: 12px 40px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Drop shadow for button depth */
+  cursor: pointer;
+  display: inline-block;
+}
+
+.btn-register-promo:hover {
+  background: #fff;
+  color: #7c3aed;
+  border-color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 991px) {
+  .internship-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(76, 29, 149, 0) 0%,
+      rgba(109, 40, 217, 0.6) 40%,
+      rgba(109, 40, 217, 1) 100%
+    );
+     justify-content: center !important;
+     align-items: flex-end !important;
+     padding-bottom: 3rem;
+     padding-right: 0;
+  }
+  
+  .internship-content-box {
+      text-align: center !important;
+      margin-right: 0 !important;
+      padding: 0 20px;
+      max-width: 100%;
+  }
+
+  .internship-title {
+    font-size: 2.5rem;
+  }
+}

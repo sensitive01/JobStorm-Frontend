@@ -7,6 +7,7 @@ import FeaturedJobs from "./NewAndRandomJobs";
 import GlobalHiringHub from "./GlobalHiringHub";
 import AssessmentPromo from "./AssessmentPromo";
 import CareerCTA from "./CareerCTA";
+import InternshipPromo from "./InternshipPromo";
 
 const Homepage = () => {
   return (
@@ -17,6 +18,9 @@ const Homepage = () => {
       {/* START COURSES */}
       <UpcomingCourses />
       {/* END COURSES */}
+      {/* START INTERNSHIP PROMO */}
+      <InternshipPromo />
+      {/* END INTERNSHIP PROMO */}
       {/* START HOW IT WORKS */}
       <HowItWorks />
       {/* END HOW IT WORKS */}
