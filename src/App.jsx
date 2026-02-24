@@ -58,9 +58,12 @@ import SkillBadges from "./Components/User/SkillBadges/SkillBadges";
 import UserDocuments from "./Components/User/Documents/UserDocuments";
 import UserSettings from "./Components/User/Settings/UserSettings";
 
+import ScrollToTop from "./Components/ScrollToTop";
+
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         {/* Layout route */}
         <Route

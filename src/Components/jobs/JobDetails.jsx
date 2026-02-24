@@ -33,6 +33,10 @@ const JobDetails = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState(null);
 
+  // Login Prompt Modal State
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const [showSharePrompt, setShowSharePrompt] = useState(false);
+
   useEffect(() => {
     fetchJobDetails();
   }, [id]);
@@ -83,7 +87,7 @@ const JobDetails = () => {
       };
       setJob(mappedJob);
       const isApplied = jobData?.applications?.filter(
-        (candidate) => candidate?.applicantId === candidateId
+        (candidate) => candidate?.applicantId === candidateId,
       );
       console.log("isApplied", isApplied);
       if (isApplied.length !== 0) {
@@ -104,8 +108,7 @@ const JobDetails = () => {
   const openModal = () => {
     const token = getAuthToken();
     if (!token) {
-      alert("Please login to apply for jobs");
-      navigate("/candidate-login");
+      setShowLoginPrompt(true);
       return;
     }
     setShowModal(true);
@@ -214,7 +217,7 @@ const JobDetails = () => {
         uploadedFileUrl,
         id,
         coverLetter,
-        candidateId
+        candidateId,
       );
       console.log("✅ Application submitted successfully:", response);
       if (response.status === 201) {
@@ -232,8 +235,7 @@ const JobDetails = () => {
   const handleSaveJob = async () => {
     const token = getAuthToken();
     if (!token) {
-      alert("Please login to save jobs");
-      navigate("/login");
+      setShowLoginPrompt(true);
       return;
     }
 
@@ -299,6 +301,137 @@ const JobDetails = () => {
 
   return (
     <div className="job-details-page">
+      {/* Login Prompt Modal */}
+      {showLoginPrompt && (
+        <div
+          className="application-modal-overlay"
+          onClick={(e) => {
+            if (e.target.className === "application-modal-overlay") {
+              setShowLoginPrompt(false);
+            }
+          }}
+        >
+          <div className="application-modal" style={{ maxWidth: "400px" }}>
+            <div className="modal-header">
+              <h2>Authentication Required</h2>
+              <button
+                className="modal-close"
+                onClick={() => setShowLoginPrompt(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div
+              className="modal-body"
+              style={{ textAlign: "center", padding: "30px 25px" }}
+            >
+              <div style={{ fontSize: "48px", marginBottom: "15px" }}>🔒</div>
+              <h3
+                style={{
+                  marginBottom: "15px",
+                  color: "#1a1a1a",
+                  fontWeight: "600",
+                }}
+              >
+                Please Login
+              </h3>
+              <p
+                style={{
+                  color: "#555",
+                  marginBottom: "25px",
+                  lineHeight: "1.5",
+                }}
+              >
+                You need to be logged in to apply for or save jobs. Please log
+                in or create an account to continue.
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "15px",
+                  justifyContent: "center",
+                }}
+              >
+                <button
+                  className="btn btn-cancel"
+                  onClick={() => setShowLoginPrompt(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => navigate("/candidate-login")}
+                >
+                  Login Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Share Prompt Modal */}
+      {showSharePrompt && (
+        <div
+          className="application-modal-overlay"
+          onClick={(e) => {
+            if (e.target.className === "application-modal-overlay") {
+              setShowSharePrompt(false);
+            }
+          }}
+        >
+          <div className="application-modal" style={{ maxWidth: "350px" }}>
+            <div className="modal-header">
+              <h2>Success</h2>
+              <button
+                className="modal-close"
+                onClick={() => setShowSharePrompt(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div
+              className="modal-body"
+              style={{ textAlign: "center", padding: "30px 25px" }}
+            >
+              <div style={{ fontSize: "48px", marginBottom: "15px" }}>✅</div>
+              <h3
+                style={{
+                  marginBottom: "15px",
+                  color: "#1a1a1a",
+                  fontWeight: "600",
+                }}
+              >
+                Link Copied!
+              </h3>
+              <p
+                style={{
+                  color: "#555",
+                  marginBottom: "25px",
+                  lineHeight: "1.5",
+                }}
+              >
+                Job link has been successfully copied to your clipboard.
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "15px",
+                  justifyContent: "center",
+                }}
+              >
+                <button
+                  className="btn btn-primary btn-block"
+                  onClick={() => setShowSharePrompt(false)}
+                >
+                  Okay
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Application Modal */}
       {showModal && (
         <div
@@ -562,8 +695,8 @@ const JobDetails = () => {
                     {uploading
                       ? "Uploading to Cloud..."
                       : submitting
-                      ? "Submitting Application..."
-                      : "Submit Application"}
+                        ? "Submitting Application..."
+                        : "Submit Application"}
                   </button>
                 )}
               </div>
@@ -583,7 +716,7 @@ const JobDetails = () => {
                   src={
                     job.companyLogo ||
                     `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                      job.companyName
+                      job.companyName,
                     )}&background=4A90E2&color=fff&size=128&bold=true`
                   }
                   alt={job.companyName}
@@ -752,14 +885,14 @@ const JobDetails = () => {
                 className="btn btn-block btn-outline"
                 onClick={() => {
                   navigator.clipboard.writeText(window.location.href);
-                  alert("Link copied to clipboard!");
+                  setShowSharePrompt(true);
                 }}
               >
                 🔗 Share Job
               </button>
               <button
                 className="btn btn-block btn-outline"
-                onClick={() => navigate("/jobs")}
+                onClick={() => navigate("/job-list")}
               >
                 📋 Browse More Jobs
               </button>

@@ -10,20 +10,39 @@ const NewAndRandomJobs = () => {
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
 
-  const [activeTab, setActiveTab] = useState("INDIA");
+  const [activeTab, setActiveTab] = useState("Asia");
   const [isPaid, setIsPaid] = useState(false);
   const [allJobs, setAllJobs] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [dynamicTabs, setDynamicTabs] = useState(["INDIA"]);
+  const [dynamicTabs, setDynamicTabs] = useState(["Asia"]);
 
   const inferRegion = (job) => {
-    if (job.region) return job.region;
+    if (job.region) {
+      const r = job.region.toLowerCase();
+      if (r === "india" || r === "asia") return "Asia";
+      if (r === "middle-east" || r === "middle east") return "Middle East";
+      if (r === "europe") return "Europe";
+      if (r === "other") return "Other";
+      // Capitalize first letter of each word
+      return r
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    }
 
     // Fallback logic for older jobs missing the region field
     const loc = (job.location || "").toLowerCase();
-    if (loc.includes("india")) return "INDIA";
+
+    if (
+      loc.includes("singapore") ||
+      loc.includes("malaysia") ||
+      loc.includes("asia") ||
+      loc.includes("india")
+    )
+      return "Asia";
+
     if (
       loc.includes("dubai") ||
       loc.includes("uae") ||
@@ -32,6 +51,7 @@ const NewAndRandomJobs = () => {
       loc.includes("saudi")
     )
       return "Middle East";
+
     if (
       loc.includes("europe") ||
       loc.includes("uk") ||
@@ -39,12 +59,6 @@ const NewAndRandomJobs = () => {
       loc.includes("germany")
     )
       return "Europe";
-    if (
-      loc.includes("singapore") ||
-      loc.includes("malaysia") ||
-      loc.includes("asia")
-    )
-      return "Asia";
 
     return "Other";
   };
@@ -74,26 +88,31 @@ const NewAndRandomJobs = () => {
           const fetchedJobs = response.data.data || [];
           setAllJobs(fetchedJobs);
 
-          // Get unique regions, default to INDIA if missing
+          // Get unique regions, default to Asia if missing
           const fetchedRegions = fetchedJobs.map(inferRegion).filter(Boolean);
           let uniqueRegions = [...new Set(fetchedRegions)];
 
-          // If no jobs at all, ensure INDIA is there
-          if (uniqueRegions.length === 0) {
-            uniqueRegions = ["INDIA"];
-          } else if (!paidUser && !uniqueRegions.includes("INDIA")) {
-            uniqueRegions.unshift("INDIA"); // Ensure INDIA is present for unpaid users
-          }
-
-          // Show all unique regions regardless of payment status
-          setDynamicTabs(uniqueRegions);
-
-          if (paidUser) {
-            // Default to the first available region if paid
-            setActiveTab(uniqueRegions[0]);
+          if (!userId) {
+            setDynamicTabs(["Recent"]);
+            setActiveTab("Recent");
           } else {
-            // Unpaid users always start on INDIA
-            setActiveTab("INDIA");
+            // If no jobs at all, ensure Asia is there
+            if (uniqueRegions.length === 0) {
+              uniqueRegions = ["Asia"];
+            } else if (!paidUser && !uniqueRegions.includes("Asia")) {
+              uniqueRegions.unshift("Asia"); // Ensure Asia is present for unpaid users
+            }
+
+            // Show all unique regions regardless of payment status
+            setDynamicTabs(uniqueRegions);
+
+            if (paidUser) {
+              // Default to the first available region if paid
+              setActiveTab(uniqueRegions[0]);
+            } else {
+              // Unpaid users always start on Asia
+              setActiveTab("Asia");
+            }
           }
         }
         setLoading(false);
@@ -108,11 +127,15 @@ const NewAndRandomJobs = () => {
 
   useEffect(() => {
     if (allJobs.length > 0) {
-      const filteredJobs = allJobs.filter((job) => {
-        const jobRegion = inferRegion(job);
-        return jobRegion.toLowerCase() === activeTab.toLowerCase();
-      });
-      setJobs(filteredJobs.slice(0, 5));
+      if (activeTab === "Recent") {
+        setJobs(allJobs.slice(0, 5));
+      } else {
+        const filteredJobs = allJobs.filter((job) => {
+          const jobRegion = inferRegion(job);
+          return jobRegion.toLowerCase() === activeTab.toLowerCase();
+        });
+        setJobs(filteredJobs.slice(0, 5));
+      }
     } else {
       setJobs([]);
     }
@@ -165,7 +188,7 @@ const NewAndRandomJobs = () => {
                 <span className="visually-hidden">Loading...</span>
               </div>
             </div>
-          ) : activeTab !== "INDIA" && !isPaid ? (
+          ) : activeTab !== "Asia" && activeTab !== "Recent" && !isPaid ? (
             <div className="text-center py-5">
               <div className="mb-4">
                 <i
@@ -173,16 +196,19 @@ const NewAndRandomJobs = () => {
                   style={{ fontSize: "48px", color: "#8b5cf6" }}
                 ></i>
               </div>
-              <h4 className="mb-3">Premium Content Unlocked</h4>
+              <h4 className="mb-3">Premium Content Locked</h4>
               <p className="text-muted mb-4">
-                You must have an active subscription to access premium job roles
-                situated in {activeTab}. Please upgrade to view and apply!
+                {!userId
+                  ? `You must be logged in to access premium job roles situated in ${activeTab}. Please login to view and apply!`
+                  : `You must have an active subscription to access premium job roles situated in ${activeTab}. Please upgrade to view and apply!`}
               </p>
               <button
-                onClick={() => navigate("/pricing")}
+                onClick={() =>
+                  navigate(!userId ? "/candidate-login" : "/price-page")
+                }
                 className="btn btn-primary bg-purple-600 text-white px-4 py-2 rounded-lg"
               >
-                View Subscription Plans
+                {!userId ? "Login to View" : "View Subscription Plans"}
               </button>
             </div>
           ) : jobs.length > 0 ? (
@@ -231,11 +257,11 @@ const NewAndRandomJobs = () => {
                           </div>
                           <div className="meta-item">
                             <i className="mdi mdi-currency-usd"></i>
-                            <span>{job.salary || "$30k-$50k"}</span>
-                          </div>
-                          <div className="meta-item">
-                            <i className="mdi mdi-calendar-blank-outline"></i>
-                            <span>4 Days Remaining</span>
+                            <span>
+                              {job.salaryFrom && job.salaryTo
+                                ? `${job.salaryFrom} - ${job.salaryTo}`
+                                : job.salary || "30k - 50k"}
+                            </span>
                           </div>
                         </div>
                       </div>

@@ -207,7 +207,6 @@ const Resources = () => {
           </section>
         </div>
       </div>
-      <Footer />
     </>
   );
 };
