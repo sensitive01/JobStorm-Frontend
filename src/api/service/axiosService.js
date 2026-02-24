@@ -375,3 +375,13 @@ export const submitContactForm = async (data) => {
     return err;
   }
 };
+
+
+export const getAllCatergories = async () => {
+  try {
+    const response = await axiosInstance.get(`/get-all-categories`);
+    return response;
+  } catch (err) {
+    return err;
+  }
+};

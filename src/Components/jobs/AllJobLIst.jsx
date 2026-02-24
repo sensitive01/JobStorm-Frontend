@@ -46,6 +46,10 @@ const AllJobList = () => {
   const [jobsPerPage, setJobsPerPage] = useState(10);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     fetchJobs();
     fetchSavedJobs();
     checkSubscriptionStatus();
@@ -121,7 +125,7 @@ const AllJobList = () => {
         category,
         jobTitle,
         locationFilter,
-        experience
+        experience,
       );
 
       if (response.status === 200) {
@@ -129,7 +133,7 @@ const AllJobList = () => {
           const hasApplied =
             candidateId &&
             job.applications?.some(
-              (application) => application?.applicantId === candidateId
+              (application) => application?.applicantId === candidateId,
             );
 
           return {
@@ -137,7 +141,7 @@ const AllJobList = () => {
             id: job._id,
             title: job.jobTitle,
             companyLogo: `https://ui-avatars.com/api/?name=${encodeURIComponent(
-              job.companyName
+              job.companyName,
             )}&background=4A90E2&color=fff&size=128&bold=true`,
             salary:
               job.salaryFrom && job.salaryTo
@@ -164,15 +168,15 @@ const AllJobList = () => {
                 .includes(searchQuery.toLowerCase()) ||
               (job.tags &&
                 job.tags.some((tag) =>
-                  tag.toLowerCase().includes(searchQuery.toLowerCase())
-                ))
+                  tag.toLowerCase().includes(searchQuery.toLowerCase()),
+                )),
           );
         }
 
         if (filterType !== "all") {
           mappedJobs = mappedJobs.filter(
             (job) =>
-              job.type && job.type.toLowerCase() === filterType.toLowerCase()
+              job.type && job.type.toLowerCase() === filterType.toLowerCase(),
           );
         }
 
@@ -188,12 +192,12 @@ const AllJobList = () => {
         switch (sortBy) {
           case "newest":
             mappedJobs.sort(
-              (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+              (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
             );
             break;
           case "oldest":
             mappedJobs.sort(
-              (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+              (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
             );
             break;
           case "salary-high":
@@ -201,7 +205,7 @@ const AllJobList = () => {
             break;
           case "salary-low":
             mappedJobs.sort(
-              (a, b) => (a.salaryFrom || 0) - (b.salaryFrom || 0)
+              (a, b) => (a.salaryFrom || 0) - (b.salaryFrom || 0),
             );
             break;
           default:
@@ -211,7 +215,7 @@ const AllJobList = () => {
         setJobs(mappedJobs);
 
         const appliedIds = new Set(
-          mappedJobs.filter((job) => job.isApplied).map((job) => job.id)
+          mappedJobs.filter((job) => job.isApplied).map((job) => job.id),
         );
         setAppliedJobs(appliedIds);
       } else {
@@ -305,7 +309,7 @@ const AllJobList = () => {
         } else {
           setSavedJobs((prev) => new Set(prev).add(jobId));
           alert(
-            "✓ Job saved successfully! You can find it in your saved jobs."
+            "✓ Job saved successfully! You can find it in your saved jobs.",
           );
         }
       }

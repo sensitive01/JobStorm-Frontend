@@ -1,9 +1,8 @@
 /* CandidateOverview.module.css */
 
 .candidateOverviewContainer {
-  background-color: #ffffff;
-  border-radius: 0.5rem;
-  padding: 1.5rem;
+  display: block;
+  /* Removed background and padding to fit inside parent card */
 }
 
 .headerActions {
@@ -147,6 +146,16 @@
 
 .sectionHeader:hover {
   background-color: #f9fafb;
+}
+
+.sectionHeaderNoCollapse {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #f3f4f6;
 }
 
 .sectionHeaderLeft {

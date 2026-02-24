@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../jobportal.css";
+import "./MySavedJobs.css";
 import {
   candidateSaveJob,
   getSavedJobDetails,
@@ -65,7 +65,7 @@ const AllJobList = () => {
           const hasApplied =
             candidateId &&
             job.applications?.some(
-              (application) => application?.applicantId === candidateId
+              (application) => application?.applicantId === candidateId,
             );
 
           return {
@@ -74,7 +74,7 @@ const AllJobList = () => {
             id: job._id,
             title: job.jobTitle,
             companyLogo: `https://ui-avatars.com/api/?name=${encodeURIComponent(
-              job.companyName
+              job.companyName,
             )}&background=4A90E2&color=fff&size=128&bold=true`,
             salary:
               job.salaryFrom && job.salaryTo
@@ -102,8 +102,8 @@ const AllJobList = () => {
                 .includes(searchQuery.toLowerCase()) ||
               (job.tags &&
                 job.tags.some((tag) =>
-                  tag.toLowerCase().includes(searchQuery.toLowerCase())
-                ))
+                  tag.toLowerCase().includes(searchQuery.toLowerCase()),
+                )),
           );
         }
 
@@ -111,7 +111,7 @@ const AllJobList = () => {
         if (filterType !== "all") {
           mappedJobs = mappedJobs.filter(
             (job) =>
-              job.type && job.type.toLowerCase() === filterType.toLowerCase()
+              job.type && job.type.toLowerCase() === filterType.toLowerCase(),
           );
         }
 
@@ -119,12 +119,12 @@ const AllJobList = () => {
         switch (sortBy) {
           case "newest":
             mappedJobs.sort(
-              (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+              (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
             );
             break;
           case "oldest":
             mappedJobs.sort(
-              (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+              (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
             );
             break;
           case "salary-high":
@@ -132,7 +132,7 @@ const AllJobList = () => {
             break;
           case "salary-low":
             mappedJobs.sort(
-              (a, b) => (a.salaryFrom || 0) - (b.salaryFrom || 0)
+              (a, b) => (a.salaryFrom || 0) - (b.salaryFrom || 0),
             );
             break;
           default:
@@ -143,7 +143,7 @@ const AllJobList = () => {
 
         // Update applied jobs Set from the mapped jobs
         const appliedIds = new Set(
-          mappedJobs.filter((job) => job.isApplied).map((job) => job.id)
+          mappedJobs.filter((job) => job.isApplied).map((job) => job.id),
         );
         setAppliedJobs(appliedIds);
       } else {
@@ -157,8 +157,6 @@ const AllJobList = () => {
       setLoading(false);
     }
   };
-
-
 
   // Fetch user's saved jobs
   const fetchSavedJobs = async () => {
@@ -227,7 +225,7 @@ const AllJobList = () => {
         } else {
           setSavedJobs((prev) => new Set(prev).add(jobId));
           alert(
-            "✓ Job saved successfully! You can find it in your saved jobs."
+            "✓ Job saved successfully! You can find it in your saved jobs.",
           );
         }
       }
@@ -256,231 +254,157 @@ const AllJobList = () => {
   };
 
   return (
-    <div className="all-job-list">
-      {/* Header Section */}
-      <div className="job-list-header">
-        <div className="container">
-          <h1>Saved Jobs</h1>
-          <p>Browse through {jobs.length} available positions</p>
+    <div className="my-saved-jobs">
+      {/* Search and Filter Section */}
+      <div className="filters-section">
+        <div className="search-box">
+          <i className="uil uil-search"></i>
+          <input
+            type="text"
+            placeholder="Search saved jobs..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        <div className="filter-controls">
+          <select
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+            className="form-select"
+          >
+            <option value="all">All Types</option>
+            <option value="Full Time">Full Time</option>
+            <option value="Part Time">Part Time</option>
+            <option value="Contract">Contract</option>
+            <option value="Freelance">Freelance</option>
+            <option value="Remote">Remote</option>
+          </select>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="form-select"
+          >
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="salary-high">Salary: High to Low</option>
+            <option value="salary-low">Salary: Low to High</option>
+          </select>
         </div>
       </div>
 
-      <div className="container">
-        {/* Search and Filter Section */}
-        <div className="search-filter-section">
-          <div className="row align-items-center">
-            <div className="col-md-4">
-              <div className="search-box">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search jobs..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <i className="search-icon">🔍</i>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <select
-                className="form-select"
-                value={filterType}
-                onChange={(e) => setFilterType(e.target.value)}
-              >
-                <option value="all">All Job Types</option>
-                <option value="full-time">Full Time</option>
-                <option value="part-time">Part Time</option>
-                <option value="contract">Contract</option>
-                <option value="internship">Internship</option>
-                <option value="freelance">Freelance</option>
-              </select>
-            </div>
-            <div className="col-md-4">
-              <select
-                className="form-select"
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-              >
-                <option value="newest">Newest First</option>
-                <option value="oldest">Oldest First</option>
-                <option value="salary-high">Salary: High to Low</option>
-                <option value="salary-low">Salary: Low to High</option>
-              </select>
-            </div>
-          </div>
+      {/* Error Message */}
+      {error && (
+        <div className="alert alert-danger">
+          <strong>Error:</strong> {error}
         </div>
+      )}
 
-        {/* Error Message */}
-        {error && (
-          <div className="alert alert-danger">
-            <strong>Error:</strong> {error}
-          </div>
-        )}
+      {/* Jobs Grid */}
+      {loading ? (
+        <div className="loading-state">
+          <div className="spinner"></div>
+          <p>Loading your saved jobs...</p>
+        </div>
+      ) : jobs.length === 0 ? (
+        <div className="empty-state">
+          <div className="empty-icon">❤️</div>
+          <h3>No Saved Jobs Found</h3>
+          <p>
+            {searchQuery || filterType !== "all"
+              ? "Try adjusting your search or filters"
+              : "Jobs you save will appear here for easy access"}
+          </p>
+          <button className="browse-btn" onClick={() => navigate("/job-list")}>
+            Browse Jobs
+          </button>
+        </div>
+      ) : (
+        <div className="saved-jobs-grid">
+          {jobs.map((job) => (
+            <div key={job.id} className="saved-job-card">
+              <div className="card-top">
+                <img
+                  src={job.companyLogo}
+                  alt={job.companyName}
+                  className="company-logo"
+                />
+                <button
+                  className="remove-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    console.log("Removing job:", job.id);
+                    // Pass job.id. If job.id is missing, try job._id as fallback
+                    handleSaveJob(job.id || job._id);
+                  }}
+                  title="Remove from saved"
+                >
+                  <i className="uil uil-trash-alt"></i>
+                </button>
+              </div>
 
-        {/* Loading State */}
-        {loading ? (
-          <div className="loading-container">
-            <div className="spinner"></div>
-            <p>Loading jobs...</p>
-          </div>
-        ) : jobs.length === 0 ? (
-          <div className="no-jobs">
-            <div className="no-jobs-icon">📋</div>
-            <h3>No Jobs Found</h3>
-            <p>Try adjusting your search or filters</p>
-          </div>
-        ) : (
-          /* Job List */
-          <div className="job-cards-container">
-            {jobs.map((job) => (
-              <div key={job.id || job._id} className="job-card">
-                {/* Posted Date and Save Button in Same Line */}
-                <div className="job-card-top-bar">
-                  <div className="job-posted">
-                    Posted {job.postedDate || "2 days ago"}
-                  </div>
+              <div className="card-content">
+                <h3 className="job-title">{job.title || job.jobTitle}</h3>
+                <p className="company-name">{job.companyName}</p>
+
+                <div className="job-tags">
+                  <span className="tag">
+                    <i className="uil uil-map-marker"></i>{" "}
+                    {job.location || "N/A"}
+                  </span>
+                  <span className="tag">
+                    <i className="uil uil-clock"></i> {job.type || job.jobType}
+                  </span>
+                  {job.salary && (
+                    <span className="tag salary">
+                      <i className="uil uil-bill"></i> {job.salary}
+                    </span>
+                  )}
+                </div>
+
+                <div className="skills-preview">
+                  {job.tags?.slice(0, 3).map((skill, index) => (
+                    <span key={index} className="skill-chip">
+                      {skill}
+                    </span>
+                  ))}
+                  {job.tags?.length > 3 && (
+                    <span className="more-skills">+{job.tags.length - 3}</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="card-footer">
+                <div className="meta-info">
+                  {job.deadline && (
+                    <span className="deadline">
+                      Expires: {new Date(job.deadline).toLocaleDateString()}
+                    </span>
+                  )}
+                  <span className="saved-date">Posted {job.postedDate}</span>
+                </div>
+                <div className="action-buttons">
                   <button
-                    className={`save-btn ${
-                      isSaved(job.id || job._id) ? "saved" : ""
-                    }`}
-                    onClick={() => handleSaveJob(job.id || job._id)}
-                    title={
-                      isSaved(job.id || job._id)
-                        ? "Remove from saved"
-                        : "Save for later"
-                    }
+                    className="view-btn"
+                    onClick={() => navigate(`/job-preview/${job.id}`)}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill={isSaved(job.id || job._id) ? "#dc3545" : "none"}
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="bookmark-icon"
-                    >
-                      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                    </svg>
+                    View Details
+                  </button>
+                  <button
+                    className={`apply-btn ${job.isApplied ? "applied" : ""}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (!job.isApplied) handleApply(job.id);
+                    }}
+                    disabled={job.isApplied}
+                  >
+                    {job.isApplied ? "Applied" : "Apply Now"}
                   </button>
                 </div>
-
-                {/* Job Card Header */}
-                <div className="job-card-header">
-                  <div className="company-info">
-                    <img
-                      src={job.companyLogo || "https://via.placeholder.com/60"}
-                      alt={job.companyName}
-                      className="company-logo"
-                    />
-                    <div className="company-text-info">
-                      <h3
-                        className="job-title"
-                        title={job.title || job.jobTitle}
-                      >
-                        {job.title || job.jobTitle}
-                      </h3>
-                      <p
-                        className="company-name"
-                        title={job.companyName || job.company}
-                      >
-                        {job.companyName || job.company}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Job Details */}
-                <div className="job-details">
-                  <div className="job-detail-item" title={job.location}>
-                    <span className="icon">📍</span>
-                    <span>{job.location}</span>
-                  </div>
-                  {job.salary && (
-                    <div className="job-detail-item" title={job.salary}>
-                      <span className="icon">💰</span>
-                      <span>{job.salary}</span>
-                    </div>
-                  )}
-                  {job.experience && (
-                    <div className="job-detail-item" title={job.experience}>
-                      <span className="icon">⏱️</span>
-                      <span>{job.experience}</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Job Description */}
-                {job.description && (
-                  <p className="job-description" title={job.description}>
-                    {job.description}
-                  </p>
-                )}
-
-                {/* Job Tags */}
-                <div className="job-tags">
-                  {job.type && (
-                    <span className={`badge ${getJobTypeBadge(job.type)}`}>
-                      {job.type}
-                    </span>
-                  )}
-                  {/* Show max 4 skill tags to prevent overflow */}
-                  {job.tags &&
-                    job.tags.slice(0, 4).map((tag, index) => (
-                      <span
-                        key={index}
-                        className="badge badge-light"
-                        title={tag}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  {/* Show +X more if there are additional tags */}
-                  {job.tags && job.tags.length > 4 && (
-                    <span
-                      className="badge badge-secondary"
-                      title={job.tags.slice(4).join(", ")}
-                    >
-                      +{job.tags.length - 4} more
-                    </span>
-                  )}
-                  {job.urgent && (
-                    <span className="badge badge-danger">Urgent</span>
-                  )}
-                </div>
-
-                {/* Job Card Footer */}
-                <div className="job-card-footer">
-                  <div className="job-actions">
-                    <button
-                      className="btn btn-outline"
-                      onClick={() =>
-                        navigate(`/job-preview/${job.id || job._id}`)
-                      }
-                    >
-                      View Details
-                    </button>
-                    {isApplied(job.id || job._id) ? (
-                      <button className="btn btn-applied" disabled>
-                        ✓ Applied
-                      </button>
-                    ) : (
-                      <button
-                        className="btn btn-primary"
-                        onClick={() => handleApply(job.id || job._id)}
-                      >
-                        Apply Now
-                      </button>
-                    )}
-                  </div>
-                </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

@@ -1,0 +1,389 @@
+/* MySavedJobs.css - Independent Styles for Saved Jobs Page */
+
+.my-saved-jobs {
+  padding: 20px 0 60px 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* ===========================
+   Filters Section
+   =========================== */
+.my-saved-jobs .filters-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.my-saved-jobs .search-box {
+  flex: 1;
+  min-width: 300px;
+  position: relative;
+}
+
+.my-saved-jobs .search-box i {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 18px;
+}
+
+.my-saved-jobs .search-box input {
+  width: 100%;
+  padding: 12px 15px 12px 45px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.my-saved-jobs .search-box input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.my-saved-jobs .filter-controls {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.my-saved-jobs .form-select {
+  padding: 10px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: white;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+  min-width: 150px;
+}
+
+.my-saved-jobs .form-select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+/* ===========================
+   Jobs Grid
+   =========================== */
+.my-saved-jobs .saved-jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 25px;
+}
+
+/* ===========================
+   Job Card
+   =========================== */
+.my-saved-jobs .saved-job-card {
+  background: white;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.my-saved-jobs .saved-job-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+/* Card Top: Logo & Remove Button */
+.my-saved-jobs .card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.my-saved-jobs .company-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.my-saved-jobs .remove-btn {
+  background: white;
+  border: 1px solid #ffdede;
+  color: #ff4757;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 16px;
+}
+
+.my-saved-jobs .remove-btn:hover {
+  background: #ff4757;
+  color: white;
+  border-color: #ff4757;
+  transform: rotate(90deg);
+}
+
+/* Card Content */
+.my-saved-jobs .card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.my-saved-jobs .job-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 5px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.my-saved-jobs .company-name {
+  font-size: 14px;
+  color: #636e72;
+  margin: 0 0 15px 0;
+  font-weight: 500;
+}
+
+/* Job Tags: Location, Type, Salary */
+.my-saved-jobs .job-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.my-saved-jobs .tag {
+  font-size: 13px;
+  color: #555;
+  background: #f8f9fa;
+  padding: 6px 12px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.my-saved-jobs .tag i {
+  color: #667eea;
+  font-size: 14px;
+}
+
+.my-saved-jobs .tag.salary {
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.my-saved-jobs .tag.salary i {
+  color: #22c55e;
+}
+
+/* Skills Preview */
+.my-saved-jobs .skills-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.my-saved-jobs .skill-chip {
+  font-size: 12px;
+  padding: 4px 10px;
+  background: #f1f2f6;
+  border-radius: 6px;
+  color: #2f3542;
+  font-weight: 500;
+}
+
+.my-saved-jobs .more-skills {
+  font-size: 12px;
+  padding: 4px 8px;
+  color: #747d8c;
+}
+
+/* Card Footer */
+.my-saved-jobs .card-footer {
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid #f1f2f6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.my-saved-jobs .meta-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.my-saved-jobs .saved-date, .my-saved-jobs .deadline {
+  font-size: 12px;
+  color: #a4b0be;
+}
+
+.my-saved-jobs .action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.my-saved-jobs .view-btn {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2f3542;
+  background: white;
+  border: 1px solid #ced6e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.my-saved-jobs .view-btn:hover {
+  background: #f1f2f6;
+  border-color: #b2bec3;
+}
+
+.my-saved-jobs .apply-btn {
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+  transition: all 0.2s;
+}
+
+.my-saved-jobs .apply-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+}
+
+.my-saved-jobs .apply-btn.applied {
+  background: #2ed573;
+  cursor: default;
+  box-shadow: none;
+}
+
+.my-saved-jobs .apply-btn.applied:hover {
+  transform: none;
+}
+
+/* ===========================
+   Empty & Loading States
+   =========================== */
+.my-saved-jobs .empty-state, .my-saved-jobs .loading-state {
+  background: white;
+  padding: 60px 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+}
+
+.my-saved-jobs .empty-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.my-saved-jobs .browse-btn {
+  margin-top: 20px;
+  padding: 12px 30px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.my-saved-jobs .browse-btn:hover {
+  background: #5a67d8;
+}
+
+/* Error Alert */
+.my-saved-jobs .alert {
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.my-saved-jobs .alert-danger {
+  background-color: #ffe5e5;
+  color: #d63031;
+  border: 1px solid #ff7675;
+}
+
+.my-saved-jobs .spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ===========================
+   Responsive
+   =========================== */
+@media (max-width: 768px) {
+  .my-saved-jobs .filters-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .my-saved-jobs .filter-controls {
+    justify-content: space-between;
+  }
+  
+  .my-saved-jobs .form-select {
+    flex: 1;
+  }
+  
+  .my-saved-jobs .saved-jobs-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}

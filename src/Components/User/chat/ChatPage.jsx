@@ -219,11 +219,19 @@ const ChatPage = () => {
   };
 
   const filteredChats = dummyChats.filter((chat) =>
-    chat.name.toLowerCase().includes(searchTerm.toLowerCase())
+    chat.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
-    <div className="chat-container">
+    <div
+      className="chat-container"
+      style={{
+        margin: 0,
+        marginTop: 0,
+        height: "calc(100vh - 140px)",
+        width: "100%",
+      }}
+    >
       {/* Sidebar with chat list */}
       <div className="chat-sidebar">
         <div className="chat-sidebar-header">

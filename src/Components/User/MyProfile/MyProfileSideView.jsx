@@ -11,22 +11,10 @@ const MyProfileSideView = ({ data, profileImage }) => {
     );
   }
 
-  const handleDownloadResume = () => {
-    if (data.resume?.url) {
-      window.open(data.resume.url, "_blank");
-    }
-  };
-
-  const handleDownloadCoverLetter = () => {
-    if (data.coverLetterFile?.url) {
-      window.open(data.coverLetterFile.url, "_blank");
-    }
-  };
-
   return (
     <div>
       {/* Profile Section */}
-      <div className="text-center pb-4 border-bottom">
+      <div className="text-center pb-4">
         <img
           src={profileImage}
           alt={data.userName}
@@ -108,161 +96,82 @@ const MyProfileSideView = ({ data, profileImage }) => {
           )}
         </ul>
       </div>
+      <style>{`
+        .candidate-detail-social-menu .list-inline-item:not(:last-child) {
+          margin-right: 0.5rem;
+        }
+        
+        .social-link {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          font-size: 20px;
+          border-radius: 8px; /* Rounded square look */
+          transition: all 0.3s ease;
+          text-decoration: none;
+        }
 
-      {/* Profile Summary Section */}
-      {data.profilesummary && (
-        <div className="py-4 border-bottom">
-          <h6 className="fs-16 fw-bold mb-3">Profile Summary</h6>
-          <p className="text-muted fs-14 mb-0" style={{ lineHeight: "1.6", textAlign: "justify" }}>
-            {data.profilesummary}
-          </p>
-        </div>
-      )}
+        .social-link:hover {
+          transform: translateY(-2px);
+        }
 
-      {/* Contact Details */}
-      <div className="py-4 border-bottom">
-        <h6 className="fs-16 fw-bold mb-3">Contact Information</h6>
-        <div className="candidate-profile-overview">
-          {data.userEmail && (
-            <div className="d-flex align-items-center mb-3">
-              <div className="flex-shrink-0">
-                <i className="uil uil-envelope-alt text-primary fs-20" />
-              </div>
-              <div className="flex-grow-1 ms-3">
-                <h6 className="fs-14 mb-1 text-muted">Email</h6>
-                <p className="mb-0 fs-14 text-break">{data.userEmail}</p>
-              </div>
-            </div>
-          )}
+        .btn-soft-primary {
+          background-color: rgba(99, 102, 241, 0.15);
+          color: #6366f1;
+        }
+        
+        .btn-soft-primary:hover {
+          background-color: #6366f1;
+          color: #ffffff;
+        }
 
-          {data.userMobile && (
-            <div className="d-flex align-items-center mb-3">
-              <div className="flex-shrink-0">
-                <i className="uil uil-phone text-success fs-20" />
-              </div>
-              <div className="flex-grow-1 ms-3">
-                <h6 className="fs-14 mb-1 text-muted">Phone</h6>
-                <p className="mb-0 fs-14">{data.userMobile}</p>
-              </div>
-            </div>
-          )}
+        .btn-soft-dark {
+          background-color: rgba(33, 37, 41, 0.15);
+          color: #212529;
+        }
+        
+        .btn-soft-dark:hover {
+          background-color: #212529;
+          color: #ffffff;
+        }
 
-          {data.currentCity && (
-            <div className="d-flex align-items-center mb-3">
-              <div className="flex-shrink-0">
-                <i className="uil uil-map-marker text-danger fs-20" />
-              </div>
-              <div className="flex-grow-1 ms-3">
-                <h6 className="fs-14 mb-1 text-muted">Location</h6>
-                <p className="mb-0 fs-14">
-                  {data.currentCity}
-                  {data.state && `, ${data.state}`}
-                </p>
-              </div>
-            </div>
-          )}
+        .btn-soft-info {
+          background-color: rgba(14, 165, 233, 0.15);
+          color: #0ea5e9;
+        }
+        
+        .btn-soft-info:hover {
+          background-color: #0ea5e9;
+          color: #ffffff;
+        }
 
-          {data.totalExperience && (
-            <div className="d-flex align-items-center mb-3">
-              <div className="flex-shrink-0">
-                <i className="uil uil-briefcase text-info fs-20" />
-              </div>
-              <div className="flex-grow-1 ms-3">
-                <h6 className="fs-14 mb-1 text-muted">Experience</h6>
-                <p className="mb-0 fs-14">{data.totalExperience} years</p>
-              </div>
-            </div>
-          )}
+        .btn-soft-danger {
+          background-color: rgba(239, 68, 68, 0.15);
+          color: #ef4444;
+        }
+        
+        .btn-soft-danger:hover {
+          background-color: #ef4444;
+          color: #ffffff;
+        }
 
-          {data.expectedSalary && (
-            <div className="d-flex align-items-center mb-3">
-              <div className="flex-shrink-0">
-                <i className="uil uil-dollar-sign text-warning fs-20" />
-              </div>
-              <div className="flex-grow-1 ms-3">
-                <h6 className="fs-14 mb-1 text-muted">Expected Salary</h6>
-                <p className="mb-0 fs-14">
-                  ₹{(data.expectedSalary / 100000).toFixed(1)} LPA
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+        .btn-soft-success {
+          background-color: rgba(34, 197, 94, 0.15);
+          color: #22c55e;
+        }
+        
+        .btn-soft-success:hover {
+          background-color: #22c55e;
+          color: #ffffff;
+        }
 
-      {/* Resume & Documents */}
-      <div className="py-4 border-bottom">
-        <h6 className="fs-16 fw-bold mb-3">Documents</h6>
-
-        {data.resume?.url && (
-          <button
-            onClick={handleDownloadResume}
-            className="btn btn-soft-primary w-100 mb-2"
-          >
-            <i className="uil uil-file-download me-2" />
-            Download Resume
-          </button>
-        )}
-
-        {data.coverLetterFile?.url && (
-          <button
-            onClick={handleDownloadCoverLetter}
-            className="btn btn-soft-info w-100"
-          >
-            <i className="uil uil-file-download me-2" />
-            Download Cover Letter
-          </button>
-        )}
-      </div>
-
-      {/* Additional Info */}
-      <div className="py-4">
-        <h6 className="fs-16 fw-bold mb-3">Additional Details</h6>
-        <div className="candidate-profile-overview">
-          {data.dob && (
-            <div className="d-flex justify-content-between mb-2">
-              <span className="text-muted fs-14">Date of Birth</span>
-              <span className="fs-14 fw-semibold">
-                {new Date(data.dob).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })}
-              </span>
-            </div>
-          )}
-
-          {data.gender && (
-            <div className="d-flex justify-content-between mb-2">
-              <span className="text-muted fs-14">Gender</span>
-              <span className="fs-14 fw-semibold">{data.gender}</span>
-            </div>
-          )}
-
-          {data.maritalStatus && (
-            <div className="d-flex justify-content-between mb-2">
-              <span className="text-muted fs-14">Marital Status</span>
-              <span className="fs-14 fw-semibold">{data.maritalStatus}</span>
-            </div>
-          )}
-
-          {data.preferredLocation && (
-            <div className="d-flex justify-content-between mb-2">
-              <span className="text-muted fs-14">Preferred Location</span>
-              <span className="fs-14 fw-semibold">
-                {data.preferredLocation}
-              </span>
-            </div>
-          )}
-
-          {data.specialization && (
-            <div className="d-flex justify-content-between mb-2">
-              <span className="text-muted fs-14">Specialization</span>
-              <span className="fs-14 fw-semibold">{data.specialization}</span>
-            </div>
-          )}
-        </div>
-      </div>
+        .avatar-lg {
+          width: 100px;
+          height: 100px;
+        }
+      `}</style>
     </div>
   );
 };

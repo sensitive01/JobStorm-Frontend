@@ -1,14 +1,21 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 // TopHeader import removed
-import { getDistictValues, getMyName } from "../../../api/service/axiosService";
+import {
+  getDistictValues,
+  getMyName,
+  getUserDetails,
+} from "../../../api/service/axiosService";
 import accountImage from "../../../../public/assets/images/account.jpg";
 import HeaderAuthButtons from "./HeaderAuthButtons";
 
 const Header = () => {
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
-  const [name, setName] = useState("");
+  const [name, setName] = useState(localStorage.getItem("userName") || "");
+  const [profilePic, setProfilePic] = useState(
+    localStorage.getItem("userProfilePic") || null,
+  );
   const isNavigatingRef = useRef(false);
   const [categories, setCategories] = useState([]);
   const [locations, setLocations] = useState([]);
@@ -17,12 +24,28 @@ const Header = () => {
     if (userId) {
       const fetchData = async () => {
         try {
-          const response = await getMyName(userId);
-          if (response.status === 200) {
-            setName(response.data.userName);
+          // Fetch user name
+          const nameResponse = await getMyName(userId);
+          if (nameResponse.status === 200) {
+            const fetchedName = nameResponse.data.userName;
+            setName(fetchedName);
+            localStorage.setItem("userName", fetchedName);
+          }
+
+          // Fetch full details for profile pic
+          const userDetailsResponse = await getUserDetails(userId);
+          if (
+            userDetailsResponse.status === 200 &&
+            userDetailsResponse.data.data
+          ) {
+            const picUrl = userDetailsResponse.data.data.userProfilePic?.url;
+            setProfilePic(picUrl);
+            if (picUrl) {
+              localStorage.setItem("userProfilePic", picUrl);
+            }
           }
         } catch (error) {
-          console.error("Error fetching user name:", error);
+          console.error("Error fetching user data:", error);
         }
       };
       fetchData();
@@ -87,7 +110,7 @@ const Header = () => {
       });
 
       const toggles = document.querySelectorAll(
-        '[data-bs-toggle="dropdown"][aria-expanded="true"]'
+        '[data-bs-toggle="dropdown"][aria-expanded="true"]',
       );
       toggles.forEach((toggle) => {
         toggle.setAttribute("aria-expanded", "false");
@@ -405,7 +428,7 @@ const Header = () => {
 
           <nav className="navbar navbar-expand-lg fixed-top sticky" id="navbar">
             <div className="container-fluid custom-container">
-              <a className="navbar-brand text-dark fw-bold" href="/">
+              <Link className="navbar-brand text-dark fw-bold" to="/">
                 <img
                   src="assets/images/logo-dark.png"
                   alt=""
@@ -416,7 +439,7 @@ const Header = () => {
                   alt=""
                   className="logo-light"
                 />
-              </a>
+              </Link>
 
               <div
                 className="collapse navbar-collapse justify-content-end gap-4"
@@ -443,14 +466,14 @@ const Header = () => {
                       aria-labelledby="aboutDropdown"
                     >
                       <li>
-                        <a className="dropdown-item" href="/about-us">
+                        <Link className="dropdown-item" to="/about-us">
                           About JobsStorm
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a className="dropdown-item" href="/contact-us">
+                        <Link className="dropdown-item" to="/contact-us">
                           Contact Us
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                   </li>
@@ -489,9 +512,9 @@ const Header = () => {
                                 {category}
                               </a>
                             ))}
-                            <a className="dropdown-item" href="/job-list">
+                            <Link className="dropdown-item" to="/job-list">
                               View All Categories
-                            </a>
+                            </Link>
                           </div>
                         </div>
                         <div className="col-lg-4">
@@ -512,9 +535,9 @@ const Header = () => {
                                 {location}
                               </a>
                             ))}
-                            <a className="dropdown-item" href="/job-list">
+                            <Link className="dropdown-item" to="/job-list">
                               Explore Locations
-                            </a>
+                            </Link>
                           </div>
                         </div>
                         <div className="col-lg-4">
@@ -564,34 +587,34 @@ const Header = () => {
                       aria-labelledby="companiesDropdown"
                     >
                       <li>
-                        <a
+                        <Link
                           className="dropdown-item"
-                          href="/associated-company-list"
+                          to="/associated-company-list"
                         >
                           Browse Companies
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a className="dropdown-item" href="/employer-login">
+                        <Link className="dropdown-item" to="/employer-login">
                           Post a Job
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                   </li>
 
                   {/* Learn Link */}
                   <li className="nav-item">
-                    <a href="/learn" className="nav-link">
+                    <Link to="/learn" className="nav-link">
                       Learn
-                    </a>
+                    </Link>
                   </li>
 
                   {/* Resources Link */}
                   <li className="nav-item">
                     {/* Using FAQ/Pricing/Policy as Resources */}
-                    <a href="/faq-pages" className="nav-link">
+                    <Link to="/faq-pages" className="nav-link">
                       Resources
-                    </a>
+                    </Link>
                   </li>
 
                   {/* Internship Dropdown */}
@@ -610,9 +633,9 @@ const Header = () => {
                       aria-labelledby="internshipDropdown"
                     >
                       <li>
-                        <a className="dropdown-item" href="/internship">
+                        <Link className="dropdown-item" to="/internship">
                           Internship Program
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                   </li>
@@ -652,11 +675,12 @@ const Header = () => {
                           aria-expanded="false"
                         >
                           <img
-                            src={accountImage}
+                            src={profilePic || accountImage}
                             alt="user"
                             width={35}
                             height={35}
                             className="rounded-circle me-1"
+                            style={{ objectFit: "cover" }}
                           />
                           <span className="d-none d-xl-inline-block fw-medium">
                             Hi, {name}
@@ -667,35 +691,35 @@ const Header = () => {
                           aria-labelledby="userdropdown"
                         >
                           <li>
-                            <a className="dropdown-item" href="/my-profile">
+                            <Link className="dropdown-item" to="/my-profile">
                               My Profile
-                            </a>
+                            </Link>
                           </li>
                           <li>
-                            <a
+                            <Link
                               className="dropdown-item"
-                              href="/my-applied-jobs"
+                              to="/my-applied-jobs"
                             >
                               Applied Jobs
-                            </a>
+                            </Link>
                           </li>
                           <li>
-                            <a className="dropdown-item" href="/my-saved-jobs">
+                            <Link className="dropdown-item" to="/my-saved-jobs">
                               Saved Jobs
-                            </a>
+                            </Link>
                           </li>
                           <li>
-                            <a className="dropdown-item" href="/my-chats">
+                            <Link className="dropdown-item" to="/my-chats">
                               My Chats
-                            </a>
+                            </Link>
                           </li>
                           <li>
-                            <a
+                            <Link
                               className="dropdown-item"
-                              href="/transaction-history"
+                              to="/transaction-history"
                             >
                               My Subscription
-                            </a>
+                            </Link>
                           </li>
 
                           <li>
@@ -733,11 +757,12 @@ const Header = () => {
                           aria-expanded="false"
                         >
                           <img
-                            src={accountImage}
+                            src={profilePic || accountImage}
                             alt="user"
                             width={30}
                             height={30}
                             className="rounded-circle"
+                            style={{ objectFit: "cover" }}
                           />
                         </a>
                         <ul
@@ -745,35 +770,35 @@ const Header = () => {
                           aria-labelledby="userdropdownMobile"
                         >
                           <li>
-                            <a
+                            <Link
                               className="dropdown-item"
-                              href="/manage-jobs-page"
+                              to="/manage-jobs-page"
                             >
                               Manage Jobs
-                            </a>
+                            </Link>
                           </li>
                           <li>
-                            <a className="dropdown-item" href="/my-profile">
+                            <Link className="dropdown-item" to="/my-profile">
                               My Profile
-                            </a>
+                            </Link>
                           </li>
                           <li>
-                            <a
+                            <Link
                               className="dropdown-item"
-                              href="/my-applied-jobs"
+                              to="/my-applied-jobs"
                             >
                               Applied Jobs
-                            </a>
+                            </Link>
                           </li>
                           <li>
-                            <a className="dropdown-item" href="/my-saved-jobs">
+                            <Link className="dropdown-item" to="/my-saved-jobs">
                               Saved Jobs
-                            </a>
+                            </Link>
                           </li>
                           <li>
-                            <a className="dropdown-item" href="/my-chats">
+                            <Link className="dropdown-item" to="/my-chats">
                               My Chats
-                            </a>
+                            </Link>
                           </li>
                           <li>
                             <a

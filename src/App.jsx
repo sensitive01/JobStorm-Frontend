@@ -50,6 +50,13 @@ import ShareProfile from "./Components/User/shareProfile/ShareProfile";
 import TransactionHistory from "./Components/User/pricing/TransactionHistory";
 import PaymentFailure from "./Components/User/pricing/PaymentFailure";
 
+import UserDashboardLayout from "./Components/User/Layout/UserDashboardLayout";
+import UserDashboard from "./Components/User/Dashboard/UserDashboard";
+import ResumeMatcher from "./Components/User/ResumeMatcher/ResumeMatcher";
+import SkillBadges from "./Components/User/SkillBadges/SkillBadges";
+import UserDocuments from "./Components/User/Documents/UserDocuments";
+import UserSettings from "./Components/User/Settings/UserSettings";
+
 function App() {
   return (
     <Router>
@@ -81,8 +88,22 @@ function App() {
           <Route index element={<Homepage />} /> {/* Default route */}
           <Route path="/contact-us" element={<Contact />} />
           <Route path="/about-us" element={<About />} />
-          <Route path="/my-profile" element={<MyProfile />} />
-          <Route path="/edit-myprofile" element={<MyProfile />} />
+          <Route element={<UserDashboardLayout />}>
+            <Route path="/user-dashboard" element={<UserDashboard />} />
+            <Route path="/my-profile" element={<MyProfile />} />
+            <Route path="/edit-myprofile" element={<MyProfile />} />
+            <Route path="/my-applied-jobs" element={<AppliedJobsPage />} />
+            <Route path="/my-saved-jobs" element={<MySavedJobs />} />
+            <Route path="/my-chats" element={<ChatPage />} />
+            <Route
+              path="/transaction-history"
+              element={<TransactionHistory />}
+            />
+            <Route path="/resume-matcher" element={<ResumeMatcher />} />
+            <Route path="/skill-badges" element={<SkillBadges />} />
+            <Route path="/documents" element={<UserDocuments />} />
+            <Route path="/settings" element={<UserSettings />} />
+          </Route>
           <Route path="/post-jobs" element={<PostJob />} />
           <Route path="/saved-jobs" element={<SavedJobs />} />
           <Route path="/jobs-list-view" element={<JobsListView />} />
@@ -114,20 +135,16 @@ function App() {
           <Route path="/saved-candidate-page" element={<SavedCandidate />} />
           <Route path="/job-list" element={<AllJobList />} />
           <Route path="/job-preview/:id" element={<JobDetails />} />
-          <Route path="/transaction-history" element={<TransactionHistory />} />
           <Route
             path="/candidate-details-page"
             element={<CandidateDetailsPage />}
           />
           <Route path="/search-candidate-page" element={<SearchCandidate />} />
           <Route path="/post-new-job" element={<AddNewJobs />} />
-          <Route path="/my-applied-jobs" element={<AppliedJobsPage />} />
-          <Route path="/my-saved-jobs" element={<MySavedJobs />} />
           <Route
             path="/apply-manually/:jobId"
             element={<JobApplicationForm />}
           />
-          <Route path="/my-chats" element={<ChatPage />} />
         </Route>
         <Route
           path="/terms-and-conditions-page"

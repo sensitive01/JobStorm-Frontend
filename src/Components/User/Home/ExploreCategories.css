@@ -16,10 +16,11 @@
     text-decoration: underline;
 }
 
+
 .categories-grid-wrapper {
     /* Using a distinct border styles to match the reference image */
     /* border: 2px dashed #3b82f6; Removed wrapper border */
-    overflow: hidden; /* Ensure content stays within border radius if any */
+    padding: 10px; /* Added padding to prevent hover effects from being clipped */
 }
 
 /* Individual Card Styling */
@@ -38,9 +39,10 @@
 
 .category-card:hover {
     border-color: #7e22ce;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Adjusted shadow for cleaner look */
+    transform: translateY(-5px); /* Kept transform as user likely wants the effect but without collision */
     background-color: #fff;
+    z-index: 1; /* Ensure hovered card is above others */
 }
 
 .category-card.active-card:hover {

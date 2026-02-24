@@ -131,45 +131,11 @@ const FaqPage = () => {
         <div className="main-content">
           <div className="page-content">
             {/* Start home */}
-            <section className="page-title-box">
-              <div className="container">
-                <div className="row justify-content-center">
-                  <div className="col-md-6">
-                    <div className="text-center text-white">
-                      <h3 className="mb-4">FAQ'S</h3>
-                      <div className="page-next">
-                        <nav
-                          className="d-inline-block"
-                          aria-label="breadcrumb text-center"
-                        >
-                          <ol className="breadcrumb justify-content-center">
-                            <li className="breadcrumb-item">
-                              <a href="index-2.html">Home</a>
-                            </li>
-                            <li className="breadcrumb-item">
-                              <a href="javascript:void(0)">Company</a>
-                            </li>
-                            <li
-                              className="breadcrumb-item active"
-                              aria-current="page"
-                            >
-                              {" "}
-                              FAQ'S{" "}
-                            </li>
-                          </ol>
-                        </nav>
-                      </div>
-                    </div>
-                  </div>
-                  {/*end col*/}
-                </div>
-                {/*end row*/}
-              </div>
-              {/*end container*/}
-            </section>
-            {/* end home */}
             {/* START SHAPE */}
-            <div className="position-relative" style={{ zIndex: 1 }}>
+            <div
+              className="position-relative"
+              style={{ zIndex: 1, marginTop: "80px" }}
+            >
               <div className="shape">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
                   <path
@@ -1172,7 +1138,6 @@ const FaqPage = () => {
             </section>
             {/* END FAQ-PAGE */}
           </div>
-    
         </div>
       </div>
     </>

@@ -17,18 +17,10 @@ const NewAndRandomJobs = () => {
     const fetchJobs = async () => {
       setLoading(true);
       try {
-        // We'll fetch 'recent' or 'featured' jobs.
-        // Note: Real region filtering would normally happen via API query.
-        // Here we simulate fetching the main list.
         const response = await getJobsByType("recent");
 
         if (response.data && response.data.success) {
-          // Limit for display
           let fetchedJobs = response.data.data.slice(0, 5);
-
-          // Optional: Client-side filter simulation if location data exists
-          // if (activeTab !== 'INDIA') { ... }
-          // For now, we return the jobs to show the layout working.
 
           setJobs(fetchedJobs);
         }
@@ -51,9 +43,7 @@ const NewAndRandomJobs = () => {
   };
 
   const getRandomColor = (index) => {
-    // Just a helper to vary logo bgs if images are transparent,
-    // or just consistent branding.
-    // Design shows solid colors: Green, Black, Black, Red.
+  
     const colors = ["#84cc16", "#1f2937", "#000000", "#ef4444", "#3b82f6"];
     return colors[index % colors.length];
   };

@@ -1,6 +1,18 @@
-import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Globe, ChevronDown, ChevronUp, Briefcase, GraduationCap, Award, CheckCircle, Download } from 'lucide-react';
-import styles from './CandidateOverview.module.css';
+import React, { useState } from "react";
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Globe,
+  ChevronDown,
+  ChevronUp,
+  Briefcase,
+  GraduationCap,
+  Award,
+  CheckCircle,
+  Download,
+} from "lucide-react";
+import styles from "./CandidateOverview.module.css";
 
 const CandidateOverview = ({ data, loading }) => {
   const [showDocuments, setShowDocuments] = useState(true);
@@ -17,19 +29,14 @@ const CandidateOverview = ({ data, loading }) => {
   const formatFullDate = (dateString) => {
     if (!dateString) return "N/A";
     const date = new Date(dateString);
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
+    const options = { year: "numeric", month: "short", day: "numeric" };
+    return date.toLocaleDateString("en-US", options);
   };
 
   const formatDateRange = (startDate, endDate) => {
     const start = formatDate(startDate);
     const end = formatDate(endDate);
     return `${start} - ${end}`;
-  };
-
-  const getFileSize = (url) => {
-    // You can calculate actual file size if needed, for now returning placeholder
-    return "2.4 MB";
   };
 
   if (loading) {
@@ -41,24 +48,43 @@ const CandidateOverview = ({ data, loading }) => {
   }
 
   if (!data) {
-    return (
-      <div className={styles.noDataAlert}>
-        No data found
-      </div>
-    );
+    return <div className={styles.noDataAlert}>No data found</div>;
   }
 
   const documents = [
-    { name: 'Passport', file: data.passport, size: '2.4 MB' },
-    { name: 'Police Clearance', file: data.policeClearance, size: '1.1 MB' },
-    { name: 'Degree Certificate', file: data.educationCertificate, size: '3.5 MB' },
-    { name: 'Resume', file: data.resume, size: '1.8 MB' },
-    { name: 'Cover Letter', file: data.coverLetterFile, size: '0.9 MB' },
-    { name: 'MOFA Attestation', file: data.mofaAttestation, size: '2.1 MB' },
-  ].filter(doc => doc.file);
+    { name: "Passport", file: data.passport, size: "2.4 MB" },
+    { name: "Police Clearance", file: data.policeClearance, size: "1.1 MB" },
+    {
+      name: "Degree Certificate",
+      file: data.educationCertificate,
+      size: "3.5 MB",
+    },
+    { name: "Resume", file: data.resume, size: "1.8 MB" },
+    { name: "Cover Letter", file: data.coverLetterFile, size: "0.9 MB" },
+    { name: "MOFA Attestation", file: data.mofaAttestation, size: "2.1 MB" },
+  ].filter((doc) => doc.file);
 
   return (
     <div className={styles.candidateOverviewContainer}>
+      {/* Profile Summary Section */}
+      {data.profilesummary && (
+        <div className={styles.sectionCard}>
+          <div className={styles.sectionHeaderNoCollapse}>
+            <div className={styles.sectionHeaderLeft}>
+              <span className={styles.sectionTitle}>Profile Summary</span>
+            </div>
+          </div>
+          <div className={styles.sectionContentFull}>
+            <p
+              className="text-muted fs-14 mb-0"
+              style={{ lineHeight: "1.6", textAlign: "justify" }}
+            >
+              {data.profilesummary}
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Header Actions */}
       <div className={styles.headerActions}>
         {data.resume?.url && (
@@ -88,7 +114,9 @@ const CandidateOverview = ({ data, loading }) => {
             </div>
             <div>
               <div className={styles.contactLabel}>LOCATION</div>
-              <div className={styles.contactValue}>{data.currentCity || data.city}, {data.state}</div>
+              <div className={styles.contactValue}>
+                {data.currentCity || data.city}, {data.state}
+              </div>
             </div>
           </div>
         )}
@@ -127,13 +155,13 @@ const CandidateOverview = ({ data, loading }) => {
             </div>
             <div>
               <div className={styles.contactLabel}>WEBSITE</div>
-              <a 
-                href={data.portfolio} 
-                target="_blank" 
+              <a
+                href={data.portfolio}
+                target="_blank"
                 rel="noopener noreferrer"
                 className={styles.contactLink}
               >
-                {data.portfolio.replace(/^https?:\/\//, '')}
+                {data.portfolio.replace(/^https?:\/\//, "")}
               </a>
             </div>
           </div>
@@ -148,7 +176,10 @@ const CandidateOverview = ({ data, loading }) => {
             className={styles.sectionHeader}
           >
             <div className={styles.sectionHeaderLeft}>
-              <CheckCircle className={styles.iconSmall} style={{ color: '#10b981' }} />
+              <CheckCircle
+                className={styles.iconSmall}
+                style={{ color: "#10b981" }}
+              />
               <span className={styles.sectionTitle}>Verified Documents</span>
             </div>
             {showDocuments ? (
@@ -168,20 +199,26 @@ const CandidateOverview = ({ data, loading }) => {
                     <div className={styles.documentCardContent}>
                       <Download className={styles.documentDownloadIcon} />
                       <div className={styles.documentCardTitle}>{doc.name}</div>
-                      <div className={styles.documentCardInfo}>PDF • {doc.size}</div>
+                      <div className={styles.documentCardInfo}>
+                        PDF • {doc.size}
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
-              
+
               {/* Passport Expiry Date */}
               {data.passportExpiryDate && (
                 <div className={styles.passportExpiryInfo}>
                   <div className={styles.infoText}>
-                    <span className={styles.infoLabel}>Passport Number:</span> {data.passportNumber || 'N/A'}
+                    <span className={styles.infoLabel}>Passport Number:</span>{" "}
+                    {data.passportNumber || "N/A"}
                   </div>
                   <div className={styles.infoText}>
-                    <span className={styles.infoLabel}>Passport Expiry Date:</span> {formatFullDate(data.passportExpiryDate)}
+                    <span className={styles.infoLabel}>
+                      Passport Expiry Date:
+                    </span>{" "}
+                    {formatFullDate(data.passportExpiryDate)}
                   </div>
                 </div>
               )}
@@ -198,7 +235,10 @@ const CandidateOverview = ({ data, loading }) => {
             className={styles.sectionHeader}
           >
             <div className={styles.sectionHeaderLeft}>
-              <Briefcase className={styles.iconSmall} style={{ color: '#3b82f6' }} />
+              <Briefcase
+                className={styles.iconSmall}
+                style={{ color: "#3b82f6" }}
+              />
               <span className={styles.sectionTitle}>Experience</span>
             </div>
             {showExperience ? (
@@ -214,14 +254,20 @@ const CandidateOverview = ({ data, loading }) => {
                   <div key={exp._id || index} className={styles.experienceItem}>
                     <div className={styles.timelineDot}></div>
                     <div className={styles.experienceItemHeader}>
-                      <h4 className={styles.experiencePosition}>{exp.position}</h4>
+                      <h4 className={styles.experiencePosition}>
+                        {exp.position}
+                      </h4>
                       <span className={styles.experienceDuration}>
                         {formatDateRange(exp.startDate, exp.endDate)}
                       </span>
                     </div>
-                    <div className={styles.experienceCompany}>{exp.company}</div>
+                    <div className={styles.experienceCompany}>
+                      {exp.company}
+                    </div>
                     {exp.description && (
-                      <p className={styles.experienceDescription}>{exp.description}</p>
+                      <p className={styles.experienceDescription}>
+                        {exp.description}
+                      </p>
                     )}
                   </div>
                 ))}
@@ -239,7 +285,10 @@ const CandidateOverview = ({ data, loading }) => {
             className={styles.sectionHeader}
           >
             <div className={styles.sectionHeaderLeft}>
-              <GraduationCap className={styles.iconSmall} style={{ color: '#8b5cf6' }} />
+              <GraduationCap
+                className={styles.iconSmall}
+                style={{ color: "#8b5cf6" }}
+              />
               <span className={styles.sectionTitle}>Education</span>
             </div>
             {showEducation ? (
@@ -254,7 +303,9 @@ const CandidateOverview = ({ data, loading }) => {
                 {data.education.map((edu, index) => (
                   <div key={edu._id || index} className={styles.educationItem}>
                     <div className={styles.educationItemHeader}>
-                      <h4 className={styles.educationInstitution}>{edu.institution}</h4>
+                      <h4 className={styles.educationInstitution}>
+                        {edu.institution}
+                      </h4>
                       <span className={styles.educationDuration}>
                         {formatDateRange(edu.startDate, edu.endDate)}
                       </span>
@@ -262,7 +313,9 @@ const CandidateOverview = ({ data, loading }) => {
                     <div className={styles.educationType}>{edu.type}</div>
                     <div className={styles.educationDegree}>{edu.degree}</div>
                     {edu.description && (
-                      <p className={styles.educationDescription}>{edu.description}</p>
+                      <p className={styles.educationDescription}>
+                        {edu.description}
+                      </p>
                     )}
                   </div>
                 ))}
@@ -272,15 +325,15 @@ const CandidateOverview = ({ data, loading }) => {
         </div>
       )}
 
-      {/* Certifications / Additional Info */}
+      {/* Additional Details & Skills */}
       <div className={styles.sectionCard}>
         <button
           onClick={() => setShowCertifications(!showCertifications)}
           className={styles.sectionHeader}
         >
           <div className={styles.sectionHeaderLeft}>
-            <Award className={styles.iconSmall} style={{ color: '#8b5cf6' }} />
-            <span className={styles.sectionTitle}>Certifications</span>
+            <Award className={styles.iconSmall} style={{ color: "#8b5cf6" }} />
+            <span className={styles.sectionTitle}>Additional Details</span>
           </div>
           {showCertifications ? (
             <ChevronUp className={styles.chevronIcon} />
@@ -304,28 +357,33 @@ const CandidateOverview = ({ data, loading }) => {
                   </div>
                 </div>
               )}
-              
+
               {/* Other Information */}
               {data.expectedSalary && (
                 <div className={styles.infoItem}>
                   <div className={styles.infoText}>
-                    <span className={styles.infoLabel}>Expected Salary:</span> ₹{data.expectedSalary.toLocaleString()} per annum
+                    <span className={styles.infoLabel}>Expected Salary:</span> ₹
+                    {data.expectedSalary.toLocaleString()} per annum
                   </div>
                 </div>
               )}
-              
+
               {data.preferredLocation && (
                 <div className={styles.infoItem}>
                   <div className={styles.infoText}>
-                    <span className={styles.infoLabel}>Preferred Location:</span> {data.preferredLocation}
+                    <span className={styles.infoLabel}>
+                      Preferred Location:
+                    </span>{" "}
+                    {data.preferredLocation}
                   </div>
                 </div>
               )}
-              
+
               {data.totalExperience && (
                 <div className={styles.infoItem}>
                   <div className={styles.infoText}>
-                    <span className={styles.infoLabel}>Total Experience:</span> {data.totalExperience} year(s)
+                    <span className={styles.infoLabel}>Total Experience:</span>{" "}
+                    {data.totalExperience} year(s)
                   </div>
                 </div>
               )}
@@ -333,7 +391,8 @@ const CandidateOverview = ({ data, loading }) => {
               {data.nationality && (
                 <div className={styles.infoItem}>
                   <div className={styles.infoText}>
-                    <span className={styles.infoLabel}>Nationality:</span> {data.nationality}
+                    <span className={styles.infoLabel}>Nationality:</span>{" "}
+                    {data.nationality}
                   </div>
                 </div>
               )}
@@ -341,7 +400,26 @@ const CandidateOverview = ({ data, loading }) => {
               {data.maritalStatus && (
                 <div className={styles.infoItem}>
                   <div className={styles.infoText}>
-                    <span className={styles.infoLabel}>Marital Status:</span> {data.maritalStatus}
+                    <span className={styles.infoLabel}>Marital Status:</span>{" "}
+                    {data.maritalStatus}
+                  </div>
+                </div>
+              )}
+
+              {data.gender && (
+                <div className={styles.infoItem}>
+                  <div className={styles.infoText}>
+                    <span className={styles.infoLabel}>Gender:</span>{" "}
+                    {data.gender}
+                  </div>
+                </div>
+              )}
+
+              {data.specialization && (
+                <div className={styles.infoItem}>
+                  <div className={styles.infoText}>
+                    <span className={styles.infoLabel}>Specialization:</span>{" "}
+                    {data.specialization}
                   </div>
                 </div>
               )}
@@ -349,7 +427,8 @@ const CandidateOverview = ({ data, loading }) => {
               {data.dob && (
                 <div className={styles.infoItem}>
                   <div className={styles.infoText}>
-                    <span className={styles.infoLabel}>Date of Birth:</span> {formatFullDate(data.dob)}
+                    <span className={styles.infoLabel}>Date of Birth:</span>{" "}
+                    {formatFullDate(data.dob)}
                   </div>
                 </div>
               )}
