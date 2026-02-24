@@ -1,6 +1,126 @@
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { getAllJobs } from "../../../api/service/axiosService";
 
 const AssociatedCompanyList = () => {
+  const [companies, setCompanies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [companiesPerPage, setCompaniesPerPage] = useState(25);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("df");
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        setLoading(true);
+        const response = await getAllJobs("", "", "", "");
+        if (response.status === 200 && response.data) {
+          // Group jobs by company name
+          const companyMap = {};
+          response.data.forEach((job) => {
+            const name = job.companyName || "Unknown Company";
+            if (!companyMap[name]) {
+              companyMap[name] = {
+                companyName: name,
+                location: job.location || "Global",
+                totalJobs: 0,
+                logo: `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                  name,
+                )}&background=random&color=fff&size=128&bold=true`,
+              };
+            }
+            companyMap[name].totalJobs += 1;
+            // Capture a real location if first job had none
+            if (companyMap[name].location === "Global" && job.location) {
+              companyMap[name].location = job.location;
+            }
+          });
+          setCompanies(Object.values(companyMap));
+        }
+      } catch (error) {
+        console.error("Error fetching companies:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCompanies();
+  }, []);
+
+  const filteredCompanies = useMemo(() => {
+    let result = [...companies];
+
+    if (searchQuery.trim()) {
+      const lowerQuery = searchQuery.toLowerCase();
+      result = result.filter(
+        (c) =>
+          c.companyName.toLowerCase().includes(lowerQuery) ||
+          c.location.toLowerCase().includes(lowerQuery),
+      );
+    }
+
+    if (sortBy === "az") {
+      result.sort((a, b) => a.companyName.localeCompare(b.companyName));
+    } else if (sortBy === "za") {
+      result.sort((a, b) => b.companyName.localeCompare(a.companyName));
+    } else if (sortBy === "random") {
+      result.sort(() => Math.random() - 0.5);
+    } else if (sortBy === "jobs") {
+      result.sort((a, b) => b.totalJobs - a.totalJobs);
+    }
+
+    return result;
+  }, [companies, searchQuery, sortBy]);
+
+  // Pagination calculations
+  const indexOfLastCompany = currentPage * companiesPerPage;
+  const indexOfFirstCompany = indexOfLastCompany - companiesPerPage;
+  const currentCompanies = filteredCompanies.slice(
+    indexOfFirstCompany,
+    indexOfLastCompany,
+  );
+  const totalPages = Math.ceil(filteredCompanies.length / companiesPerPage);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Get page numbers to display with professional ellipsis (...) limits
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxPagesToShow = 5;
+
+    if (totalPages <= maxPagesToShow) {
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) {
+          pageNumbers.push(i);
+        }
+        pageNumbers.push("...");
+        pageNumbers.push(totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pageNumbers.push(1);
+        pageNumbers.push("...");
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pageNumbers.push(i);
+        }
+      } else {
+        pageNumbers.push(1);
+        pageNumbers.push("...");
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pageNumbers.push(i);
+        }
+        pageNumbers.push("...");
+        pageNumbers.push(totalPages);
+      }
+    }
+
+    return pageNumbers;
+  };
+
   return (
     <>
       <div>
@@ -134,47 +254,85 @@ const AssociatedCompanyList = () => {
             {/* START COMPANY-LIST */}
             <section className="section">
               <div className="container">
+                <div className="row mb-4">
+                  <div className="col-12 text-center text-lg-start">
+                    <h2 className="fw-bold mb-2">Associated Companies</h2>
+                    <p className="text-muted">
+                      Explore our global network of top-tier company partners
+                      and job opportunities.
+                    </p>
+                  </div>
+                </div>
                 <div className="row align-items-center mb-4">
-                  <div className="col-lg-8">
+                  <div className="col-lg-3">
                     <div className="mb-3 mb-lg-0">
                       <h6 className="fs-16 mb-0">
-                        {" "}
-                        Showing 1 – 8 of 11 results{" "}
+                        {loading
+                          ? "Loading results..."
+                          : `Showing ${filteredCompanies.length > 0 ? indexOfFirstCompany + 1 : 0} – ${Math.min(indexOfLastCompany, filteredCompanies.length)} of ${filteredCompanies.length} results`}
                       </h6>
                     </div>
                   </div>
                   {/*end col*/}
-                  <div className="col-lg-4">
+                  <div className="col-lg-9">
                     <div className="candidate-list-widgets">
                       <div className="row">
-                        <div className="col-lg-6">
-                          <div className="selection-widget">
-                            <select
-                              className="form-select"
-                              data-trigger=""
-                              name="choices-single-filter-orderby"
-                              id="choices-single-filter-orderby"
-                              aria-label="Default select example"
-                            >
-                              <option value="df">Default</option>
-                              <option value="ne">Newest</option>
-                              <option value="od">Oldest</option>
-                              <option value="rd">Random</option>
-                            </select>
+                        <div className="col-lg-4">
+                          <div className="search-box mb-2 mb-lg-0">
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Search company or location..."
+                              value={searchQuery}
+                              onChange={(e) => {
+                                setSearchQuery(e.target.value);
+                                setCurrentPage(1);
+                              }}
+                            />
                           </div>
                         </div>
-                        <div className="col-lg-6">
+                        <div className="col-lg-4">
                           <div className="selection-widget mt-2 mt-lg-0">
                             <select
                               className="form-select"
-                              data-trigger=""
-                              name="choices-candidate-page"
-                              id="choices-candidate-page"
-                              aria-label="Default select example"
+                              value={sortBy}
+                              onChange={(e) => {
+                                setSortBy(e.target.value);
+                                setCurrentPage(1);
+                              }}
                             >
-                              <option value="df">All</option>
-                              <option value="ne">8 per Page</option>
-                              <option value="ne">12 per Page</option>
+                              <option value="df">Default Sort</option>
+                              <option value="az">A to Z</option>
+                              <option value="za">Z to A</option>
+                              <option value="jobs">Most Jobs</option>
+                              <option value="random">Randomize</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div className="col-lg-4">
+                          <div className="selection-widget mt-2 mt-lg-0">
+                            <select
+                              className="form-select"
+                              value={
+                                companiesPerPage === filteredCompanies.length
+                                  ? "all"
+                                  : companiesPerPage
+                              }
+                              onChange={(e) => {
+                                if (e.target.value === "all") {
+                                  setCompaniesPerPage(
+                                    filteredCompanies.length || 100,
+                                  );
+                                } else {
+                                  setCompaniesPerPage(Number(e.target.value));
+                                }
+                                setCurrentPage(1);
+                              }}
+                            >
+                              <option value="12">12 per Page</option>
+                              <option value="25">25 per Page</option>
+                              <option value="50">50 per Page</option>
+                              <option value="all">All</option>
                             </select>
                           </div>
                         </div>
@@ -186,311 +344,132 @@ const AssociatedCompanyList = () => {
                 </div>
                 {/*end row*/}
                 <div className="row">
-                  <div className="col-lg-4 col-md-6">
-                    <div className="card text-center mb-4">
-                      <div className="card-body px-4 py-5">
-                        <div className="featured-label">
-                          <span className="featured">
-                            4.9 <i className="mdi mdi-star-outline" />
-                          </span>
-                        </div>
-                        <img
-                          src="assets/images/featured-job/img-01.png"
-                          alt=""
-                          className="img-fluid rounded-3"
-                        />
-                        <div className="mt-4">
-                          <a
-                            href="company-details.html"
-                            className="primary-link"
-                          >
-                            <h6 className="fs-18 mb-2">JobsStorm Consulting</h6>
-                          </a>
-                          <p className="text-muted mb-4">New York</p>
-                          <a
-                            href="company-details.html"
-                            className="btn btn-primary"
-                          >
-                            52 Opening Jobs
-                          </a>
-                        </div>
+                  {loading ? (
+                    <div className="col-12 text-center py-5">
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                      >
+                        <span className="visually-hidden">Loading...</span>
                       </div>
                     </div>
-                  </div>
-                  {/*end col*/}
-                  <div className="col-lg-4 col-md-6">
-                    <div className="card text-center mb-4">
-                      <div className="card-body px-4 py-5">
-                        <img
-                          src="assets/images/featured-job/img-02.png"
-                          alt=""
-                          className="img-fluid rounded-3"
-                        />
-                        <div className="mt-4">
-                          <a
-                            href="company-details.html"
-                            className="primary-link"
-                          >
-                            <h6 className="fs-18 mb-2">Creative Agency</h6>
-                          </a>
-                          <p className="text-muted mb-4">UK</p>
-                          <a
-                            href="company-details.html"
-                            className="btn btn-primary"
-                          >
-                            11 Opening Jobs
-                          </a>
+                  ) : currentCompanies.length > 0 ? (
+                    currentCompanies.map((company, index) => (
+                      <div className="col-lg-4 col-md-6" key={index}>
+                        <div className="card text-center mb-4">
+                          <div className="card-body px-4 py-5">
+                            <img
+                              src={company.logo}
+                              alt={company.companyName}
+                              className="img-fluid rounded-3 mb-3 shadow-sm"
+                              style={{
+                                width: "80px",
+                                height: "80px",
+                                objectFit: "cover",
+                                borderRadius: "10px",
+                              }}
+                            />
+                            <div className="mt-4">
+                              <a href="#" className="primary-link">
+                                <h6 className="fs-18 mb-2">
+                                  {company.companyName}
+                                </h6>
+                              </a>
+                              <p className="text-muted mb-4">
+                                {company.location}
+                              </p>
+                              <a href="#" className="btn btn-primary">
+                                {company.totalJobs} Opening Job
+                                {company.totalJobs !== 1 ? "s" : ""}
+                              </a>
+                            </div>
+                          </div>
                         </div>
                       </div>
+                    ))
+                  ) : (
+                    <div className="col-12 text-center py-5">
+                      <h5>No associated companies found.</h5>
                     </div>
-                  </div>
-                  {/*end col*/}
-                  <div className="col-lg-4 col-md-6">
-                    <div className="card text-center mb-4">
-                      <div className="card-body px-4 py-5">
-                        <img
-                          src="assets/images/featured-job/img-03.png"
-                          alt=""
-                          className="img-fluid rounded-3"
-                        />
-                        <div className="mt-4">
-                          <a
-                            href="company-details.html"
-                            className="primary-link"
-                          >
-                            <h6 className="fs-18 mb-2">DootTech Solution</h6>
-                          </a>
-                          <p className="text-muted mb-4">London</p>
-                          <a
-                            href="company-details.html"
-                            className="btn btn-primary"
-                          >
-                            09 Opening Jobs
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/*end col*/}
-                  <div className="col-lg-4 col-md-6">
-                    <div className="card text-center mb-4">
-                      <div className="card-body px-4 py-5">
-                        <img
-                          src="assets/images/featured-job/img-07.png"
-                          alt=""
-                          className="img-fluid rounded-3"
-                        />
-                        <div className="mt-4">
-                          <a
-                            href="company-details.html"
-                            className="primary-link"
-                          >
-                            <h6 className="fs-18 mb-2">
-                              Apple School &amp; College
-                            </h6>
-                          </a>
-                          <p className="text-muted mb-4">Canada</p>
-                          <a
-                            href="company-details.html"
-                            className="btn btn-primary"
-                          >
-                            27 Opening Jobs
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/*end col*/}
-                  <div className="col-lg-4 col-md-6">
-                    <div className="card text-center mb-4">
-                      <div className="card-body px-4 py-5">
-                        <div className="featured-label">
-                          <span className="featured">
-                            4.8 <i className="mdi mdi-star-outline" />
-                          </span>
-                        </div>
-                        <img
-                          src="assets/images/featured-job/img-05.png"
-                          alt=""
-                          className="img-fluid rounded-3"
-                        />
-                        <div className="mt-4">
-                          <a
-                            href="company-details.html"
-                            className="primary-link"
-                          >
-                            <h6 className="fs-18 mb-2">Hunter Hospital</h6>
-                          </a>
-                          <p className="text-muted mb-4">America</p>
-                          <a
-                            href="company-details.html"
-                            className="btn btn-primary"
-                          >
-                            07 Opening Jobs
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/*end col*/}
-                  <div className="col-lg-4 col-md-6">
-                    <div className="card text-center mb-4">
-                      <div className="card-body px-4 py-5">
-                        <img
-                          src="assets/images/featured-job/img-06.png"
-                          alt=""
-                          className="img-fluid rounded-3"
-                        />
-                        <div className="mt-4">
-                          <a
-                            href="company-details.html"
-                            className="primary-link"
-                          >
-                            <h6 className="fs-18 mb-2">Jshop Agency</h6>
-                          </a>
-                          <p className="text-muted mb-4">California</p>
-                          <a
-                            href="company-details.html"
-                            className="btn btn-primary"
-                          >
-                            20 Opening Jobs
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/*end col*/}
-                  <div className="col-lg-4 col-md-6">
-                    <div className="card text-center mb-4">
-                      <div className="card-body px-4 py-5">
-                        <img
-                          src="assets/images/featured-job/img-08.png"
-                          alt=""
-                          className="img-fluid rounded-3"
-                        />
-                        <div className="mt-4">
-                          <a
-                            href="company-details.html"
-                            className="primary-link"
-                          >
-                            <h6 className="fs-18 mb-2">Adobe Agency</h6>
-                          </a>
-                          <p className="text-muted mb-4">New York</p>
-                          <a
-                            href="company-details.html"
-                            className="btn btn-primary"
-                          >
-                            27 Opening Jobs
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/*end col*/}
-                  <div className="col-lg-4 col-md-6">
-                    <div className="card text-center mb-4">
-                      <div className="card-body px-4 py-5">
-                        <img
-                          src="assets/images/featured-job/img-09.png"
-                          alt=""
-                          className="img-fluid rounded-3"
-                        />
-                        <div className="mt-4">
-                          <a
-                            href="company-details.html"
-                            className="primary-link"
-                          >
-                            <h6 className="fs-18 mb-2">Creative Agency</h6>
-                          </a>
-                          <p className="text-muted mb-4">Uk</p>
-                          <a
-                            href="company-details.html"
-                            className="btn btn-primary"
-                          >
-                            35 Opening Jobs
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/*end col*/}
-                  <div className="col-lg-4 col-md-6">
-                    <div className="card text-center mb-4">
-                      <div className="card-body px-4 py-5">
-                        <div className="featured-label">
-                          <span className="featured">
-                            3.0 <i className="mdi mdi-star-outline" />
-                          </span>
-                        </div>
-                        <img
-                          src="assets/images/featured-job/img-10.png"
-                          alt=""
-                          className="img-fluid rounded-3"
-                        />
-                        <div className="mt-4">
-                          <a
-                            href="company-details.html"
-                            className="primary-link"
-                          >
-                            <h6 className="fs-18 mb-2">Kshop Agency</h6>
-                          </a>
-                          <p className="text-muted mb-4">America</p>
-                          <a
-                            href="company-details.html"
-                            className="btn btn-primary"
-                          >
-                            14 Opening Jobs
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/*end col*/}
+                  )}
                 </div>
                 {/*end row*/}
-                <div className="row">
-                  <div className="col-lg-12 mt-5">
-                    <nav aria-label="Page navigation example">
-                      <ul className="pagination job-pagination mb-0 justify-content-center">
-                        <li className="page-item disabled">
-                          <a
-                            className="page-link"
-                            href="javascript:void(0)"
-                            tabIndex={-1}
+                {totalPages > 1 && (
+                  <div className="row">
+                    <div className="col-lg-12 mt-5">
+                      <nav aria-label="Page navigation example">
+                        <ul className="pagination job-pagination mb-0 justify-content-center">
+                          <li
+                            className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
                           >
-                            <i className="mdi mdi-chevron-double-left fs-15" />
-                          </a>
-                        </li>
-                        <li className="page-item active">
-                          <a className="page-link" href="javascript:void(0)">
-                            1
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="javascript:void(0)">
-                            2
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="javascript:void(0)">
-                            3
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="javascript:void(0)">
-                            4
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="javascript:void(0)">
-                            <i className="mdi mdi-chevron-double-right fs-15" />
-                          </a>
-                        </li>
-                      </ul>
-                    </nav>
+                            <button
+                              className="page-link"
+                              onClick={() => paginate(currentPage - 1)}
+                              disabled={currentPage === 1}
+                              style={{
+                                border: "none",
+                                background: "transparent",
+                              }}
+                            >
+                              <i className="mdi mdi-chevron-double-left fs-15" />
+                            </button>
+                          </li>
+
+                          {getPageNumbers().map((number, idx) => (
+                            <li
+                              key={idx}
+                              className={`page-item ${currentPage === number ? "active" : ""}`}
+                            >
+                              {number === "..." ? (
+                                <span
+                                  className="page-link"
+                                  style={{
+                                    border: "none",
+                                    background: "transparent",
+                                    cursor: "default",
+                                  }}
+                                >
+                                  ...
+                                </span>
+                              ) : (
+                                <button
+                                  className="page-link"
+                                  onClick={() => paginate(number)}
+                                  style={
+                                    currentPage !== number
+                                      ? {
+                                          border: "none",
+                                          background: "transparent",
+                                        }
+                                      : {}
+                                  }
+                                >
+                                  {number}
+                                </button>
+                              )}
+                            </li>
+                          ))}
+
+                          <li
+                            className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}
+                          >
+                            <button
+                              className="page-link"
+                              onClick={() => paginate(currentPage + 1)}
+                              disabled={currentPage === totalPages}
+                              style={{
+                                border: "none",
+                                background: "transparent",
+                              }}
+                            >
+                              <i className="mdi mdi-chevron-double-right fs-15" />
+                            </button>
+                          </li>
+                        </ul>
+                      </nav>
+                    </div>
                   </div>
-                  {/*end col*/}
-                </div>
+                )}
                 {/* end row */}
               </div>
               {/*end container*/}

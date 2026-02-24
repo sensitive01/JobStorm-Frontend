@@ -1,8 +1,13 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import "./AboutUs.css";
 // Importing the same components used in Homepage for consistency
 import AssessmentPromo from "../Home/AssessmentPromo";
 import CareerCTA from "../Home/CareerCTA";
+
+import achievent1 from "../../../assets/images/achievements/1.jpg";
+import achievent2 from "../../../assets/images/achievements/2.jpg";
+import achievent3 from "../../../assets/images/achievements/3.jpg";
+import achievent4 from "../../../assets/images/achievements/4.jpg";
 
 // Swiper imports
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -17,11 +22,12 @@ import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-
-import missionImage from "../../../assets/images/26.png"
-import visionImage from "../../../assets/images/27.jpg"
+import missionImage from "../../../assets/images/26.png";
+import visionImage from "../../../assets/images/27.jpg";
 
 const About = () => {
+  const [zoomedImage, setZoomedImage] = useState(null);
+
   React.useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -31,11 +37,11 @@ const About = () => {
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.2 },
     );
 
     const sections = document.querySelectorAll(
-      ".vision-section, .mission-section, .timeline-item"
+      ".vision-section, .mission-section, .timeline-item",
     );
     sections.forEach((section) => observer.observe(section));
 
@@ -187,10 +193,7 @@ const About = () => {
                 <div className="col-lg-6">
                   {/* Image Card */}
                   <div className="visual-card">
-                    <img
-                      src={missionImage}
-                      alt="Vision Binoculars"
-                    />
+                    <img src={missionImage} alt="Vision Binoculars" />
                   </div>
                 </div>
               </div>
@@ -249,10 +252,7 @@ const About = () => {
                 <div className="col-lg-6">
                   {/* Image Card for Mission */}
                   <div className="visual-card mission-visual">
-                    <img
-                      src={visionImage}
-                      alt="Mission Target"
-                    />
+                    <img src={visionImage} alt="Mission Target" />
                   </div>
                 </div>
               </div>
@@ -281,57 +281,103 @@ const About = () => {
               <div className="row">
                 {/* Item 1 */}
                 <div className="col-lg-3 col-md-6 mb-4 timeline-item fade-in-up delay-0">
-                  <div className="timeline-tag">Meetings</div>
+                  <div className="timeline-tag">2023</div>
                   <div className="timeline-dot"></div>
-                  <div className="visual-card-small"></div>
-                  <h5 className="mt-4 text-white">
-                    Notes with an AI assistant
-                  </h5>
+                  <div className="visual-card-small">
+                    <img
+                      src={achievent1}
+                      alt="Best Startup of the Year"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        borderRadius: "16px",
+                        cursor: "zoom-in",
+                      }}
+                      onClick={() => setZoomedImage(achievent1)}
+                    />
+                  </div>
+                  <h5 className="mt-4 text-white">Best Startup of the Year</h5>
                   <p className="text-small text-muted">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                    do eiusmod tempor incididunt.
+                    Recognized as the best startup of the year for outstanding
+                    performance and growth.
                   </p>
                 </div>
 
                 {/* Item 2 */}
                 <div className="col-lg-3 col-md-6 mb-4 timeline-item fade-in-up delay-200">
-                  <div className="timeline-tag">Meetings</div>
+                  <div className="timeline-tag">2023</div>
                   <div className="timeline-dot"></div>
-                  <div className="visual-card-small"></div>
-                  <h5 className="mt-4 text-white">
-                    Notes with an AI assistant
-                  </h5>
+                  <div className="visual-card-small">
+                    <img
+                      src={achievent2}
+                      alt="Best Startup Achievement"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        borderRadius: "16px",
+                        cursor: "zoom-in",
+                      }}
+                      onClick={() => setZoomedImage(achievent2)}
+                    />
+                  </div>
+                  <h5 className="mt-4 text-white">Best Startup Achievement</h5>
                   <p className="text-small text-muted">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                    do eiusmod tempor incididunt.
+                    Awarded for major milestones and significant innovations in
+                    our industry sector.
                   </p>
                 </div>
 
                 {/* Item 3 */}
                 <div className="col-lg-3 col-md-6 mb-4 timeline-item fade-in-up delay-400">
-                  <div className="timeline-tag">Meetings</div>
+                  <div className="timeline-tag">2024</div>
                   <div className="timeline-dot"></div>
-                  <div className="visual-card-small"></div>
-                  <h5 className="mt-4 text-white">
-                    Notes with an AI assistant
-                  </h5>
+                  <div className="visual-card-small">
+                    <img
+                      src={achievent3}
+                      alt="Pride of INDIA Award"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        borderRadius: "16px",
+                        cursor: "zoom-in",
+                      }}
+                      onClick={() => setZoomedImage(achievent3)}
+                    />
+                  </div>
+                  <h5 className="mt-4 text-white">Pride of INDIA Award</h5>
                   <p className="text-small text-muted">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                    do eiusmod tempor incididunt.
+                    Honored with the Pride of INDIA award for exceptional
+                    contribution to national tech development.
                   </p>
                 </div>
 
                 {/* Item 4 */}
                 <div className="col-lg-3 col-md-6 mb-4 timeline-item fade-in-up delay-600">
-                  <div className="timeline-tag">Meetings</div>
+                  <div className="timeline-tag">2026</div>
                   <div className="timeline-dot"></div>
-                  <div className="visual-card-small"></div>
+                  <div className="visual-card-small">
+                    <img
+                      src={achievent4}
+                      alt="National Pride & Excellence"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        borderRadius: "16px",
+                        cursor: "zoom-in",
+                      }}
+                      onClick={() => setZoomedImage(achievent4)}
+                    />
+                  </div>
                   <h5 className="mt-4 text-white">
-                    Notes with an AI assistant
+                    National Pride & Excellence
                   </h5>
                   <p className="text-small text-muted">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                    do eiusmod tempor incididunt.
+                    Received the prestigious National Pride & Excellence award
+                    for lasting global impact.
                   </p>
                 </div>
               </div>
@@ -340,7 +386,7 @@ const About = () => {
         </section>
 
         {/* TESTIMONIALS SECTION */}
-        <section className="testimonials-section">
+        <section className="about-testimonials-section">
           <div className="container-medium">
             <h2 className="vision-heading text-white text-center mb-5">
               Listen to What Our Client Says!
@@ -362,38 +408,44 @@ const About = () => {
                   text: "Abodah, under the umbrella of Zennial Pro, has completely transformed our approach to learning and development. Their tailored solutions have not only improved employee engagement but also boosted productivity.",
                   name: "David Lee",
                   role: "HR Director, Tech Innovations Inc.",
-                  image: "https://randomuser.me/api/portraits/men/32.jpg",
+                  image:
+                    "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop",
                 },
                 {
                   text: "The strategic insights provided by the team helped us navigate complex international markets with ease. A truly invaluable partner for global expansion.",
                   name: "Sarah Jenkins",
                   role: "VP of Operations, GlobalReach",
-                  image: "https://randomuser.me/api/portraits/women/44.jpg",
+                  image:
+                    "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1000&auto=format&fit=crop",
                 },
                 {
                   text: "Exceptional service and a platform that delivers real results. Hiring international talent has never been this streamlined and secure.",
                   name: "Michael Chen",
                   role: "CEO, StartUp Hub",
-                  image: "https://randomuser.me/api/portraits/men/45.jpg",
+                  image:
+                    "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1000&auto=format&fit=crop",
                 },
                 // Duplicates for Loop Stability
                 {
                   text: "Abodah, under the umbrella of Zennial Pro, has completely transformed our approach to learning and development. Their tailored solutions have not only improved employee engagement but also boosted productivity.",
                   name: "David Lee",
                   role: "HR Director, Tech Innovations Inc.",
-                  image: "https://randomuser.me/api/portraits/men/32.jpg",
+                  image:
+                    "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop",
                 },
                 {
                   text: "The strategic insights provided by the team helped us navigate complex international markets with ease. A truly invaluable partner for global expansion.",
                   name: "Sarah Jenkins",
                   role: "VP of Operations, GlobalReach",
-                  image: "https://randomuser.me/api/portraits/women/44.jpg",
+                  image:
+                    "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1000&auto=format&fit=crop",
                 },
                 {
                   text: "Exceptional service and a platform that delivers real results. Hiring international talent has never been this streamlined and secure.",
                   name: "Michael Chen",
                   role: "CEO, StartUp Hub",
-                  image: "https://randomuser.me/api/portraits/men/45.jpg",
+                  image:
+                    "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1000&auto=format&fit=crop",
                 },
               ].map((testimonial, index) => (
                 <SwiperSlide key={index}>
@@ -426,6 +478,58 @@ const About = () => {
           <div className="mb-5"></div>
         </div>
       </div>
+
+      {/* ZOOMED IMAGE OVERLAY */}
+      {zoomedImage && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 9999,
+            cursor: "zoom-out",
+          }}
+          onClick={() => setZoomedImage(null)}
+        >
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setZoomedImage(null);
+            }}
+            style={{
+              position: "absolute",
+              top: "20px",
+              right: "30px",
+              background: "transparent",
+              color: "white",
+              border: "none",
+              fontSize: "40px",
+              cursor: "pointer",
+              zIndex: 10000,
+              padding: "10px",
+            }}
+            aria-label="Close"
+          >
+            &times;
+          </button>
+          <img
+            src={zoomedImage}
+            alt="Zoomed Timeline Achievement"
+            style={{
+              maxHeight: "90vh",
+              maxWidth: "90vw",
+              objectFit: "contain",
+              borderRadius: "8px",
+            }}
+          />
+        </div>
+      )}
     </Fragment>
   );
 };

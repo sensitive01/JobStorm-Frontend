@@ -57,8 +57,19 @@ const Header = () => {
       try {
         const response = await getDistictValues();
         if (response.data && response.status === 200) {
-          setCategories(response.data.categories || []);
-          setLocations(response.data.locations || []);
+          const rawCats = response.data.categories || [];
+          const rawLocs = response.data.locations || [];
+
+          // Deduplicate category and location names case-insensitively, keeping uppercase versions for consistency
+          const uniqueCategories = Array.from(
+            new Set(rawCats.map((c) => c.toUpperCase())),
+          );
+          const uniqueLocations = Array.from(
+            new Set(rawLocs.map((l) => l.toUpperCase())),
+          );
+
+          setCategories(uniqueCategories);
+          setLocations(uniqueLocations);
         }
       } catch (error) {
         console.error("Error fetching categories and locations:", error);
@@ -611,8 +622,7 @@ const Header = () => {
 
                   {/* Resources Link */}
                   <li className="nav-item">
-                    {/* Using FAQ/Pricing/Policy as Resources */}
-                    <Link to="/faq-pages" className="nav-link">
+                    <Link to="/resources" className="nav-link">
                       Resources
                     </Link>
                   </li>

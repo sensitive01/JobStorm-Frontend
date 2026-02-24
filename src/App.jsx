@@ -21,6 +21,7 @@ import PricingPage from "./Components/User/pricing/PricingPage";
 import PaymentStatus from "./Components/User/pricing/PaymentStatus";
 import AssociatedCompanyList from "./Components/User/associatedCompany/AssociatedCompanyList";
 import FaqPage from "./Components/User/faq/FaqPage";
+import Resources from "./Components/User/Resources/Resources";
 import BlogsPage from "./Components/User/blogs/BlogsPage";
 import LearningPage from "./Components/User/Learn/LearningPage";
 import InternshipPage from "./Components/User/Internship/InternshipPage";
@@ -126,6 +127,7 @@ function App() {
             element={<CompanyDetailsPage />}
           />
           <Route path="/faq-pages" element={<FaqPage />} />
+          <Route path="/resources" element={<Resources />} />
           <Route path="/blogs-pages" element={<BlogsPage />} />
           <Route path="/learn" element={<LearningPage />} />
           <Route path="/internship" element={<InternshipPage />} />
