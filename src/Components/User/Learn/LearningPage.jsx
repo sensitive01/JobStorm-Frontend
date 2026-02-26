@@ -237,7 +237,7 @@ const LearningPage = () => {
     <div className="learning-page">
       {/* Hero Section */}
       <section className="learning-hero">
-        <div className="container custom-container">
+        <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-7 hero-content">
               <span className="badge-pill-custom">
@@ -354,15 +354,15 @@ const LearningPage = () => {
 
       {/* Logos Section */}
       <section className="logos-section">
-        <div className="container custom-container">
-          <div className="row align-items-center">
-            <div className="col-md-3">
-              <h4>
+        <div className="container">
+          <div className="row align-items-center text-center text-md-start w-100 mx-0">
+            <div className="col-md-3 col-12 mb-4 mb-md-0 px-0">
+              <h4 className="mb-0">
                 250+ <br />
                 <span>Collaboration</span>
               </h4>
             </div>
-            <div className="col-md-9 logo-grid">
+            <div className="col-md-9 col-12 logo-grid justify-content-center justify-content-md-between px-0">
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Duolingo_logo_2019.svg/2560px-Duolingo_logo_2019.svg.png"
                 alt="Duolingo"
@@ -387,97 +387,106 @@ const LearningPage = () => {
 
       {/* Why Different Section */}
       <section className="why-different-section">
-        <div className="container custom-container">
-          <div className="d-flex justify-content-between align-items-end mb-4">
-            <h2 className="section-title mb-0">
-              Why This Learning Model Is{" "}
-              <span className="text-purple">Different</span>
-            </h2>
-            <div className="scroll-arrows d-flex gap-2">
-              <button
-                className="btn btn-light rounded-circle shadow-sm border"
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                onClick={() => scroll("left")}
-              >
-                <i className="mdi mdi-arrow-left text-dark"></i>
-              </button>
-              <button
-                className="btn btn-light rounded-circle shadow-sm border"
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                onClick={() => scroll("right")}
-              >
-                <i className="mdi mdi-arrow-right text-dark"></i>
-              </button>
+        <div className="container">
+          <div className="row w-100 mx-0">
+            <div className="col-12 px-0">
+              <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-end mb-4 gap-3 w-100">
+                <h2 className="section-title mb-0">
+                  Why This Learning Model Is{" "}
+                  <span className="text-purple">Different</span>
+                </h2>
+                <div className="scroll-arrows d-flex gap-2">
+                  <button
+                    className="btn btn-light rounded-circle shadow-sm border"
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    onClick={() => scroll("left")}
+                  >
+                    <i className="mdi mdi-arrow-left text-dark"></i>
+                  </button>
+                  <button
+                    className="btn btn-light rounded-circle shadow-sm border"
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    onClick={() => scroll("right")}
+                  >
+                    <i className="mdi mdi-arrow-right text-dark"></i>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div
-            className="diff-cards-container d-flex gap-4 pb-4"
-            ref={scrollRef}
-            style={{
-              overflowX: "auto",
-              scrollbarWidth: "none",
-              scrollSnapType: "x mandatory",
-              scrollBehavior: "smooth",
-            }}
-          >
-            {differentSteps.map((step, index) => (
+          <div className="row w-100 mx-0">
+            <div className="col-12 px-0">
               <div
-                className="col-12 col-md-6 flex-shrink-0"
-                key={index}
-                style={{ scrollSnapAlign: "start" }}
+                className="diff-cards-container d-flex gap-4 pb-4"
+                ref={scrollRef}
+                style={{
+                  width: "100%",
+                  overflowX: "auto",
+                  scrollbarWidth: "none",
+                  scrollSnapType: "x mandatory",
+                  scrollBehavior: "smooth",
+                }}
               >
-                <div className={`diff-card ${step.bgClass} h-100`}>
-                  <img
-                    src={step.image}
-                    alt={step.title}
-                    className="card-img-top"
-                  />
-                  <div className="card-body">
-                    <h3>
-                      {step.id}{" "}
-                      <span className="subtitle ms-2">
-                        {step.isHighlightLast ? (
-                          <>
-                            {step.prefix}{" "}
-                            <span className="text-purple">
-                              {step.highlight}
-                            </span>
-                          </>
-                        ) : (
-                          <>
-                            <span className="text-purple">
-                              {step.highlight}
-                            </span>{" "}
-                            {step.prefix}
-                          </>
-                        )}
-                      </span>
-                    </h3>
-                    <p>{step.desc}</p>
+                {differentSteps.map((step, index) => (
+                  <div
+                    className="col-10 col-md-6 flex-shrink-0"
+                    key={index}
+                    style={{ scrollSnapAlign: "start" }}
+                  >
+                    <div className={`diff-card ${step.bgClass} h-100`}>
+                      <img
+                        src={step.image}
+                        alt={step.title}
+                        className="card-img-top"
+                      />
+                      <div className="card-body">
+                        <h3>
+                          {step.id}{" "}
+                          <span className="subtitle ms-2">
+                            {step.isHighlightLast ? (
+                              <>
+                                {step.prefix}{" "}
+                                <span className="text-purple">
+                                  {step.highlight}
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <span className="text-purple">
+                                  {step.highlight}
+                                </span>{" "}
+                                {step.prefix}
+                              </>
+                            )}
+                          </span>
+                        </h3>
+                        <p>{step.desc}</p>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* Programmes Section */}
       <section className="programmes-section">
-        <div className="container custom-container">
+        <div className="container">
           <h2 className="section-title mb-4">
             Our <span className="text-italic text-purple">Programmes</span>
           </h2>
@@ -554,10 +563,10 @@ const LearningPage = () => {
 
       {/* Core Foundations Section */}
       <section className="core-foundations-section">
-        <div className="container custom-container">
+        <div className="container">
           <div className="row align-items-stretch">
             {/* Left Column - Heading, Description, and Numbered List */}
-            <div className="col-lg-5 d-flex flex-column">
+            <div className="col-lg-5 d-flex flex-column mb-4 mb-lg-0">
               <h2 className="core-heading">
                 The Core Cyber Security <br />
                 <span className="text-purple">Foundations</span>
@@ -667,7 +676,7 @@ const LearningPage = () => {
 
       {/* Flowchart Section */}
       <section className="flow-model-section my-5">
-        <div className="container custom-container bg-light-purple p-5 rounded-4 position-relative">
+        <div className="container bg-light-purple p-5 rounded-4 position-relative">
           <h2 className="section-title mb-5">
             Why This Learning Model Is{" "}
             <span className="text-purple">Different</span>
@@ -841,7 +850,7 @@ const LearningPage = () => {
         </div>
 
         {/* Course Highlights & Fees Section */}
-        <div className="container custom-container mt-5">
+        <div className="container mt-5">
           <div className="row">
             {/* Highlights Card */}
             <div className="col-lg-4 mb-4 mb-lg-0">
@@ -974,8 +983,8 @@ const LearningPage = () => {
                   expenses of your course.
                 </p>
 
-                <div className="d-flex flex-wrap align-items-end justify-content-between mt-auto">
-                  <div>
+                <div className="d-flex flex-column flex-md-row align-items-start align-items-md-end justify-content-between mt-auto gap-4">
+                  <div className="w-100 w-md-auto">
                     <h3
                       className="mb-2 fw-bold text-dark"
                       style={{ fontSize: "2rem" }}
@@ -987,7 +996,7 @@ const LearningPage = () => {
                     </p>
                   </div>
                   <button
-                    className="btn btn-purple px-5 py-2 fw-bold"
+                    className="btn btn-purple px-5 py-2 fw-bold w-100 w-md-auto"
                     style={{ borderRadius: "8px" }}
                   >
                     Apply Now
@@ -1001,7 +1010,7 @@ const LearningPage = () => {
 
       {/* Footer Info Section - Cohort Details Ticket Style */}
       <section className="info-footer-section">
-        <div className="container custom-container">
+        <div className="container">
           <h2
             className="text-center fw-bold mb-5"
             style={{ fontSize: "2.5rem" }}
@@ -1012,17 +1021,17 @@ const LearningPage = () => {
             <div className="col-12">
               <div className="cohort-ticket">
                 {/* Top Section */}
-                <div className="ticket-top">
-                  <div className="ticket-date">
+                <div className="ticket-top flex-column flex-md-row gap-4 px-3 px-md-5">
+                  <div className="ticket-date text-center text-md-start w-100 w-md-auto">
                     <h2>
                       19<span>MAR</span>
                     </h2>
                   </div>
-                  <div className="ticket-title">
+                  <div className="ticket-title text-center text-md-start w-100 w-md-auto">
                     <h3>Weekend Batch [Sat - Sun]</h3>
                   </div>
-                  <div>
-                    <button className="btn btn-purple px-4 py-2">
+                  <div className="w-100 w-md-auto text-center text-md-end">
+                    <button className="btn btn-purple px-4 py-2 w-100 w-md-auto">
                       Enroll Now
                     </button>
                   </div>
@@ -1036,7 +1045,7 @@ const LearningPage = () => {
                 </div>
 
                 {/* Bottom Section */}
-                <div className="ticket-bottom">
+                <div className="ticket-bottom px-3 px-md-5">
                   <div className="ticket-info-grid">
                     <div>
                       <span className="ticket-label">Batch</span>
@@ -1063,19 +1072,25 @@ const LearningPage = () => {
       </section>
 
       {/* Internship Section */}
-      <section className="internship-collage-section">
-        <div className="container custom-container">
-          <div className="row align-items-stretch">
+      <section className="internship-collage-section py-5">
+        <div className="container">
+          <div className="row g-4 overflow-visible">
             {/* Left Card */}
-            <div className="col-lg-4 mb-4 mb-lg-0">
-              <div className="internship-card">
-                <h2>
+            <div className="col-lg-4 col-12 mb-4 mb-lg-0">
+              <div className="internship-card h-100 p-4 p-md-5">
+                <h2 className="mb-2" style={{ opacity: 0.9 }}>
                   Start your <br />
                   Internship <br />
                   Career
                 </h2>
-                <h3>In Abroad</h3>
-                <button className="btn btn-outline-custom">Apply Now</button>
+                <h3 className="mb-4">
+                  In <span className="text-purple-light">Abroad</span>
+                </h3>
+                <div className="mt-auto">
+                  <button className="btn btn-outline-custom w-100 w-md-auto">
+                    Apply Now
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -1112,7 +1127,7 @@ const LearningPage = () => {
 
       {/* FAQ Section */}
       <section className="faq-section">
-        <div className="container custom-container">
+        <div className="container">
           <div className="row">
             <div className="col-lg-5 mb-4 mb-lg-0">
               <h2 className="fw-bold mb-3">Frequently Asked Questions</h2>
@@ -1188,7 +1203,7 @@ const LearningPage = () => {
 
       {/* Assessment Banner */}
       <section className="assessment-banner-section mt-5 mb-5">
-        <div className="container custom-container">
+        <div className="container">
           <div className="w-100">
             <img
               src={image10}

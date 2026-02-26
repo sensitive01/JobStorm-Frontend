@@ -72,11 +72,11 @@ const ExploreCategories = () => {
   return (
     <section className="section explore-categories-section">
       <div className="container-medium">
-        <div className="d-flex justify-content-between align-items-center mb-5">
-          <h2 className="title fw-bold">
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center text-center text-md-start mb-5 gap-3 gap-md-0">
+          <h2 className="title fw-bold mb-0">
             Explore by <span className="text-purple">category</span>
           </h2>
-          <div className="d-flex align-items-center gap-3">
+          <div className="d-flex flex-wrap justify-content-center align-items-center gap-3">
             {categories.length > 8 && (
               <>
                 <button

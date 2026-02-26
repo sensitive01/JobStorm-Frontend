@@ -121,6 +121,16 @@ const InternshipPage = () => {
               navigation={true}
               modules={[EffectCoverflow, Pagination, Navigation, Autoplay]}
               className="internship-swiper"
+              breakpoints={{
+                320: {
+                  slidesPerView: 1,
+                  spaceBetween: 20,
+                },
+                768: {
+                  slidesPerView: "auto",
+                  spaceBetween: 30,
+                },
+              }}
             >
               {/* Placeholder Images for Carousel */}
               {[1, 2, 3, 4, 5].map((item) => (
@@ -541,15 +551,17 @@ const InternshipPage = () => {
       <section className="testimonials-section">
         <div className="container">
           <h2>Don't just take our word for it!</h2>
-          <p className="testimonials-subtext">See the feedback from your teammates.</p>
+          <p className="testimonials-subtext">
+            See the feedback from your teammates.
+          </p>
 
           <div className="testimonials-container">
             {/* Left: Main Card */}
             <div className="testimonial-main-card">
-              <img 
-                src={testimonials[activeIndex].image} 
-                alt={testimonials[activeIndex].name} 
-                className="testimonial-main-img" 
+              <img
+                src={testimonials[activeIndex].image}
+                alt={testimonials[activeIndex].name}
+                className="testimonial-main-img"
               />
               <div className="testimonial-content">
                 <i className="mdi mdi-format-quote-open quote-icon"></i>
@@ -569,39 +581,40 @@ const InternshipPage = () => {
             {/* Right: Preview Strip (Shows next 3 items) */}
             <div className="testimonial-preview-strip">
               {[1, 2, 3].map((offset) => {
-                 const index = (activeIndex + offset) % testimonials.length;
-                 const item = testimonials[index];
-                 return (
-                   <div 
-                    key={item.id} 
+                const index = (activeIndex + offset) % testimonials.length;
+                const item = testimonials[index];
+                return (
+                  <div
+                    key={item.id}
                     className="preview-slice"
                     onClick={() => setActiveIndex(index)}
-                   >
-                      <img src={item.image} alt={item.name} />
-                   </div>
-                 );
+                  >
+                    <img src={item.image} alt={item.name} />
+                  </div>
+                );
               })}
             </div>
           </div>
 
           {/* Controls */}
           <div className="testimonial-controls">
-             <div className="progress-indicator">
-                <div className="progress-text">
-                    {activeIndex + 1}/{testimonials.length} Testimonials
-                </div>
-                <div className="progress-bar-bg">
-                    <div 
-                        className="progress-bar-fill" 
-                        style={{width: `${((activeIndex + 1) / testimonials.length) * 100}%`}}
-                    ></div>
-                </div>
-             </div>
-             <button className="next-btn" onClick={handleNext}>
-                 Next <i className="mdi mdi-arrow-right"></i>
-             </button>
+            <div className="progress-indicator">
+              <div className="progress-text">
+                {activeIndex + 1}/{testimonials.length} Testimonials
+              </div>
+              <div className="progress-bar-bg">
+                <div
+                  className="progress-bar-fill"
+                  style={{
+                    width: `${((activeIndex + 1) / testimonials.length) * 100}%`,
+                  }}
+                ></div>
+              </div>
+            </div>
+            <button className="next-btn" onClick={handleNext}>
+              Next <i className="mdi mdi-arrow-right"></i>
+            </button>
           </div>
-
         </div>
       </section>
 

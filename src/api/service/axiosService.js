@@ -215,6 +215,15 @@ export const getBlogList = async () => {
   }
 };
 
+export const getAllResources = async () => {
+  try {
+    const response = await axiosInstance.get(`/get-all-resources`);
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
 export const getDistictValues = async () => {
   try {
     const response = await axiosInstance.get(
@@ -380,6 +389,24 @@ export const submitContactForm = async (data) => {
 export const getAllCatergories = async () => {
   try {
     const response = await axiosInstance.get(`/get-all-categories`);
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const getNotifications = async (userId) => {
+  try {
+    const response = await axiosInstance.get(`/get-notifications/${userId}`);
+    return response;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const markNotificationRead = async (notificationId) => {
+  try {
+    const response = await axiosInstance.put(`/mark-notification-read/${notificationId}`);
     return response;
   } catch (err) {
     return err;

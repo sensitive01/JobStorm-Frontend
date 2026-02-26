@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { toast } from "react-toastify";
 import {
   editUserData,
   getUserDetails,
@@ -68,7 +69,7 @@ const EditProfilePage = ({ formData, profileImages }) => {
   const [skills, setSkills] = useState(formData?.skills || []);
   const [education, setEducation] = useState(formData?.education || []);
   const [workExperience, setWorkExperience] = useState(
-    formData?.workExperience || []
+    formData?.workExperience || [],
   );
 
   // File states
@@ -96,81 +97,81 @@ const EditProfilePage = ({ formData, profileImages }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState(null);
 
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await getUserDetails(userId);
+      if (response.status === 200) {
+        const data = response.data.data;
+        setUserData(data);
+
+        // Update documents with expiry date from user data
+        if (data.passportExpiryDate) {
+          setDocuments((prev) => ({
+            ...prev,
+            passport: {
+              ...prev.passport,
+              expiryDate: new Date(data.passportExpiryDate)
+                .toISOString()
+                .split("T")[0],
+            },
+          }));
+        }
+
+        setFormState({
+          firstName: data.userName?.split(" ")[0] || "",
+          lastName: data.userName?.split(" ").slice(1).join(" ") || "",
+          userName: data.userName || "",
+          gender: data.gender || "",
+          dob: data.dob || "",
+          nationality: data.nationality || "",
+          passportNumber: data.passportNumber || "",
+          maritalStatus: data.maritalStatus || "",
+          languages: data.languages?.join(", ") || "",
+          userEmail: data.userEmail || "",
+          userMobile: data.userMobile || "",
+          addressLine1: data.addressLine1 || "",
+          addressLine2: data.addressLine2 || "",
+          city: data.city || "",
+          state: data.state || "",
+          pincode: data.pincode || "",
+          currentCity: data.currentCity || "",
+          location: data.location || "",
+          preferredLocation: data.preferredLocation || "",
+          currentrole: data.currentrole || "",
+          specialization: data.specialization || "",
+          gradeLevels: data.gradeLevels?.join(", ") || "",
+          totalExperience: data.totalExperience || "",
+          expectedSalary: data.expectedSalary || "",
+          isAvailable: data.isAvailable || false,
+          profilesummary: data.profilesummary || "",
+          github: data.github || "",
+          linkedin: data.linkedin || "",
+          portfolio: data.portfolio || "",
+        });
+
+        setSkills(data.skills || []);
+        setEducation(data.education || []);
+        setWorkExperience(data.workExperience || []);
+
+        if (data.userProfilePic?.url) {
+          setProfileImage(data.userProfilePic.url);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      setSubmitError("Failed to load profile data");
+    } finally {
+      setLoading(false);
+    }
+  }, [userId]);
+
   // Fetch user data
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await getUserDetails(userId);
-        if (response.status === 200) {
-          const data = response.data.data;
-          setUserData(data);
-
-          // Update documents with expiry date from user data
-          if (data.passportExpiryDate) {
-            setDocuments((prev) => ({
-              ...prev,
-              passport: {
-                ...prev.passport,
-                expiryDate: new Date(data.passportExpiryDate)
-                  .toISOString()
-                  .split("T")[0],
-              },
-            }));
-          }
-
-          setFormState({
-            firstName: data.userName?.split(" ")[0] || "",
-            lastName: data.userName?.split(" ").slice(1).join(" ") || "",
-            userName: data.userName || "",
-            gender: data.gender || "",
-            dob: data.dob || "",
-            nationality: data.nationality || "",
-            passportNumber: data.passportNumber || "",
-            maritalStatus: data.maritalStatus || "",
-            languages: data.languages?.join(", ") || "",
-            userEmail: data.userEmail || "",
-            userMobile: data.userMobile || "",
-            addressLine1: data.addressLine1 || "",
-            addressLine2: data.addressLine2 || "",
-            city: data.city || "",
-            state: data.state || "",
-            pincode: data.pincode || "",
-            currentCity: data.currentCity || "",
-            location: data.location || "",
-            preferredLocation: data.preferredLocation || "",
-            currentrole: data.currentrole || "",
-            specialization: data.specialization || "",
-            gradeLevels: data.gradeLevels?.join(", ") || "",
-            totalExperience: data.totalExperience || "",
-            expectedSalary: data.expectedSalary || "",
-            isAvailable: data.isAvailable || false,
-            profilesummary: data.profilesummary || "",
-            github: data.github || "",
-            linkedin: data.linkedin || "",
-            portfolio: data.portfolio || "",
-          });
-
-          setSkills(data.skills || []);
-          setEducation(data.education || []);
-          setWorkExperience(data.workExperience || []);
-
-          if (data.userProfilePic?.url) {
-            setProfileImage(data.userProfilePic.url);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        setSubmitError("Failed to load profile data");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     if (userId) {
       fetchData();
     }
-  }, [userId]);
+  }, [userId, fetchData]);
 
   // Handlers
   const handleInputChange = (e) => {
@@ -283,7 +284,7 @@ const EditProfilePage = ({ formData, profileImages }) => {
     if (documents.educationCertificate.file) {
       submitData.append(
         "educationCertificate",
-        documents.educationCertificate.file
+        documents.educationCertificate.file,
       );
     }
     if (documents.policeClearance.file) {
@@ -306,16 +307,16 @@ const EditProfilePage = ({ formData, profileImages }) => {
 
       if (response.status === 200) {
         setSubmitSuccess(true);
-        alert("Profile updated successfully!");
-        window.location.reload();
+        toast.success("Profile updated successfully!");
+        await fetchData(); // Refresh data locally automatically
       } else {
         setSubmitError(response.message || "Failed to update profile");
-        alert(`Error: ${response.message || "Failed to update profile"}`);
+        toast.error(`Error: ${response.message || "Failed to update profile"}`);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       setSubmitError("An error occurred while updating your profile");
-      alert("An error occurred while updating your profile.");
+      toast.error("An error occurred while updating your profile.");
     } finally {
       setLoading(false);
     }

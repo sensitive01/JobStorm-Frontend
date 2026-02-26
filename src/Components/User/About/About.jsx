@@ -395,11 +395,18 @@ const About = () => {
             <Swiper
               grabCursor={true}
               centeredSlides={true}
-              slidesPerView={"auto"}
-              spaceBetween={40} /* Physical gap for arrows */
+              slidesPerView={1}
+              spaceBetween={20}
+              breakpoints={{
+                992: {
+                  slidesPerView: "auto",
+                  spaceBetween: 40,
+                },
+              }}
               loop={true}
               pagination={{ clickable: true }}
               navigation={true}
+              autoHeight={true}
               modules={[Pagination, Navigation]}
               className="testimonial-swiper"
             >

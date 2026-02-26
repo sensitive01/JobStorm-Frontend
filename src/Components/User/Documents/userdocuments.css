@@ -6,12 +6,31 @@
   min-height: 100vh;
 }
 
+@media (max-width: 768px) {
+  .docs-page-container {
+    padding: 20px 15px;
+  }
+}
+
 /* Header Wrapper */
 .docs-header-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: flex-end; /* Align bottom to match text and button */
   margin-bottom: 32px;
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .docs-header-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .docs-upload-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 .docs-title-section {
@@ -58,6 +77,19 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
   margin-bottom: 32px;
+}
+
+@media (max-width: 1024px) {
+    .docs-metrics-layout {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .docs-metrics-layout {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
 }
 
 /* Common Metric Card base */
@@ -200,11 +232,38 @@
   align-items: center;
   padding: 16px 24px;
   border-bottom: 1px solid #f1f5f9;
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+    .docs-list-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
 }
 
 .docs-tabs-group {
   display: flex;
   gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+/* Hide scrollbar but allow scrolling */
+.docs-tabs-group::-webkit-scrollbar {
+    display: none;
+}
+.docs-tabs-group {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+@media (max-width: 640px) {
+    .docs-tab-btn {
+        padding: 6px 12px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
 }
 
 .docs-tab-btn {
@@ -252,6 +311,15 @@
   outline: none;
   width: 200px;
   transition: border-color 0.2s, width 0.2s;
+}
+
+@media (max-width: 900px) {
+    .docs-search-wrapper input {
+        width: 100%;
+    }
+    .docs-search-wrapper input:focus {
+        width: 100%;
+    }
 }
 
 .docs-search-wrapper input:focus {
@@ -373,3 +441,83 @@
 .doc-act-btn:hover {
   color: #475569;
 }
+
+/* Mobile Card View */
+.mobile-doc-list {
+  padding: 16px;
+}
+
+.doc-mobile-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  transition: transform 0.2s;
+}
+
+.doc-mobile-card:active {
+  transform: scale(0.98);
+}
+
+.doc-mobile-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.doc-mobile-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.doc-mobile-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.doc-mobile-meta-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.m-lbl {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.m-val {
+  font-size: 13px;
+  color: #475569;
+}
+
+.doc-mobile-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.mobile-act-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.text-break {
+    word-break: break-all;
+}
+

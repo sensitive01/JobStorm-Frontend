@@ -1,10 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 // TopHeader import removed
 import {
   getDistictValues,
   getMyName,
   getUserDetails,
+  getNotifications,
+  markNotificationRead,
 } from "../../../api/service/axiosService";
 import accountImage from "../../../../public/assets/images/account.jpg";
 import HeaderAuthButtons from "./HeaderAuthButtons";
@@ -19,6 +21,37 @@ const Header = () => {
   const isNavigatingRef = useRef(false);
   const [categories, setCategories] = useState([]);
   const [locations, setLocations] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const location = useLocation();
+
+  const closeOpenUI = () => {
+    const dropdowns = document.querySelectorAll(".dropdown-menu.show");
+    dropdowns.forEach((dropdown) => {
+      dropdown.classList.remove("show");
+    });
+
+    const dropdownParents = document.querySelectorAll(".dropdown.show");
+    dropdownParents.forEach((parent) => {
+      parent.classList.remove("show");
+    });
+
+    const toggles = document.querySelectorAll(
+      '[data-bs-toggle="dropdown"][aria-expanded="true"]',
+    );
+    toggles.forEach((toggle) => {
+      toggle.setAttribute("aria-expanded", "false");
+    });
+
+    const collapse = document.getElementById("navbarCollapse");
+    // Ensure that it only collapses if it's currently open
+    if (collapse && collapse.classList.contains("show")) {
+      collapse.className = collapse.className.replace("show", "").trim();
+    }
+  };
+
+  useEffect(() => {
+    closeOpenUI();
+  }, [location.pathname]);
 
   useEffect(() => {
     if (userId) {
@@ -78,6 +111,51 @@ const Header = () => {
     fetchData();
   }, []);
 
+  const fetchUserNotifications = useCallback(async () => {
+    if (userId) {
+      try {
+        const response = await getNotifications(userId);
+        if (response.status === 200 && response.data.success) {
+          setNotifications(response.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    fetchUserNotifications();
+
+    // Optional: Refresh notifications every 60 seconds
+    const interval = setInterval(fetchUserNotifications, 60000);
+    return () => clearInterval(interval);
+  }, [fetchUserNotifications]);
+
+  const handleMarkAsRead = async (e, notificationId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      const response = await markNotificationRead(notificationId);
+      if (response.status === 200) {
+        setNotifications((prev) =>
+          prev.filter((n) => n._id !== notificationId),
+        );
+      }
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+    }
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return (
+      date.toLocaleDateString() +
+      " " +
+      date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+    );
+  };
+
   useEffect(() => {
     const updateBodyPadding = () => {
       if (userId) {
@@ -108,30 +186,6 @@ const Header = () => {
     }
 
     isNavigatingRef.current = true;
-
-    const closeOpenUI = () => {
-      const dropdowns = document.querySelectorAll(".dropdown-menu.show");
-      dropdowns.forEach((dropdown) => {
-        dropdown.classList.remove("show");
-      });
-
-      const dropdownParents = document.querySelectorAll(".dropdown.show");
-      dropdownParents.forEach((parent) => {
-        parent.classList.remove("show");
-      });
-
-      const toggles = document.querySelectorAll(
-        '[data-bs-toggle="dropdown"][aria-expanded="true"]',
-      );
-      toggles.forEach((toggle) => {
-        toggle.setAttribute("aria-expanded", "false");
-      });
-
-      const collapse = document.getElementById("navbarCollapse");
-      if (collapse && collapse.classList.contains("show")) {
-        collapse.classList.remove("show");
-      }
-    };
 
     closeOpenUI();
 
@@ -352,14 +406,17 @@ const Header = () => {
 
           .navbar-collapse {
             position: absolute;
-            top: 90px;
+            top: 100%;
             left: 0;
             right: 0;
             width: 100%;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid #e5e7eb;
           }
 
           body.user-logged-in .navbar-collapse {
-            top: 120px;
+            top: 100%;
           }
         }
 
@@ -394,6 +451,19 @@ const Header = () => {
           .header-item img {
             width: 30px !important;
             height: 30px !important;
+          }
+
+          .notification-dropdown-mobile {
+            position: fixed !important;
+            top: 60px !important;
+            left: 10px !important;
+            right: 10px !important;
+            width: auto !important;
+            max-width: none !important;
+            margin: 0 !important;
+            transform: none !important;
+            border-radius: 12px !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
           }
         }
 
@@ -618,6 +688,13 @@ const Header = () => {
                     </ul>
                   </li>
 
+                  {/* Blogs Link */}
+                  <li className="nav-item">
+                    <Link to="/blogs-pages" className="nav-link">
+                      Blogs
+                    </Link>
+                  </li>
+
                   {/* Learn Link */}
                   <li className="nav-item">
                     <Link to="/learn" className="nav-link">
@@ -667,18 +744,115 @@ const Header = () => {
                           aria-expanded="false"
                         >
                           <i className="mdi mdi-bell fs-22" />
-                          <div className="count position-absolute">3</div>
+                          {notifications.length > 0 && (
+                            <div className="count position-absolute">
+                              {notifications.length}
+                            </div>
+                          )}
                         </a>
                         <div
-                          className="dropdown-menu dropdown-menu-sm dropdown-menu-end p-0"
+                          className="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0 shadow-lg border-0"
                           aria-labelledby="notification"
+                          style={{
+                            width: "320px",
+                            maxHeight: "450px",
+                            overflowY: "auto",
+                          }}
                         >
-                          <div className="notification-header border-bottom bg-light">
-                            <h6 className="mb-1">Notification</h6>
+                          <div className="notification-header border-bottom bg-light p-3">
+                            <h6 className="mb-1 fw-bold">Notifications</h6>
                             <p className="text-muted fs-13 mb-0">
-                              You have 3 unread notifications
+                              You have {notifications.length} unread
+                              notifications
                             </p>
                           </div>
+                          <div className="notification-list">
+                            {notifications.length === 0 ? (
+                              <div className="p-4 text-center text-muted">
+                                <i className="mdi mdi-bell-off-outline fs-24 d-block mb-2"></i>
+                                <span className="fs-14">
+                                  No new notifications
+                                </span>
+                              </div>
+                            ) : (
+                              notifications.map((notif) => (
+                                <div
+                                  key={notif._id}
+                                  className="notification-item p-3 border-bottom hover-bg-light position-relative"
+                                  style={{
+                                    cursor: "pointer",
+                                    transition: "all 0.2s ease",
+                                  }}
+                                  onClick={(e) =>
+                                    handleMarkAsRead(e, notif._id)
+                                  }
+                                >
+                                  <div className="d-flex align-items-start">
+                                    <div className="flex-shrink-0 me-3">
+                                      <div
+                                        className="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center"
+                                        style={{
+                                          width: "40px",
+                                          height: "40px",
+                                        }}
+                                      >
+                                        <i className="mdi mdi-bell-outline fs-18"></i>
+                                      </div>
+                                    </div>
+                                    <div className="flex-grow-1 pe-3">
+                                      <h6
+                                        className="mb-1 fs-14 fw-bold text-dark"
+                                        style={{ lineHeight: "1.4" }}
+                                      >
+                                        {notif.title}
+                                      </h6>
+                                      <p
+                                        className="text-muted fs-13 mb-2"
+                                        style={{
+                                          lineHeight: "1.5",
+                                          color: "#555",
+                                        }}
+                                      >
+                                        {notif.body}
+                                      </p>
+                                      <div className="d-flex align-items-center">
+                                        <small className="text-muted fs-11 fw-medium">
+                                          <i className="mdi mdi-clock-outline me-1"></i>
+                                          {formatDate(notif.createdAt)}
+                                        </small>
+                                      </div>
+                                    </div>
+                                    <div className="flex-shrink-0">
+                                      <button
+                                        className="btn btn-sm btn-light rounded-circle text-muted"
+                                        style={{
+                                          width: "24px",
+                                          height: "24px",
+                                          padding: 0,
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "center",
+                                        }}
+                                        onClick={(e) =>
+                                          handleMarkAsRead(e, notif._id)
+                                        }
+                                        title="Dismiss"
+                                      >
+                                        <i className="mdi mdi-close fs-12"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                          {notifications.length > 0 && (
+                            <div className="p-2 border-top text-center">
+                              <button className="btn btn-link btn-sm text-primary text-decoration-none fs-13">
+                                View Activity History
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </li>
                       <li className="list-inline-item dropdown">
@@ -763,6 +937,116 @@ const Header = () => {
                 {userId ? (
                   <>
                     <ul className="header-menu list-inline d-flex align-items-center mb-0">
+                      <li className="list-inline-item dropdown me-2">
+                        <a
+                          href="#"
+                          className="header-item noti-icon position-relative"
+                          id="notificationMobile"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          <i className="mdi mdi-bell fs-22" />
+                          {notifications.length > 0 && (
+                            <div className="count position-absolute">
+                              {notifications.length}
+                            </div>
+                          )}
+                        </a>
+                        <div
+                          className="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0 shadow-lg border-0 notification-dropdown-mobile"
+                          aria-labelledby="notificationMobile"
+                          style={{
+                            maxHeight: "450px",
+                            overflowY: "auto",
+                          }}
+                        >
+                          <div className="notification-header border-bottom bg-light p-3">
+                            <h6 className="mb-1 fw-bold">Notifications</h6>
+                            <p className="text-muted fs-13 mb-0">
+                              You have {notifications.length} unread
+                              notifications
+                            </p>
+                          </div>
+                          <div className="notification-list">
+                            {notifications.length === 0 ? (
+                              <div className="p-4 text-center text-muted">
+                                <i className="mdi mdi-bell-off-outline fs-24 d-block mb-2"></i>
+                                <span className="fs-14">
+                                  No new notifications
+                                </span>
+                              </div>
+                            ) : (
+                              notifications.map((notif) => (
+                                <div
+                                  key={notif._id}
+                                  className="notification-item p-3 border-bottom hover-bg-light position-relative"
+                                  style={{
+                                    cursor: "pointer",
+                                    transition: "all 0.2s ease",
+                                  }}
+                                  onClick={(e) =>
+                                    handleMarkAsRead(e, notif._id)
+                                  }
+                                >
+                                  <div className="d-flex align-items-start">
+                                    <div className="flex-shrink-0 me-2">
+                                      <div
+                                        className="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center"
+                                        style={{
+                                          width: "36px",
+                                          height: "36px",
+                                        }}
+                                      >
+                                        <i className="mdi mdi-bell-outline fs-16"></i>
+                                      </div>
+                                    </div>
+                                    <div className="flex-grow-1 pe-2">
+                                      <h6
+                                        className="mb-1 fs-14 fw-bold text-dark"
+                                        style={{ lineHeight: "1.3" }}
+                                      >
+                                        {notif.title}
+                                      </h6>
+                                      <p
+                                        className="text-muted fs-12 mb-2"
+                                        style={{
+                                          lineHeight: "1.4",
+                                          color: "#666",
+                                        }}
+                                      >
+                                        {notif.body}
+                                      </p>
+                                      <small className="text-muted fs-10 fw-medium">
+                                        <i className="mdi mdi-clock-outline me-1"></i>
+                                        {formatDate(notif.createdAt)}
+                                      </small>
+                                    </div>
+                                    <div className="flex-shrink-0">
+                                      <button
+                                        className="btn btn-sm btn-light rounded-circle text-muted"
+                                        style={{
+                                          width: "22px",
+                                          height: "22px",
+                                          padding: 0,
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "center",
+                                        }}
+                                        onClick={(e) =>
+                                          handleMarkAsRead(e, notif._id)
+                                        }
+                                        title="Dismiss"
+                                      >
+                                        <i className="mdi mdi-close fs-10"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
+                      </li>
                       <li className="list-inline-item dropdown">
                         <a
                           href="#"
@@ -784,14 +1068,6 @@ const Header = () => {
                           className="dropdown-menu dropdown-menu-end"
                           aria-labelledby="userdropdownMobile"
                         >
-                          <li>
-                            <Link
-                              className="dropdown-item"
-                              to="/manage-jobs-page"
-                            >
-                              Manage Jobs
-                            </Link>
-                          </li>
                           <li>
                             <Link className="dropdown-item" to="/my-profile">
                               My Profile

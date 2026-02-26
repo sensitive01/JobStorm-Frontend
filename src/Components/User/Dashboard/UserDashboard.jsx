@@ -3,9 +3,9 @@ import DashboardOverview from "../MyProfile/DashboardOverview";
 
 const UserDashboard = () => {
   return (
-    <div className="container-fluid">
+    <>
       <DashboardOverview />
-    </div>
+    </>
   );
 };
 

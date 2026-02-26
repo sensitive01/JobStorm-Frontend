@@ -20,6 +20,16 @@ const CandidateOverview = ({ data, loading }) => {
   const [showEducation, setShowEducation] = useState(false);
   const [showCertifications, setShowCertifications] = useState(false);
 
+  const getFileUrl = (url) => {
+    if (!url) return "#";
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      return url;
+    }
+    const baseUrl =
+      import.meta.env.VITE_BASE_ROUTE_JOBSTORM || "http://localhost:4000";
+    return `${baseUrl}${url}`;
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return "Present";
     const date = new Date(dateString);
@@ -89,7 +99,7 @@ const CandidateOverview = ({ data, loading }) => {
       <div className={styles.headerActions}>
         {data.resume?.url && (
           <a
-            href={data.resume.url}
+            href={getFileUrl(data.resume.url)}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.downloadButton}
@@ -98,10 +108,6 @@ const CandidateOverview = ({ data, loading }) => {
             Download Resume
           </a>
         )}
-        <button className={styles.emailButton}>
-          <Mail className={styles.iconSmall} />
-          Send Email
-        </button>
       </div>
 
       {/* Contact Information Grid */}
@@ -192,7 +198,14 @@ const CandidateOverview = ({ data, loading }) => {
             <div className={styles.sectionContent}>
               <div className={styles.documentsGrid}>
                 {documents.map((doc, index) => (
-                  <div key={index} className={styles.documentCard}>
+                  <a
+                    key={index}
+                    href={getFileUrl(doc.file?.url)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.documentCard}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
                     <div className={styles.documentCardTop}>
                       <CheckCircle className={styles.documentCheckIcon} />
                     </div>
@@ -203,7 +216,7 @@ const CandidateOverview = ({ data, loading }) => {
                         PDF • {doc.size}
                       </div>
                     </div>
-                  </div>
+                  </a>
                 ))}
               </div>
 

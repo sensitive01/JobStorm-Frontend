@@ -517,7 +517,8 @@
 .testimonial-swiper .swiper-slide {
     width: 60vw !important; /* Responsive Width */
     max-width: 900px;
-    height: 450px;
+    height: auto;
+    min-height: 450px;
     background: transparent; /* Wrapper is transparent */
     opacity: 0.3; /* Inactive slides are dim */
     transform: scale(0.9);
@@ -617,16 +618,137 @@
 
 /* Mobile */
 @media (max-width: 991px) {
+    .testimonial-swiper {
+        padding: 20px 0 60px 0 !important;
+    }
     .testimonial-swiper .swiper-slide {
-        width: 85vw !important;
-        height: auto;
+        width: 100% !important;
+        max-width: none !important;
+        height: auto !important;
+        box-sizing: border-box !important;
+        transform: scale(1) !important;
+        opacity: 0.5 !important;
+    }
+    .testimonial-swiper .swiper-slide-active {
+        opacity: 1 !important;
+        transform: scale(1) !important;
     }
     .testimonial-card-split {
-        flex-direction: column-reverse;
+        flex-direction: column;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        margin: 0 !important; /* Zero margin is MANDATORY for Swiper translation math */
+        overflow: hidden; /* Prevent ANY child spillage */
+        height: auto !important;
     }
     .card-left-content, .card-right-image {
         width: 100%;
+        box-sizing: border-box;
     }
-    .card-right-image { height: 250px; }
-    .swiper-button-prev, .swiper-button-next { display: none !important; }
+    .card-right-image { 
+        height: 250px; 
+    }
+    .card-left-content {
+        padding: 25px 15px !important; /* Smaller horizontal padding */
+        display: block !important; 
+        text-align: center !important;
+        height: auto !important;
+        width: 100% !important;
+        max-width: 100% !important; /* Ensure it cannot bleed over */
+        box-sizing: border-box !important;
+        overflow: hidden; /* Stop horizontal spillage from nested paragraphs */
+    }
+    .quote-icon-large {
+        font-size: 2.2rem !important;
+        margin-bottom: 15px;
+        display: inline-block;
+        color: #fca522;
+    }
+    .testimonial-body {
+        font-size: 0.95rem !important;
+        margin: 0 auto 20px auto !important;
+        text-align: center !important;
+        color: #334155;
+        width: auto !important; /* Let block element determine width */
+        max-width: 100% !important;
+        word-wrap: break-word !important; 
+        white-space: normal !important;
+        line-height: 1.6;
+    }
+    .testimonial-author {
+        display: block;
+        margin: 0 auto;
+        text-align: center;
+    }
+    .swiper-button-prev, .swiper-button-next { 
+        display: none !important; 
+    }
+}
+
+@media (max-width: 767px) {
+    .about-hero {
+        padding: 40px 0;
+        min-height: auto;
+    }
+
+    .about-hero h1 {
+        font-size: 2.4rem;
+        word-wrap: break-word;
+    }
+
+    .about-hero p.lead {
+        font-size: 1.05rem;
+    }
+
+    /* Fix button alignment & height */
+    .btn-purple-glow {
+        padding: 0 20px;
+        font-size: 0.95rem;
+        height: 48px;
+    }
+
+    .btn-arrow-circle {
+        width: 48px;
+        height: 48px;
+    }
+
+    .avatars-group {
+        gap: 20px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+
+    .stats-row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        margin-top: 20px;
+        margin-bottom: 40px;
+        gap: 10px;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .stat-item {
+        padding-right: 0;
+        margin-right: 0;
+        border-right: none;
+        text-align: center;
+        flex: 1 1 33.33%;
+    }
+
+    .stat-item h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0;
+        white-space: nowrap;
+    }
+
+    .stat-item p {
+        font-size: 0.85rem;
+    }
+
+    .world-map-bg {
+        width: 100%;
+        opacity: 0.15;
+    }
 }

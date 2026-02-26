@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  clearAllTransactions,
-  getMyTransactionHistory,
-} from "../../../api/service/axiosService";
-// import "./TransactionHistory.css";
+import { getMyTransactionHistory } from "../../../api/service/axiosService";
+import "./TransactionHistory.css";
 
 const TransactionHistory = () => {
   const userId = localStorage.getItem("userId");
@@ -32,6 +29,7 @@ const TransactionHistory = () => {
     fetchData();
   }, [userId]);
 
+  /*
   const handleClearAll = async () => {
     if (
       window.confirm(
@@ -41,6 +39,7 @@ const TransactionHistory = () => {
       const response = await clearAllTransactions(userId);
     }
   };
+*/
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
@@ -81,8 +80,8 @@ const TransactionHistory = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className="card shadow-sm border-0 rounded-3">
-      <div className="card-body p-4">
+    <div className="card shadow-sm border-0 rounded-3 transaction-history-card">
+      <div className="card-body p-3 p-lg-4">
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h5 className="card-title mb-0">My Transactions</h5>
         </div>
@@ -95,7 +94,8 @@ const TransactionHistory = () => {
           </div>
         ) : transactions.length > 0 ? (
           <>
-            <div className="table-responsive">
+            {/* Desktop Table View */}
+            <div className="table-responsive d-none d-md-block">
               <table className="table table-hover align-middle mb-0">
                 <thead className="table-light">
                   <tr>
@@ -132,6 +132,52 @@ const TransactionHistory = () => {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="d-block d-md-none mobile-transaction-list">
+              {currentTransactions.map((txn, index) => (
+                <div
+                  key={txn._id}
+                  className="transaction-mobile-card mb-3 p-3 border rounded-3 shadow-sm bg-white"
+                >
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-muted small">
+                      #{indexOfFirstItem + index + 1}
+                    </span>
+                    <span className={getStatusBadge(txn.status)}>
+                      {txn.status || "Unknown"}
+                    </span>
+                  </div>
+                  <div className="mb-2">
+                    <div className="text-muted small mb-1">Order ID</div>
+                    <div className="fw-medium text-primary text-break">
+                      {txn.orderId || "N/A"}
+                    </div>
+                  </div>
+                  <div className="row g-2">
+                    <div className="col-6">
+                      <div className="text-muted small mb-1">Plan</div>
+                      <div className="text-uppercase fw-semibold">
+                        {txn.planType || "N/A"}
+                      </div>
+                    </div>
+                    <div className="col-6 text-end">
+                      <div className="text-muted small mb-1">Amount</div>
+                      <div className="fw-bold h6 mb-0">
+                        {txn.amount
+                          ? `₹${txn.amount.toLocaleString("en-IN")}`
+                          : "0"}
+                      </div>
+                    </div>
+                  </div>
+                  <hr className="my-2 opacity-10" />
+                  <div className="text-muted small">
+                    <i className="mdi mdi-calendar-clock me-1"></i>
+                    {formatDate(txn.createdAt)}
+                  </div>
+                </div>
+              ))}
             </div>
 
             {/* Pagination Controls */}

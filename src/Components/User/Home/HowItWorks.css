@@ -113,3 +113,32 @@
         height: 300px;
     }
 }
+
+@media (max-width: 767px) {
+    .how-it-works-section .title {
+        font-size: 1.8rem; /* Scaled down title */
+    }
+
+    .how-it-works-section .description {
+        font-size: 0.95rem;
+        max-width: 100%; /* Use full width on mobile */
+    }
+
+    .steps-container {
+        padding-left: 20px; /* Reduced from 40px */
+        margin-left: 0;
+    }
+
+    .step-number {
+        font-size: 1.8rem;
+        margin-right: 15px !important; /* Reduced margin from me-4 */
+    }
+
+    .step-title {
+        font-size: 1.1rem;
+    }
+
+    .step-content p {
+        font-size: 0.9rem;
+    }
+}

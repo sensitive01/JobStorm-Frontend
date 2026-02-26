@@ -170,7 +170,7 @@ const PricingPage = () => {
     } catch (error) {
       console.error("Error booking subscription:", error);
       alert(
-        "Error booking subscription: " + (error.message || "Please try again")
+        "Error booking subscription: " + (error.message || "Please try again"),
       );
       setPaymentLoading(false);
       setCurrentPlanId(null);
@@ -204,54 +204,9 @@ const PricingPage = () => {
       <div>
         <div className="main-content">
           <div className="page-content">
-            <section className="page-title-box">
-              <div className="container">
-                <div className="row justify-content-center">
-                  <div className="col-md-6">
-                    <div className="text-center text-white">
-                      <h3 className="mb-4">Pricing & Plans</h3>
-                      <div className="page-next">
-                        <nav
-                          className="d-inline-block"
-                          aria-label="breadcrumb text-center"
-                        >
-                          <ol className="breadcrumb justify-content-center">
-                            <li className="breadcrumb-item">
-                              <a href="/">Home</a>
-                            </li>
-                            <li className="breadcrumb-item">
-                              <a href="javascript:void(0)">Company</a>
-                            </li>
-                            <li
-                              className="breadcrumb-item active"
-                              aria-current="page"
-                            >
-                              Pricing
-                            </li>
-                          </ol>
-                        </nav>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <div className="position-relative" style={{ zIndex: 1 }}>
-              <div className="shape">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
-                  <path
-                    fill=""
-                    fillOpacity={1}
-                    d="M0,192L120,202.7C240,213,480,235,720,234.7C960,235,1200,213,1320,202.7L1440,192L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z"
-                  />
-                </svg>
-              </div>
-            </div>
-
             <section
               className="section"
-              style={{ backgroundColor: "#f8f9fc", padding: "80px 0" }}
+              style={{ padding: "140px 0 80px 0", backgroundColor: "#f8f9fc" }}
             >
               <div className="container">
                 <div className="row justify-content-center">
@@ -519,18 +474,18 @@ const PricingPage = () => {
                                     background: isSpecial
                                       ? "transparent"
                                       : isPopular
-                                      ? `linear-gradient(135deg, ${accentColor}, #5b21b6)`
-                                      : "white",
+                                        ? `linear-gradient(135deg, ${accentColor}, #5b21b6)`
+                                        : "white",
                                     color: isSpecial
                                       ? accentColor
                                       : isPopular
-                                      ? "white"
-                                      : accentColor,
+                                        ? "white"
+                                        : accentColor,
                                     border: isSpecial
                                       ? `1px dashed ${accentColor}`
                                       : isPopular
-                                      ? "none"
-                                      : `2px solid ${accentColor}`,
+                                        ? "none"
+                                        : `2px solid ${accentColor}`,
                                     boxShadow: isPopular
                                       ? "0 10px 20px rgba(118, 75, 162, 0.25)"
                                       : "none",
@@ -601,12 +556,17 @@ const PricingPage = () => {
             </section>
 
             {/* Plan Usage Section - Keep as is */}
-            <section className="section pt-2">
-              <div className="container">
+            <section
+              className="section"
+              style={{ padding: "60px 0", backgroundColor: "#ffffff" }}
+            >
+              <div className="container" style={{ maxWidth: "1400px" }}>
                 <div className="usage-card-wrapper">
                   <div className="section-header-custom">
                     <span className="usage-icon">⚡</span>
-                    <h4 className="mb-0">Current Plan Usage</h4>
+                    <h3 className="mb-0 fw-bold" style={{ color: "#1e293b" }}>
+                      Current Plan Usage
+                    </h3>
                   </div>
 
                   <div className="row mt-4">
@@ -627,13 +587,13 @@ const PricingPage = () => {
                             style={{
                               width: `${getProgressPercentage(
                                 usage.applications.current,
-                                usage.applications.total
+                                usage.applications.total,
                               )}%`,
                               backgroundColor: getProgressColor(
                                 getProgressPercentage(
                                   usage.applications.current,
-                                  usage.applications.total
-                                )
+                                  usage.applications.total,
+                                ),
                               ),
                             }}
                           ></div>
@@ -659,7 +619,7 @@ const PricingPage = () => {
                             style={{
                               width: `${getProgressPercentage(
                                 usage.profileViews.current,
-                                usage.profileViews.total
+                                usage.profileViews.total,
                               )}%`,
                               backgroundColor: "#10b981",
                             }}
@@ -686,7 +646,7 @@ const PricingPage = () => {
                             style={{
                               width: `${getProgressPercentage(
                                 usage.resumeReviews.current,
-                                usage.resumeReviews.total
+                                usage.resumeReviews.total,
                               )}%`,
                               backgroundColor: "#8b5cf6",
                             }}

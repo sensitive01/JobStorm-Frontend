@@ -65,10 +65,10 @@ const MyProfile = () => {
   }, [userId]);
 
   return (
-    <div>
+    <div style={{ paddingTop: "20px" }}>
       <div className="row">
         <div className="col-12">
-          <div className="card profile-content-page mt-4 mt-lg-0">
+          <div className="card profile-content-page mt-2 mt-lg-0">
             <ul
               className="profile-content-nav nav nav-pills border-bottom mb-4"
               id="pills-tab"
@@ -98,7 +98,7 @@ const MyProfile = () => {
                 </button>
               </li>
             </ul>
-            <div className="card-body p-4">
+            <div className="card-body p-0 p-md-4">
               <div className="tab-content" id="pills-tabContent">
                 {activeTab === "about" && (
                   <div className="tab-pane fade show active">

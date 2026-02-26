@@ -662,7 +662,7 @@
     border-radius: 16px;
     position: relative;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); /* Subtle Shadow */
-    overflow: hidden; /* Ensure notches work if using different method, but for now absolute is fine */
+    overflow: visible; /* Needed for notches to hang off the edge */
 }
 
 .ticket-top {
@@ -670,6 +670,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+    .ticket-top {
+        padding: 30px 15px;
+    }
+    .ticket-bottom {
+        padding: 30px 15px !important;
+    }
 }
 
 .ticket-date h2 {
@@ -801,6 +810,20 @@
     text-align: left;
 }
 
+@media (max-width: 991px) {
+    .ticket-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ticket-info-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
+
 .ticket-label {
     font-weight: 700;
     color: #111827;
@@ -859,6 +882,33 @@
     color: white; /* Bold white "In Abroad" */
 }
 
+.text-purple-light {
+    color: #c084fc;
+}
+
+@media (max-width: 768px) {
+    .internship-card {
+        padding: 50px 25px !important;
+        min-height: 400px !important;
+        height: auto !important;
+        justify-content: flex-start !important;
+        display: flex !important; 
+    }
+    .internship-card h2 {
+        font-size: 1.8rem !important;
+        line-height: 1.3 !important;
+        margin-top: 0 !important;
+    }
+    .internship-card h3 {
+        font-size: 2rem !important;
+        line-height: 1.3 !important;
+        margin-bottom: 30px !important;
+    }
+    .info-footer-section {
+        padding: 80px 0 !important;
+    }
+}
+
 .internship-card .btn-outline-custom {
     border: 1px solid rgba(255,255,255,0.4);
     color: white;
@@ -883,6 +933,29 @@
     gap: 20px;
     height: 100%;
     min-height: 500px;
+}
+
+@media (max-width: 768px) {
+    .fees-card, .highlights-card {
+        padding: 25px 20px !important;
+    }
+    .fees-card h2 {
+        font-size: 1.8rem !important;
+        margin-bottom: 2rem !important;
+    }
+    .fees-card p {
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .collage-grid {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+    .country-card {
+        height: 250px;
+    }
 }
 
 .country-card {
@@ -942,4 +1015,66 @@
     background: #4c1d95;
     background-image: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%);
     margin-top: -1px; /* overlap fix */
+}
+
+/* Mobile Responsiveness for Learning Page */
+@media (max-width: 768px) {
+    .learning-hero {
+        padding: 50px 15px;
+        text-align: center;
+    }
+
+    .learning-hero h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-features {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .hero-buttons .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .learning-hero::before, .learning-hero::after {
+        display: none; /* Hide confusing overlapping rings on mobile */
+    }
+
+    .consultation-form-card {
+        margin-top: 20px;
+        padding: 25px 20px;
+        width: 100%;
+        text-align: left;
+    }
+
+    /* Force all rows to stack vertically on mobile if they are failing */
+    .learning-page .row {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+    }
+
+    .learning-page .col-12 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .why-different-section .section-title {
+        font-size: 1.8rem;
+        line-height: 1.3;
+    }
 }

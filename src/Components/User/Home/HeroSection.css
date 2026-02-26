@@ -341,3 +341,46 @@
 
 .orbit-item { animation: none !important; }
 
+/* Responsive adjustments for mobile search bar */
+@media (max-width: 767px) {
+  .hero-section {
+    padding: 40px 0 30px;
+  }
+
+  .hero-heading {
+    font-size: 2rem;
+  }
+
+  .hero-subtext {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-search-wrapper {
+    flex-direction: column;
+    padding: 15px;
+    gap: 12px;
+    border-radius: 12px;
+  }
+
+  .search-input-group {
+    width: 100%;
+    padding-left: 5px;
+    padding-bottom: 10px;
+    border-right: none;
+    border-bottom: 1px solid #eee;
+  }
+
+  .country-select {
+    width: 100%;
+    padding-left: 5px !important;
+    border-left: none !important;
+    justify-content: flex-start;
+  }
+
+  .search-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+  }
+}

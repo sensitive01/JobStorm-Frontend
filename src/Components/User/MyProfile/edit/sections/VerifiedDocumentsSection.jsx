@@ -44,7 +44,6 @@ const VerifiedDocumentsSection = ({
           {/* Police Clearance */}
           <DocumentUploadCard
             title="Police Clearance"
-       
             acceptedFormats="Max 8MB, PDF, JPG, PNG"
             documentType="policeClearance"
             document={documents.policeClearance}
@@ -80,7 +79,7 @@ const VerifiedDocumentsSection = ({
             title="Cover Letter"
             acceptedFormats="Max 8MB, PDF, DOC, DOCX"
             documentType="coverLetterFile"
-            document={documents.coverLetter}
+            document={documents.coverLetterFile}
             onChange={handleDocumentChange}
             currentFile={userData?.coverLetterFile?.name}
             userData={userData}

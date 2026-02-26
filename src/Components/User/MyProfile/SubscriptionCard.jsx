@@ -91,8 +91,12 @@ const SubscriptionCard = () => {
           </div>
         </div>
 
-        <div style={styles.generateOverlay}>
+        <div
+          className="generate-overlay-container"
+          style={styles.generateOverlay}
+        >
           <button
+            className="generate-large-btn"
             style={{
               ...styles.generateBtnLarge,
               ...(isGenerating ? styles.generateBtnDisabled : {}),
@@ -148,7 +152,7 @@ const SubscriptionCard = () => {
         <div style={styles.cardDetailsGrid}>
           <div style={styles.detailItem}>
             <span style={styles.detailLabel}>Card Number</span>
-            <div style={styles.cardNumberRow}>
+            <div className="card-number-row" style={styles.cardNumberRow}>
               <span style={styles.cardNumber}>
                 {formatCardNumber(cardData.fullCardNumber, showFullNumber)}
               </span>
@@ -163,7 +167,10 @@ const SubscriptionCard = () => {
             <span style={styles.detailValue}>{cardData.cardHolderName}</span>
           </div>
 
-          <div style={styles.detailRowWithButton}>
+          <div
+            className="detail-row-button-container"
+            style={styles.detailRowWithButton}
+          >
             <div style={styles.detailItemSmall}>
               <span style={styles.detailLabel}>Expires</span>
               <span style={styles.detailValue}>
@@ -183,6 +190,7 @@ const SubscriptionCard = () => {
             </div>
 
             <button
+              className="view-profile-btn"
               style={styles.viewProfileButton}
               onClick={handleViewProfile}
             >
@@ -548,28 +556,35 @@ styleSheet.textContent = `
     }
     
     /* Hover effect for view profile button */
-    button[style*="viewProfileButton"]:hover {
+    .view-profile-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4) !important;
     }
     
-    /* Hover effect for view button */
-    button[style*="viewButton"]:hover {
-        background: rgba(255, 255, 255, 0.15) !important;
-        border-color: rgba(255, 255, 255, 0.3) !important;
-    }
-    
-    /* Hover effect for generate button */
-    button[style*="generateBtnLarge"]:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(245, 158, 11, 0.45) !important;
-    }
-    
     /* Responsive layout for mobile */
-    @media (max-width: 480px) {
-        div[style*="detailRowWithButton"] {
-            grid-template-columns: 1fr !important;
-            gap: 12px !important;
+    @media (max-width: 600px) {
+        .detail-row-button-container {
+            grid-template-columns: 1fr 1fr !important;
+            grid-template-rows: auto auto;
+            gap: 12px 16px !important;
+        }
+        .detail-row-button-container .view-profile-btn {
+            grid-column: 1 / -1;
+            width: 100%;
+            margin-top: 4px;
+        }
+        .card-number-row {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 8px !important;
+        }
+        .generate-overlay-container {
+            padding: 0 16px !important;
+        }
+        .generate-large-btn {
+            min-width: 100% !important;
+            padding: 12px 16px !important;
+            font-size: 11px !important;
         }
     }
 `;

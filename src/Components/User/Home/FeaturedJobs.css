@@ -239,13 +239,30 @@
     .featured-header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 20px;
+        gap: 15px;
     }
     
     .region-tabs {
         margin: 0;
         width: 100%;
+        flex-wrap: nowrap;
         overflow-x: auto;
         padding-bottom: 5px;
+        /* Hide scrollbar for cleaner look */
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .region-tabs::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .region-tab-btn {
+        white-space: nowrap;
+    }
+
+    .view-all-btn {
+        width: 100%;
+        justify-content: center;
     }
 }

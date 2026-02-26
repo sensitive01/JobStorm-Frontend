@@ -75,9 +75,7 @@
   margin: 0;
 }
 
-.section-content {
-  /* Content wrapper */
-}
+
 
 /* Form Grid */
 .form-grid {
@@ -304,7 +302,7 @@
   }
 
   .profile-main-content {
-    padding: 16px;
+    padding: 16px 0;
   }
 
   .section-card {

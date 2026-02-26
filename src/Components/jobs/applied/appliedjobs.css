@@ -5,7 +5,7 @@
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f7f9fa;
   min-height: 100vh;
-  padding: 100px 20px 80px 20px;
+  padding: 40px 20px 80px 20px;
 }
 
 .page-header-simple {
@@ -268,149 +268,140 @@
 /* ===========================
    Responsive Design
    =========================== */
-@media (max-width: 992px) {
-  .applied-jobs .stats-section {
-    grid-template-columns: repeat(2, 1fr);
+/* ===========================
+   Responsive Design
+   =========================== */
+
+@media (max-width: 991px) {
+  .applied-jobs-page {
+    padding: 30px 15px 60px 15px;
+  }
+
+  .card-top-section {
+    padding: 20px;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .job-actions {
+    width: 100%;
+    justify-content: flex-start;
+    padding-top: 15px;
+    border-top: 1px dashed #e5e7eb;
+  }
+
+  .job-meta {
+    gap: 12px;
   }
 }
 
 @media (max-width: 768px) {
-  .applied-jobs .applied-jobs-header {
-    padding: 40px 0;
-    margin-top: 60px;
+  .page-header-simple h1 {
+    font-size: 24px;
   }
 
-  .applied-jobs .applied-jobs-header h1 {
-    font-size: 32px;
+  .company-logo-square {
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
   }
 
-  .applied-jobs .applied-jobs-header p {
+  .job-details h3 {
     font-size: 16px;
   }
 
-  .applied-jobs .stats-section {
-    grid-template-columns: 1fr;
-    margin: -30px 0 30px 0;
+  .card-timeline-section {
+    padding: 25px 15px;
   }
 
-  .applied-jobs .filter-section {
-    flex-direction: column;
+  .timeline-container {
+    padding: 0 10px;
   }
 
-  .applied-jobs .filter-group {
-    width: 100%;
+  .step-name {
+    font-size: 11px;
   }
 
-  .applied-jobs .card-header {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .applied-jobs .status-badge {
-    align-self: flex-start;
-  }
-
-  .applied-jobs .job-details-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .applied-jobs .card-footer {
-    flex-direction: column;
-  }
-
-  .applied-jobs .btn {
-    width: 100%;
-  }
-
-  .applied-jobs .modal-content {
-    margin: 0 10px;
-    max-width: calc(100% - 20px);
-  }
-
-  .applied-jobs .modal-header,
-  .applied-jobs .modal-body,
-  .applied-jobs .modal-footer {
-    padding: 15px;
-  }
-
-  .applied-jobs .modal-header h2 {
-    font-size: 18px;
-  }
-
-  .applied-jobs .job-summary {
-    padding: 12px;
-  }
-
-  .applied-jobs .modal-logo {
-    width: 45px;
-    height: 45px;
-  }
-
-  .applied-jobs .job-summary h3 {
-    font-size: 15px;
-  }
-
-  .applied-jobs .job-summary p {
-    font-size: 13px;
+  .step-date {
+    font-size: 10px;
   }
 }
 
-@media (max-width: 480px) {
-  .applied-jobs .container {
-    padding: 0 15px;
+@media (max-width: 575px) {
+  /* Mobile vertical timeline logic */
+  .timeline-container {
+    flex-direction: column;
+    gap: 30px;
+    align-items: flex-start;
+    padding-left: 20px;
   }
 
-  .applied-jobs .applied-jobs-header h1 {
-    font-size: 28px;
+  /* Hide the static div we added just in case */
+  .timeline-vertical-line {
+      display: none;
   }
 
-  .applied-jobs .stat-card {
-    padding: 20px;
+  .timeline-step {
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    text-align: left;
+    flex: none;
+    position: relative; /* For the vertical line pseudo-element */
   }
 
-  .applied-jobs .stat-icon {
-    width: 60px;
-    height: 60px;
-    font-size: 32px;
+  /* Vertical line segments */
+  .timeline-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 6px; /* Center of the circle */
+      top: 14px; /* Bottom of the circle */
+      height: 30px; /* Length of the gap */
+      width: 2px;
+      background-color: #cbd5e1;
+      z-index: 1;
   }
 
-  .applied-jobs .stat-content h3 {
-    font-size: 28px;
+  /* Active vertical line segments */
+  .timeline-step.active:not(:last-child)::after {
+      background-color: #4f46e5;
   }
 
-  .applied-jobs .job-application-card {
-    padding: 20px;
+  /* Logic: Only color the line if NEXT step is also active or current is completed */
+  /* Actually, simplest is to color the line if current step is active and NOT the very last current one, 
+     but since we have currentStepIndex, we can refine this. 
+     For now, this simple active check is better than nothing.
+  */
+
+  .step-circle {
+    margin-bottom: 0;
+    flex-shrink: 0;
   }
 
-  .applied-jobs .job-title {
-    font-size: 18px;
+  .step-line {
+    display: none; /* Hide horizontal line */
   }
 
-  .applied-jobs .company-logo {
-    width: 60px;
-    height: 60px;
+  .step-label-group {
+    align-items: flex-start;
+    text-align: left;
+    min-height: auto;
   }
 
-  .applied-jobs .timeline-step {
+  .step-name br {
+    display: none; /* Don't wrap text onto multiple lines on stack layout */
+  }
+
+  .job-main-info {
+    flex-direction: column;
+    align-items: flex-start;
     gap: 12px;
   }
-
-  .applied-jobs .step-indicator {
-    width: 34px;
-    height: 34px;
-    font-size: 13px;
-  }
-
-  .applied-jobs .timeline-step:not(:last-child)::before {
-    left: 16px;
-  }
-
-  .applied-jobs .step-content h4 {
-    font-size: 14px;
-  }
-
-  .applied-jobs .current-label {
-    font-size: 11px;
+  
+  .job-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
 }

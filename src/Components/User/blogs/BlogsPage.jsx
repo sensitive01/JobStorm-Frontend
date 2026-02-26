@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getBlogList } from "../../../api/service/axiosService";
 import { useNavigate } from "react-router-dom";
 import profileImage from "../../../../public/img-02.jpg";
-import blogImage from "../../../../public/img-08.jpg"
-
+import blogImage from "../../../../public/img-08.jpg";
 
 const BlogsPage = () => {
   const navigate = useNavigate();
@@ -50,9 +49,7 @@ const BlogsPage = () => {
     navigate(`/blog/${blogId}`);
   };
 
-  // Get featured blog (first blog)
-  const featuredBlog = blogs.length > 0 ? blogs[0] : null;
-  const otherBlogs = blogs.slice(1);
+  // Removed separate featured blog logic so all blogs use the same layout
 
   if (loading) {
     return (
@@ -118,141 +115,85 @@ const BlogsPage = () => {
   return (
     <>
       <div className="main-content">
-        <div className="page-content">
+        <div className="page-content pt-5 mt-5">
           {/* START BLOG-PAGE */}
           <section className="section">
             <div className="container">
-              {/* Featured Blog Section */}
-              {featuredBlog && (
-                <div className="row align-items-center">
-                  <div className="col-lg-12">
-                    <div className="mb-4">
-                      <h4>Latest &amp; Trending Blog Post</h4>
-                    </div>
+              <div className="row mb-4">
+                <div className="col-lg-12">
+                  <div>
+                    <h4>All Blog Posts</h4>
                   </div>
-                  <div className="col-lg-7">
-                    <div
-                      className="post-preview overflow-hidden rounded-3 mb-3 mb-lg-0"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => handleBlogClick(featuredBlog._id)}
-                    >
-                      <img
-                        src={blogImage}
-                        alt={featuredBlog.title}
-                        className="img-fluid blog-img"
-                        style={{ width: "100%", height: "400px", objectFit: "cover" }}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-lg-5">
-                    <article className="post position-relative">
-                      <div className="post ms-lg-4">
-                        <p className="text-muted mb-2">
-                          <b>{featuredBlog.category}</b> -{" "}
-                          {formatDate(featuredBlog.createdAt)}
-                        </p>
-                        <h5 className="mb-3">
-                          <a
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleBlogClick(featuredBlog._id);
+                </div>
+              </div>
+
+              <div className="row">
+                {blogs.map((blog) => (
+                  <div className="col-lg-4 col-md-6 mb-5" key={blog._id}>
+                    <article className="post position-relative h-100 d-flex flex-column">
+                      <div
+                        className="post-preview overflow-hidden mb-3 rounded-3"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleBlogClick(blog._id)}
+                      >
+                        <img
+                          src={blog.image || blogImage}
+                          alt={blog.title}
+                          className="img-fluid blog-img h-auto w-100 object-fit-cover "
+                          style={{
+                            maxHeight: "300px",
+                            aspectRatio: "16/9",
+                          }}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = blogImage;
+                          }}
+                        />
+                      </div>
+                      <p className="text-muted mb-2">
+                        <b>{blog.category}</b> - {formatDate(blog.createdAt)}
+                      </p>
+                      <h5 className="mb-3">
+                        <a
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleBlogClick(blog._id);
+                          }}
+                          className="primary-link"
+                        >
+                          {blog.title}
+                        </a>
+                      </h5>
+                      <p className="text-muted">
+                        {truncateText(blog.description, 200)}
+                      </p>
+                      <div className="d-flex align-items-center mt-auto pt-4">
+                        <div className="flex-shrink-0">
+                          <img
+                            src={blog.authorImage || profileImage}
+                            alt={blog.author}
+                            className="avatar-sm rounded-circle"
+                            style={{
+                              width: "40px",
+                              height: "40px",
+                              objectFit: "cover",
                             }}
-                            className="primary-link"
-                          >
-                            {featuredBlog.title}
-                          </a>
-                        </h5>
-                        <p className="text-muted">
-                          {truncateText(featuredBlog.description, 250)}
-                        </p>
-                        <div className="d-flex align-items-center mt-4">
-                          <div className="flex-shrink-0">
-                            <img
-                              src={profileImage}
-                              alt={featuredBlog.author}
-                              className="avatar-sm rounded-circle"
-                              style={{ width: "40px", height: "40px", objectFit: "cover" }}
-                            />
-                          </div>
-                          <div className="flex-grow-1 ms-3">
-                            <h6 className="fs-16 mb-0">{featuredBlog.author}</h6>
-                            <p className="text-muted mb-0">
-                              {featuredBlog.authorRole}
-                            </p>
-                          </div>
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = profileImage;
+                            }}
+                          />
+                        </div>
+                        <div className="flex-grow-1 ms-3">
+                          <h6 className="fs-16 mb-0">{blog.author}</h6>
+                          <p className="text-muted mb-0">{blog.authorRole}</p>
                         </div>
                       </div>
                     </article>
                   </div>
-                </div>
-              )}
-
-              {/* All Blog Posts Section */}
-              {otherBlogs.length > 0 && (
-                <>
-                  <div className="row mt-5">
-                    <div className="col-lg-12">
-                      <div>
-                        <h4>All Blog Posts</h4>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="row">
-                    {otherBlogs.map((blog, index) => (
-                      <div className="col-lg-6" key={blog._id}>
-                        <article className={`post position-relative ${index === 0 || index === 1 ? 'mt-4' : 'mt-5'}`}>
-                          <div
-                            className="post-preview overflow-hidden mb-3 rounded-3"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => handleBlogClick(blog._id)}
-                          >
-                            <img
-                              src={blog.image}
-                              alt={blog.title}
-                              className="img-fluid blog-img"
-                              style={{ width: "100%", height: "300px", objectFit: "cover" }}
-                            />
-                          </div>
-                          <p className="text-muted mb-2">
-                            <b>{blog.category}</b> - {formatDate(blog.createdAt)}
-                          </p>
-                          <h5 className="mb-3">
-                            <a
-                              href="#"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                handleBlogClick(blog._id);
-                              }}
-                              className="primary-link"
-                            >
-                              {blog.title}
-                            </a>
-                          </h5>
-                          <p className="text-muted">
-                            {truncateText(blog.description, 200)}
-                          </p>
-                          <div className="d-flex align-items-center mt-4">
-                            <div className="flex-shrink-0">
-                              <img
-                                src={blog.authorImage}
-                                alt={blog.author}
-                                className="avatar-sm rounded-circle"
-                                style={{ width: "40px", height: "40px", objectFit: "cover" }}
-                              />
-                            </div>
-                            <div className="flex-grow-1 ms-3">
-                              <h6 className="fs-16 mb-0">{blog.author}</h6>
-                              <p className="text-muted mb-0">{blog.authorRole}</p>
-                            </div>
-                          </div>
-                        </article>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
+                ))}
+              </div>
 
               {/* Pagination */}
               {blogs.length > 6 && (

@@ -783,14 +783,109 @@
     gap: 15px;
 }
 
-/* Responsive */
+/* Responsive Updates */
 @media (max-width: 991px) {
+    .internship-hero-carousel {
+        padding: 100px 0 30px 0;
+    }
+
+    .internship-hero-carousel h1 {
+        font-size: 2.2rem !important;
+        line-height: 1.2;
+    }
+
+    .internship-hero-carousel .subtitle {
+        font-size: 1rem !important;
+        padding: 0 15px;
+    }
+
+    .internship-slide {
+        width: 85vw;
+        height: 250px;
+    }
+
+    .positions-header .tabs {
+        flex-wrap: wrap;
+        border-radius: 20px;
+        justify-content: center;
+        width: 95%;
+    }
+
+    .positions-header .tabs button {
+        padding: 8px 15px;
+        font-size: 0.85rem;
+    }
+
+    .positions-header h2 {
+        font-size: 1.8rem;
+        padding: 0 15px;
+    }
+
+    .job-item {
+        margin-bottom: 40px;
+        padding: 0 15px;
+    }
+
+    .job-item h3 {
+        font-size: 1.4rem;
+    }
+
+    .job-desc {
+        font-size: 0.95rem;
+        max-width: 100%;
+    }
+
+    .internship-companies-section h4 {
+        font-size: 1.4rem;
+        padding-left: 20px;
+        text-align: center;
+    }
+
+    /* Bento Grid Reset for Mobile */
+    .gallery-grid-bento {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .gallery-col-left, .gallery-col-mid, .gallery-col-right {
+        flex: none;
+        height: auto;
+    }
+
+    .gallery-item {
+        height: 250px !important;
+    }
+
+    .gallery-item img {
+        height: 250px;
+    }
+
+    .h-tall {
+        height: 250px !important;
+    }
+
+    .gallery-split-row {
+        flex-direction: column;
+    }
+
+    .explore-card {
+        height: 150px !important;
+        padding: 20px;
+        text-align: center;
+        justify-content: flex-start !important;
+        align-items: center;
+        flex-direction: column-reverse !important;
+    }
+    .explore-text {
+        margin-top: 10px;
+    }
+
     .testimonials-container {
         flex-direction: column;
     }
     
     .testimonial-preview-strip {
-        display: none; /* Hide strip on mobile */
+        display: none; 
     }
 
     .testimonial-main-card {
@@ -800,5 +895,48 @@
     .testimonial-main-img {
         height: 300px;
         width: 100%;
+    }
+
+    .testimonial-content {
+        padding: 30px 20px;
+    }
+
+    .testimonial-text {
+        font-size: 0.95rem;
+    }
+
+    .testimonials-section h2 {
+        font-size: 1.8rem;
+        padding: 0 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .internship-hero-carousel h1 {
+        font-size: 1.8rem !important;
+    }
+
+    .timeline-vertical::before {
+        left: 20px;
+    }
+    
+    .timeline-number {
+        left: 20px;
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .timeline-row {
+        margin-left: 50px;
+        margin-bottom: 30px;
+    }
+
+    .timeline-title {
+        font-size: 1rem;
+    }
+
+    .timeline-desc {
+        font-size: 0.85rem;
     }
 }

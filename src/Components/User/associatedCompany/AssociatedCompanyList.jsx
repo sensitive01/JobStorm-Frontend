@@ -276,9 +276,9 @@ const AssociatedCompanyList = () => {
                   {/*end col*/}
                   <div className="col-lg-9">
                     <div className="candidate-list-widgets">
-                      <div className="row">
-                        <div className="col-lg-4">
-                          <div className="search-box mb-2 mb-lg-0">
+                      <div className="row g-3">
+                        <div className="col-lg-4 col-12">
+                          <div className="search-box">
                             <input
                               type="text"
                               className="form-control"
@@ -291,8 +291,8 @@ const AssociatedCompanyList = () => {
                             />
                           </div>
                         </div>
-                        <div className="col-lg-4">
-                          <div className="selection-widget mt-2 mt-lg-0">
+                        <div className="col-lg-4 col-12">
+                          <div className="selection-widget">
                             <select
                               className="form-select"
                               value={sortBy}
@@ -309,8 +309,8 @@ const AssociatedCompanyList = () => {
                             </select>
                           </div>
                         </div>
-                        <div className="col-lg-4">
-                          <div className="selection-widget mt-2 mt-lg-0">
+                        <div className="col-lg-4 col-12">
+                          <div className="selection-widget">
                             <select
                               className="form-select"
                               value={
@@ -355,7 +355,7 @@ const AssociatedCompanyList = () => {
                     </div>
                   ) : currentCompanies.length > 0 ? (
                     currentCompanies.map((company, index) => (
-                      <div className="col-lg-4 col-md-6" key={index}>
+                      <div className="col-12 col-md-6 col-lg-4" key={index}>
                         <div className="card text-center mb-4">
                           <div className="card-body px-4 py-5">
                             <img
