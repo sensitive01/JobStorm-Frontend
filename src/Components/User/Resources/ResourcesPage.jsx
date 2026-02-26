@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   getAllResources,
   getDasboardData,
@@ -7,7 +7,6 @@ import {
 import blogImage from "../../../../public/img-08.jpg";
 
 const ResourcesPage = () => {
-  const navigate = useNavigate();
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentUserData, setCurrentUserData] = useState(null);
@@ -19,6 +18,12 @@ const ResourcesPage = () => {
 
   const fetchUserInformation = async () => {
     const candidateId = localStorage.getItem("candidateId");
+
+    // Check if candidateId exists and is not the string "null" before making the API call
+    if (!candidateId || candidateId === "null") {
+      return;
+    }
+
     try {
       const { data, status } = await getDasboardData(candidateId);
       if (status === 200) {
@@ -139,7 +144,8 @@ const ResourcesPage = () => {
                             ) : (
                               <button
                                 className="btn btn-secondary w-100 rounded-pill"
-                                onClick={() => navigate("/book-your-demo")}
+                                style={{ cursor: "not-allowed" }}
+                                disabled
                               >
                                 Unlock with Premium{" "}
                                 <i className="mdi mdi-lock ms-1"></i>
