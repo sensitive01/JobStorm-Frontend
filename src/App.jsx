@@ -21,7 +21,7 @@ import PricingPage from "./Components/User/pricing/PricingPage";
 import PaymentStatus from "./Components/User/pricing/PaymentStatus";
 import AssociatedCompanyList from "./Components/User/associatedCompany/AssociatedCompanyList";
 import FaqPage from "./Components/User/faq/FaqPage";
-import ResourcesPage from "./Components/User/resources/ResourcesPage";
+import ResourcesPage from "./Components/User/Resources/ResourcesPage";
 import BlogsPage from "./Components/User/blogs/BlogsPage";
 import LearningPage from "./Components/User/Learn/LearningPage";
 import InternshipPage from "./Components/User/Internship/InternshipPage";
