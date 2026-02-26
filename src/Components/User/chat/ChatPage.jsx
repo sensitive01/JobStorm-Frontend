@@ -202,11 +202,6 @@ const ChatPage = () => {
   return (
     <div
       className={`chat-container ${isMobileChatOpen ? "mobile-chat-open" : ""}`}
-      style={{
-        marginTop: "20px",
-        height: "calc(100vh - 140px)",
-        width: "calc(100% - 60px)",
-      }}
     >
       <div className="chat-sidebar">
         <div className="chat-sidebar-header">
