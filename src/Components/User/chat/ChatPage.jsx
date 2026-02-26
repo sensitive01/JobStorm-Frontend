@@ -11,7 +11,7 @@ import {
   Search,
 } from "lucide-react";
 
-const SOCKET_URL = import.meta.env.VITE_BASE_URL || "http://localhost:4000";
+const SOCKET_URL = import.meta.env.VITE_BASE_ROUTE_JOBSTORM;
 
 const ChatPage = () => {
   const [chats, setChats] = useState([]);
@@ -205,7 +205,7 @@ const ChatPage = () => {
       style={{
         marginTop: "20px",
         height: "calc(100vh - 140px)",
-        width: "100%",
+        width: "calc(100% - 60px)",
       }}
     >
       <div className="chat-sidebar">
