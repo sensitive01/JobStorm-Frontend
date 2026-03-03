@@ -205,14 +205,13 @@ export const getJobsByType = async (jobType) => {
 
 
 export const getBlogList = async () => {
-  try {
-    const response = await axiosInstance.get(
-      `/get-all-blogs`
-    );
-    return response;
-  } catch (err) {
-    return err;
-  }
+  const response = await axiosInstance.get(`/get-all-blogs`);
+  return response;
+};
+
+export const getBlogById = async (blogId) => {
+  const response = await axiosInstance.get(`/get-blog-by-id/${blogId}`);
+  return response;
 };
 
 export const getAllResources = async () => {

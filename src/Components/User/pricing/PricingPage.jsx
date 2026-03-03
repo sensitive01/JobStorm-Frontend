@@ -669,32 +669,32 @@ const PricingPage = () => {
                     <div className="col-lg-3 col-md-6">
                       <div className="counter-box mt-3">
                         <div className="counters text-center">
-                          <h5 className="counter mb-0">15,000+</h5>
-                          <h6 className="fs-16 mt-3">Available Jobs</h6>
+                          <div className="counter mb-0">15,000+</div>
+                          <div className="fs-16 mt-3">Available Jobs</div>
                         </div>
                       </div>
                     </div>
                     <div className="col-lg-3 col-md-6">
                       <div className="counter-box mt-3">
                         <div className="counters text-center">
-                          <h5 className="counter mb-0">7500+</h5>
-                          <h6 className="fs-16 mt-3">Applications</h6>
+                          <div className="counter mb-0">7500+</div>
+                          <div className="fs-16 mt-3">Applications</div>
                         </div>
                       </div>
                     </div>
                     <div className="col-lg-3 col-md-6">
                       <div className="counter-box mt-3">
                         <div className="counters text-center">
-                          <h5 className="counter mb-0">8.85K</h5>
-                          <h6 className="fs-16 mt-3">Positive Feedback</h6>
+                          <div className="counter mb-0">8.85K</div>
+                          <div className="fs-16 mt-3">Positive Feedback</div>
                         </div>
                       </div>
                     </div>
                     <div className="col-lg-3 col-md-6">
                       <div className="counter-box mt-3">
                         <div className="counters text-center">
-                          <h5 className="counter mb-0">9875</h5>
-                          <h6 className="fs-16 mt-3">Members</h6>
+                          <div className="counter mb-0">9875</div>
+                          <div className="fs-16 mt-3">Members</div>
                         </div>
                       </div>
                     </div>

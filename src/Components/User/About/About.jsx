@@ -87,12 +87,16 @@ const About = () => {
 
                 <div className="avatars-group">
                   <div className="d-flex align-items-center">
-                    <button className="btn-purple-glow">
-                      Create Account For Free
-                    </button>
-                    <div className="btn-arrow-circle me-4">
-                      <i className="mdi mdi-arrow-right"></i>
-                    </div>
+                    {!localStorage.getItem("userId") && (
+                      <>
+                        <button className="btn-purple-glow">
+                          Create Account For Free
+                        </button>
+                        <div className="btn-arrow-circle me-4">
+                          <i className="mdi mdi-arrow-right"></i>
+                        </div>
+                      </>
+                    )}
                   </div>
 
                   <div className="d-flex align-items-center">

@@ -3,7 +3,10 @@ import { useNavigate } from "react-router-dom";
 import {
   getJobsByType,
   getUserDetails,
+  candidateSaveJob,
+  getSavedJobs,
 } from "../../../api/service/axiosService";
+import SuccessPopup from "../../utils/SuccessPopup";
 import "./FeaturedJobs.css";
 
 const NewAndRandomJobs = () => {
@@ -15,6 +18,13 @@ const NewAndRandomJobs = () => {
   const [allJobs, setAllJobs] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [savedJobs, setSavedJobs] = useState(new Set());
+  const [savingJobId, setSavingJobId] = useState(null);
+  const [popup, setPopup] = useState({
+    show: false,
+    message: "",
+    type: "saved",
+  });
 
   const [dynamicTabs, setDynamicTabs] = useState(["Asia"]);
 
@@ -122,7 +132,25 @@ const NewAndRandomJobs = () => {
       }
     };
 
+    const fetchSavedJobsData = async () => {
+      if (!userId) return;
+      try {
+        const response = await getSavedJobs(userId);
+        if (response.status === 200) {
+          const savedIds = new Set(
+            (response.data.savedJobs || []).map((sj) =>
+              typeof sj === "string" ? sj : sj._id || sj.id,
+            ),
+          );
+          setSavedJobs(savedIds);
+        }
+      } catch (error) {
+        console.error("Error fetching saved jobs:", error);
+      }
+    };
+
     fetchJobsData();
+    fetchSavedJobsData();
   }, [userId]);
 
   useEffect(() => {
@@ -147,6 +175,46 @@ const NewAndRandomJobs = () => {
 
   const handleJobDetails = (jobId) => {
     navigate(`/job-details/${jobId}`);
+  };
+
+  const handleSaveJob = async (jobId) => {
+    if (!userId) {
+      navigate("/candidate-login");
+      return;
+    }
+
+    try {
+      const isSaved = savedJobs.has(jobId);
+      setSavingJobId(jobId);
+
+      const response = await candidateSaveJob(userId, jobId);
+
+      if (response.status === 200) {
+        if (isSaved) {
+          setSavedJobs((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(jobId);
+            return newSet;
+          });
+          setPopup({
+            show: true,
+            message: "Job removed from saved list",
+            type: "unsaved",
+          });
+        } else {
+          setSavedJobs((prev) => new Set(prev).add(jobId));
+          setPopup({
+            show: true,
+            message: "Job saved successfully!",
+            type: "saved",
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error saving job:", error);
+    } finally {
+      setTimeout(() => setSavingJobId(null), 600);
+    }
   };
 
   const getRandomColor = (index) => {
@@ -268,7 +336,19 @@ const NewAndRandomJobs = () => {
 
                       {/* Actions */}
                       <div className="job-actions-right">
-                        <i className="mdi mdi-bookmark-outline bookmark-icon"></i>
+                        <button
+                          className={`bookmark-btn ${savedJobs.has(job._id) ? "saved" : ""} ${savingJobId === job._id ? "animating" : ""}`}
+                          onClick={() => handleSaveJob(job._id)}
+                          disabled={savingJobId === job._id}
+                        >
+                          <i
+                            className={`mdi ${
+                              savedJobs.has(job._id)
+                                ? "mdi-bookmark"
+                                : "mdi-bookmark-outline"
+                            } bookmark-icon`}
+                          ></i>
+                        </button>
                         <button
                           className="apply-btn"
                           onClick={() => handleApplyNow(job._id)}
@@ -288,6 +368,13 @@ const NewAndRandomJobs = () => {
           )}
         </div>
       </div>
+
+      <SuccessPopup
+        show={popup.show}
+        message={popup.message}
+        type={popup.type}
+        onClose={() => setPopup({ ...popup, show: false })}
+      />
     </section>
   );
 };

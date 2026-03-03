@@ -10,13 +10,49 @@ import netherlandsImage from "../../../assets/images/Netherlands.jpg"; // Fixed 
 const jobsstormLogo = "/assets/images/favicon.ico";
 import asiaImage from "../../../assets/images/Asia.png";
 
+import { useNavigate } from "react-router-dom";
+
 const HeroSection = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = React.useState("");
+  const [showDropdown, setShowDropdown] = React.useState(false);
+  const dropdownRef = React.useRef(null);
+
+  const locationsList = [
+    { name: "India", flag: indiaImage },
+    { name: "Europe", flag: euImage },
+    { name: "Middle East", flag: uaeImage },
+    { name: "Asia", flag: asiaImage },
+  ];
+
+  const [selectedLocation, setSelectedLocation] = React.useState(
+    locationsList[0],
+  );
+
+  // Handle click outside to close dropdown
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleSearch = () => {
-    window.location.href = `/job-list?jobTitle=${encodeURIComponent(
-      searchTerm
-    )}`;
+    const searchData = {
+      jobTitle: searchTerm,
+      location: selectedLocation.name,
+      category: "",
+      experience: "",
+    };
+    navigate("/job-list", { state: searchData });
+  };
+
+  const selectLocation = (loc) => {
+    setSelectedLocation(loc);
+    setShowDropdown(false);
   };
 
   return (
@@ -41,7 +77,7 @@ const HeroSection = () => {
               <button
                 className="region-btn"
                 onClick={() =>
-                  (window.location.href = "/job-list?location=Europe")
+                  navigate("/job-list", { state: { location: "Europe" } })
                 }
               >
                 <img src={euImage} className="region-flag" alt="Europe" />
@@ -50,7 +86,7 @@ const HeroSection = () => {
               <button
                 className="region-btn"
                 onClick={() =>
-                  (window.location.href = "/job-list?location=Middle East")
+                  navigate("/job-list", { state: { location: "Middle East" } })
                 }
               >
                 <img src={uaeImage} className="region-flag" alt="Middle East" />
@@ -59,7 +95,7 @@ const HeroSection = () => {
               <button
                 className="region-btn"
                 onClick={() =>
-                  (window.location.href = "/job-list?location=Asia")
+                  navigate("/job-list", { state: { location: "Asia" } })
                 }
               >
                 {/* Visual placeholder for Asia using India for now as China flag is missing */}
@@ -79,11 +115,38 @@ const HeroSection = () => {
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 />
               </div>
-              <div className="country-select border-start ps-4">
-                {/* Using US flag as placeholder for India if India not found */}
-                <img src={indiaImage} className="country-flag" alt="India" />
-                <span className="fw-semibold">India</span>
-                <i className="uil uil-angle-down text-muted"></i>
+              <div
+                className="country-select border-start ps-4"
+                onClick={() => setShowDropdown(!showDropdown)}
+                ref={dropdownRef}
+              >
+                <img
+                  src={selectedLocation.flag}
+                  className="country-flag"
+                  alt={selectedLocation.name}
+                />
+                <span className="fw-semibold">{selectedLocation.name}</span>
+                <i
+                  className={`uil uil-angle-down text-muted transition-all ${showDropdown ? "rotate-180" : ""}`}
+                ></i>
+
+                <div
+                  className={`country-dropdown-menu ${showDropdown ? "show" : ""}`}
+                >
+                  {locationsList.map((loc, index) => (
+                    <div
+                      key={index}
+                      className="country-dropdown-item"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        selectLocation(loc);
+                      }}
+                    >
+                      <img src={loc.flag} alt={loc.name} />
+                      <span>{loc.name}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
               <button className="search-btn" onClick={handleSearch}>
                 Find Job

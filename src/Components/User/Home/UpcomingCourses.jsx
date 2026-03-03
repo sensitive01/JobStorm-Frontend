@@ -23,7 +23,7 @@ const UpcomingCourses = () => {
               skills and advance their careers in today's competitive market.
             </p>
             <button
-              onClick={() => navigate("/candidate-signup")}
+              onClick={() => navigate("/internship")}
               className="btn btn-outline-purple rounded-pill px-4 py-2"
             >
               Register Now

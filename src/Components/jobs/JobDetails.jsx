@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import SuccessPopup from "../utils/SuccessPopup";
 import "./jobdetails.css";
 import { getJobDetails } from "../../api/service/employerService";
-import { submitEasyApply } from "../../api/service/axiosService";
+import {
+  submitEasyApply,
+  getSavedJobs,
+  candidateSaveJob,
+} from "../../api/service/axiosService";
 import { uploadCloudinary } from "../utils/cloudinaryConfig";
 
 // API Configuration
@@ -22,6 +28,12 @@ const JobDetails = () => {
   const [error, setError] = useState(null);
   const [applied, setApplied] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [popup, setPopup] = useState({
+    show: false,
+    message: "",
+    type: "saved",
+  });
 
   // Modal States
   const [showModal, setShowModal] = useState(false);
@@ -94,6 +106,18 @@ const JobDetails = () => {
         setApplied(true);
       } else {
         setApplied(false);
+      }
+
+      // Check if job is saved
+      if (candidateId) {
+        const savedResponse = await getSavedJobs(candidateId);
+        if (savedResponse && savedResponse.status === 200) {
+          const savedJobsList = savedResponse.data.savedJobs || [];
+          const isSaved = savedJobsList.some((sj) =>
+            typeof sj === "string" ? sj === id : sj._id === id || sj.id === id,
+          );
+          setSaved(isSaved);
+        }
       }
 
       setError(null);
@@ -226,38 +250,43 @@ const JobDetails = () => {
       }
     } catch (error) {
       console.error("❌ Application submission failed:", error);
-      alert(error.message || "Failed to submit application. Please try again.");
+      toast.error(
+        error.message || "Failed to submit application. Please try again.",
+      );
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleSaveJob = async () => {
-    const token = getAuthToken();
-    if (!token) {
+    if (!candidateId) {
       setShowLoginPrompt(true);
       return;
     }
 
     try {
-      const url = `${API_BASE_URL}/jobs/${id}/save`;
-      const method = saved ? "DELETE" : "POST";
+      setIsSaving(true);
+      const isCurrentlySaved = saved;
+      const response = await candidateSaveJob(candidateId, id);
 
-      const response = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) throw new Error("Failed to save job");
-
-      setSaved(!saved);
-      alert(saved ? "Job removed from saved jobs" : "Job saved successfully!");
+      if (response && response.status === 200) {
+        const isNowSaved = !isCurrentlySaved;
+        setSaved(isNowSaved);
+        setPopup({
+          show: true,
+          message: isNowSaved
+            ? "Job saved successfully!"
+            : "Job removed from saved jobs",
+          type: isNowSaved ? "saved" : "unsaved",
+        });
+      } else {
+        throw new Error("Failed to save job");
+      }
     } catch (error) {
       console.error("Error saving job:", error);
-      alert("Failed to save job. Please try again.");
+      toast.error("Failed to save job. Please try again.");
+    } finally {
+      setTimeout(() => setIsSaving(false), 600);
     }
   };
 
@@ -776,8 +805,9 @@ const JobDetails = () => {
                   </button>
                 )}
                 <button
-                  className={`btn btn-outline ${saved ? "btn-saved" : ""}`}
+                  className={`btn ${saved ? "btn-saved" : "btn-outline"} ${isSaving ? "animating" : ""}`}
                   onClick={handleSaveJob}
+                  disabled={isSaving || saved}
                 >
                   {saved ? "❤️ Saved" : "🤍 Save Job"}
                 </button>
@@ -900,6 +930,13 @@ const JobDetails = () => {
           </div>
         </div>
       </div>
+      {/* Custom Success Popup */}
+      <SuccessPopup
+        show={popup.show}
+        message={popup.message}
+        type={popup.type}
+        onClose={() => setPopup({ ...popup, show: false })}
+      />
     </div>
   );
 };

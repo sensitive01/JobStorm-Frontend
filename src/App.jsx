@@ -27,6 +27,7 @@ import LearningPage from "./Components/User/Learn/LearningPage";
 import InternshipPage from "./Components/User/Internship/InternshipPage";
 import CompanyDetailsPage from "./Components/User/associatedCompany/CompanyDetailsPage";
 import BlogsMasonry from "./Components/User/blogs/BlogsMasonry";
+import BlogDetails from "./Components/User/blogs/BlogDetails";
 import PageNotFoundPage from "./Components/User/404/PageNotFoundPage";
 import ManageJobsPage from "./Components/Employer/managejobs/ManageJobsPage";
 import SavedCandidate from "./Components/Employer/bookmark/SavedCandidate";
@@ -132,6 +133,7 @@ function App() {
           <Route path="/faq-pages" element={<FaqPage />} />
           <Route path="/resources" element={<ResourcesPage />} />
           <Route path="/blogs-pages" element={<BlogsPage />} />
+          <Route path="/blog/:id" element={<BlogDetails />} />
           <Route path="/learn" element={<LearningPage />} />
           <Route path="/internship" element={<InternshipPage />} />
           <Route path="/blogs-masonry-pages" element={<BlogsMasonry />} />

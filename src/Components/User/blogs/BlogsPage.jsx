@@ -3,6 +3,7 @@ import { getBlogList } from "../../../api/service/axiosService";
 import { useNavigate } from "react-router-dom";
 import profileImage from "../../../../public/img-02.jpg";
 import blogImage from "../../../../public/img-08.jpg";
+import "./Blogs.css";
 
 const BlogsPage = () => {
   const navigate = useNavigate();
@@ -113,160 +114,112 @@ const BlogsPage = () => {
   }
 
   return (
-    <>
-      <div className="main-content">
-        <div className="page-content pt-5 mt-5">
-          {/* START BLOG-PAGE */}
-          <section className="section">
-            <div className="container">
-              <div className="row mb-4">
-                <div className="col-lg-12">
-                  <div>
-                    <h4>All Blog Posts</h4>
-                  </div>
-                </div>
+    <div className="blogs-page-wrap">
+      {/* Premium Hero Section */}
+      <section className="blogs-hero-section">
+        <div className="container">
+          <div className="blogs-hero-content animate__animated animate__fadeIn">
+            <span className="latest-badge">Insights & Updates</span>
+            <h1>The JobStorm Blog</h1>
+            <p>
+              Your destination for career growth, hiring strategies, and the
+              latest workspace trends globally.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="section py-5">
+        <div className="container">
+          {blogs.length > 0 ? (
+            <>
+              <div className="section-header">
+                <h3 className="section-title">
+                  Latest Articles ({blogs.length})
+                </h3>
               </div>
 
-              <div className="row">
-                {blogs.map((blog) => (
-                  <div className="col-lg-4 col-md-6 mb-5" key={blog._id}>
-                    <article className="post position-relative h-100 d-flex flex-column">
-                      <div
-                        className="post-preview overflow-hidden mb-3 rounded-3"
-                        style={{ cursor: "pointer" }}
-                        onClick={() => handleBlogClick(blog._id)}
-                      >
+              <div className="row g-4">
+                {blogs.map((blog, index) => (
+                  <div
+                    className="col-lg-4 col-md-6 animate__animated animate__fadeInUp"
+                    key={blog._id}
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <div
+                      className="premium-blog-card"
+                      onClick={() => handleBlogClick(blog._id)}
+                    >
+                      <div className="blog-card-img-wrap">
                         <img
                           src={blog.image || blogImage}
                           alt={blog.title}
-                          className="img-fluid blog-img h-auto w-100 object-fit-cover "
-                          style={{
-                            maxHeight: "300px",
-                            aspectRatio: "16/9",
-                          }}
+                          className="blog-card-img"
                           onError={(e) => {
                             e.target.onerror = null;
                             e.target.src = blogImage;
                           }}
                         />
-                      </div>
-                      <p className="text-muted mb-2">
-                        <b>{blog.category}</b> - {formatDate(blog.createdAt)}
-                      </p>
-                      <h5 className="mb-3">
-                        <a
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleBlogClick(blog._id);
-                          }}
-                          className="primary-link"
-                        >
-                          {blog.title}
-                        </a>
-                      </h5>
-                      <p className="text-muted">
-                        {truncateText(blog.description, 200)}
-                      </p>
-                      <div className="d-flex align-items-center mt-auto pt-4">
-                        <div className="flex-shrink-0">
-                          <img
-                            src={blog.authorImage || profileImage}
-                            alt={blog.author}
-                            className="avatar-sm rounded-circle"
-                            style={{
-                              width: "40px",
-                              height: "40px",
-                              objectFit: "cover",
-                            }}
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = profileImage;
-                            }}
-                          />
-                        </div>
-                        <div className="flex-grow-1 ms-3">
-                          <h6 className="fs-16 mb-0">{blog.author}</h6>
-                          <p className="text-muted mb-0">{blog.authorRole}</p>
+                        <div className="blog-card-category">
+                          {blog.category || "Article"}
                         </div>
                       </div>
-                    </article>
+                      <div className="blog-card-body">
+                        <h5 className="blog-card-title">{blog.title}</h5>
+                        <p className="blog-card-excerpt">
+                          {truncateText(blog.description, 90)}
+                        </p>
+
+                        <div className="blog-card-footer">
+                          <div className="author-chip">
+                            <img
+                              src={blog.authorImage || profileImage}
+                              alt={blog.author}
+                              className="js-author-avatar"
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = profileImage;
+                              }}
+                            />
+                            <span className="author-name-text">
+                              {blog.author || "JobStorm Team"}
+                            </span>
+                          </div>
+                          <div className="read-btn">
+                            Read <i className="mdi mdi-arrow-right"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
-
-              {/* Pagination */}
-              {blogs.length > 6 && (
-                <div className="row">
-                  <div className="col-lg-12 mt-5">
-                    <nav aria-label="Page navigation example">
-                      <ul className="pagination job-pagination mb-0 justify-content-center">
-                        <li className="page-item disabled">
-                          <a
-                            className="page-link"
-                            href="#"
-                            onClick={(e) => e.preventDefault()}
-                            tabIndex={-1}
-                          >
-                            <i className="mdi mdi-chevron-double-left fs-15" />
-                          </a>
-                        </li>
-                        <li className="page-item active">
-                          <a
-                            className="page-link"
-                            href="#"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            1
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a
-                            className="page-link"
-                            href="#"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            2
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a
-                            className="page-link"
-                            href="#"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            3
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a
-                            className="page-link"
-                            href="#"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            4
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a
-                            className="page-link"
-                            href="#"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            <i className="mdi mdi-chevron-double-right fs-15" />
-                          </a>
-                        </li>
-                      </ul>
-                    </nav>
-                  </div>
-                </div>
-              )}
+            </>
+          ) : (
+            <div className="empty-blogs">
+              <div className="empty-icon">
+                <i className="mdi mdi-book-open-outline"></i>
+              </div>
+              <h4 className="fw-bold">No blogs found</h4>
+              <p className="text-muted">
+                We're currently crafting new insights for you. Please check back
+                later.
+              </p>
             </div>
-          </section>
-          {/* END BLOG-PAGE */}
+          )}
+
+          {/* Pagination */}
+          {blogs.length > 12 && (
+            <div className="pagination-wrap-blogs text-center mt-5">
+              <div className="d-inline-flex gap-2">
+                <button className="page-btn-blogs active">1</button>
+                <button className="page-btn-blogs">2</button>
+              </div>
+            </div>
+          )}
         </div>
-      </div>
-    </>
+      </section>
+    </div>
   );
 };
 

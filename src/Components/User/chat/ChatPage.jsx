@@ -206,9 +206,7 @@ const ChatPage = () => {
       <div className="chat-sidebar">
         <div className="chat-sidebar-header">
           <h2>Messages</h2>
-          <button className="new-chat-btn">
-            <Plus size={20} />
-          </button>
+        
         </div>
 
         <div className="chat-search">

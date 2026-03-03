@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
+import SuccessPopup from "../utils/SuccessPopup";
 import "./jobportal.css";
 import {
   candidateSaveJob,
@@ -36,6 +38,12 @@ const AllJobList = () => {
   const [locationType, setLocationType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [error, setError] = useState(null);
+  const [savingJobId, setSavingJobId] = useState(null);
+  const [popup, setPopup] = useState({
+    show: false,
+    message: "",
+    type: "saved",
+  });
 
   /* Subscription Logic State */
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -238,7 +246,11 @@ const AllJobList = () => {
       const response = await getSavedJobs(token);
 
       if (response.status === 200) {
-        const savedIds = new Set(response.data.savedJobs || []);
+        const savedIds = new Set(
+          (response.data.savedJobs || []).map((sj) =>
+            typeof sj === "string" ? sj : sj._id || sj.id,
+          ),
+        );
         setSavedJobs(savedIds);
       }
     } catch (error) {
@@ -258,7 +270,7 @@ const AllJobList = () => {
 
     const token = getAuthToken();
     if (!token) {
-      alert("Please login to apply for jobs");
+      toast.info("Please login to apply for jobs");
       navigate("/candidate-login");
       return;
     }
@@ -278,23 +290,14 @@ const AllJobList = () => {
   const handleSaveJob = async (jobId) => {
     const token = getAuthToken();
     if (!token) {
-      alert("Please login to save jobs");
+      toast.info("Please login to save jobs");
       navigate("/candidate-login");
       return;
     }
 
     try {
       const isSaved = savedJobs.has(jobId);
-
-      const confirmMessage = isSaved
-        ? "Are you sure you want to remove this job from your saved list?"
-        : "Do you want to save this job for later?";
-
-      const confirmed = window.confirm(confirmMessage);
-
-      if (!confirmed) {
-        return;
-      }
+      setSavingJobId(jobId);
 
       const response = await candidateSaveJob(token, jobId);
 
@@ -305,17 +308,25 @@ const AllJobList = () => {
             newSet.delete(jobId);
             return newSet;
           });
-          alert("✓ Job removed from saved list successfully!");
+          setPopup({
+            show: true,
+            message: "Job removed from saved list",
+            type: "unsaved",
+          });
         } else {
           setSavedJobs((prev) => new Set(prev).add(jobId));
-          alert(
-            "✓ Job saved successfully! You can find it in your saved jobs.",
-          );
+          setPopup({
+            show: true,
+            message: "Job saved successfully!",
+            type: "saved",
+          });
         }
       }
     } catch (error) {
       console.error("Error saving job:", error);
-      alert("Failed to save job. Please try again.");
+      toast.error("Failed to save job. Please try again.");
+    } finally {
+      setTimeout(() => setSavingJobId(null), 600);
     }
   };
 
@@ -567,11 +578,11 @@ const AllJobList = () => {
                         Posted {job.postedDate || "2 days ago"}
                       </div>
                       <button
-                        className={`save-btn ${
-                          isSaved(job.id || job._id) ? "saved" : ""
-                        }`}
+                        className={`save-btn ${isSaved(job.id || job._id) ? "saved" : ""} ${savingJobId === (job.id || job._id) ? "animating" : ""}`}
                         onClick={() => handleSaveJob(job.id || job._id)}
-                        disabled={isRestricted} // Disable save for restricted? User didn't specify, but safer.
+                        disabled={
+                          isRestricted || savingJobId === (job.id || job._id)
+                        }
                         title={
                           isSaved(job.id || job._id)
                             ? "Remove from saved"
@@ -843,6 +854,13 @@ const AllJobList = () => {
           </div>
         </div>
       )}
+      {/* Custom Success Popup */}
+      <SuccessPopup
+        show={popup.show}
+        message={popup.message}
+        type={popup.type}
+        onClose={() => setPopup({ ...popup, show: false })}
+      />
     </div>
   );
 };

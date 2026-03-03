@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import SuccessPopup from "../../utils/SuccessPopup";
 import "./MySavedJobs.css";
 import {
   candidateSaveJob,
@@ -20,12 +22,17 @@ const AllJobList = () => {
   const [jobs, setJobs] = useState([]);
 
   const [loading, setLoading] = useState(true);
-  const [appliedJobs, setAppliedJobs] = useState(new Set());
   const [savedJobs, setSavedJobs] = useState(new Set());
   const [sortBy, setSortBy] = useState("newest");
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [error, setError] = useState(null);
+  const [savingJobId, setSavingJobId] = useState(null);
+  const [popup, setPopup] = useState({
+    show: false,
+    message: "",
+    type: "saved",
+  });
 
   // Fetch jobs on component mount and when filters change
   useEffect(() => {
@@ -140,12 +147,6 @@ const AllJobList = () => {
         }
 
         setJobs(mappedJobs);
-
-        // Update applied jobs Set from the mapped jobs
-        const appliedIds = new Set(
-          mappedJobs.filter((job) => job.isApplied).map((job) => job.id),
-        );
-        setAppliedJobs(appliedIds);
       } else {
         setJobs([]);
       }
@@ -180,7 +181,7 @@ const AllJobList = () => {
   const handleApply = async (jobId) => {
     const token = getAuthToken();
     if (!token) {
-      alert("Please login to apply for jobs");
+      toast.info("Please login to apply for jobs");
       navigate("/candidate-login");
       return;
     }
@@ -193,24 +194,14 @@ const AllJobList = () => {
   const handleSaveJob = async (jobId) => {
     const token = getAuthToken();
     if (!token) {
-      alert("Please login to save jobs");
+      toast.info("Please login to save jobs");
       navigate("/candidate-login");
       return;
     }
 
     try {
       const isSaved = savedJobs.has(jobId);
-
-      // Show confirmation dialog
-      const confirmMessage = isSaved
-        ? "Are you sure you want to remove this job from your saved list?"
-        : "Do you want to save this job for later?";
-
-      const confirmed = window.confirm(confirmMessage);
-
-      if (!confirmed) {
-        return; // User cancelled the action
-      }
+      setSavingJobId(jobId);
 
       const response = await candidateSaveJob(token, jobId);
 
@@ -221,38 +212,33 @@ const AllJobList = () => {
             newSet.delete(jobId);
             return newSet;
           });
-          alert("✓ Job removed from saved list successfully!");
+          // Instant UI update: remove job from the current view
+          setJobs((prevJobs) =>
+            prevJobs.filter((job) => (job.id || job._id) !== jobId),
+          );
+          setPopup({
+            show: true,
+            message: "Job removed from saved list",
+            type: "unsaved",
+          });
         } else {
           setSavedJobs((prev) => new Set(prev).add(jobId));
-          alert(
-            "✓ Job saved successfully! You can find it in your saved jobs.",
-          );
+          setPopup({
+            show: true,
+            message: "Job saved successfully!",
+            type: "saved",
+          });
         }
       }
     } catch (error) {
       console.error("Error saving job:", error);
-      alert("Failed to save job. Please try again.");
+      toast.error("Failed to save job. Please try again.");
+    } finally {
+      setTimeout(() => setSavingJobId(null), 600);
     }
   };
 
   // Check if job is applied
-  const isApplied = (jobId) => appliedJobs.has(jobId);
-
-  // Check if job is saved
-  const isSaved = (jobId) => savedJobs.has(jobId);
-
-  // Get badge class for job type
-  const getJobTypeBadge = (type) => {
-    const badges = {
-      "full-time": "badge-success",
-      "part-time": "badge-warning",
-      contract: "badge-info",
-      internship: "badge-primary",
-      freelance: "badge-secondary",
-    };
-    return badges[type?.toLowerCase()] || "badge-secondary";
-  };
-
   return (
     <div className="my-saved-jobs">
       {/* Search and Filter Section */}
@@ -329,13 +315,14 @@ const AllJobList = () => {
                   className="company-logo"
                 />
                 <button
-                  className="remove-btn"
+                  className={`remove-btn ${savingJobId === (job.id || job._id) ? "animating" : ""}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     console.log("Removing job:", job.id);
                     // Pass job.id. If job.id is missing, try job._id as fallback
                     handleSaveJob(job.id || job._id);
                   }}
+                  disabled={savingJobId === (job.id || job._id)}
                   title="Remove from saved"
                 >
                   <i className="uil uil-trash-alt"></i>
@@ -405,6 +392,13 @@ const AllJobList = () => {
           ))}
         </div>
       )}
+      {/* Custom Success Popup */}
+      <SuccessPopup
+        show={popup.show}
+        message={popup.message}
+        type={popup.type}
+        onClose={() => setPopup({ ...popup, show: false })}
+      />
     </div>
   );
 };
