@@ -214,7 +214,7 @@ const TopHeader = () => {
                   <ul className="topbar-social-menu list-inline mb-0 d-none d-md-flex">
                     <li className="list-inline-item">
                       <a
-                        href="https://instagram.com/jobsstorm"
+                        href="https://instagram.com/jobstorms"
                         className="social-link text-white"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -224,7 +224,7 @@ const TopHeader = () => {
                     </li>
                     <li className="list-inline-item">
                       <a
-                        href="https://facebook.com/jobsstorm"
+                        href="https://facebook.com/jobstorms"
                         className="social-link text-white"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -234,7 +234,7 @@ const TopHeader = () => {
                     </li>
                     <li className="list-inline-item">
                       <a
-                        href="https://x.com/jobsstorm"
+                        href="https://x.com/jobstorms"
                         className="social-link text-white"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -244,7 +244,7 @@ const TopHeader = () => {
                     </li>
                     <li className="list-inline-item">
                       <a
-                        href="https://youtube.com/@jobsstorm"
+                        href="https://youtube.com/@jobstorms"
                         className="social-link text-white"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -254,7 +254,7 @@ const TopHeader = () => {
                     </li>
                     <li className="list-inline-item">
                       <a
-                        href="https://linkedin.com/company/jobsstorm"
+                        href="https://linkedin.com/company/jobstorms"
                         className="social-link text-white"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -432,3 +432,4 @@ const TopHeader = () => {
 };
 
 export default TopHeader;
+

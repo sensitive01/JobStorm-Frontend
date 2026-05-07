@@ -675,7 +675,7 @@ const CandidateDetailsPage = () => {
                     <div className="text-center mb-4">
                       <h5>Sign Up</h5>
                       <p className="text-muted">
-                        Sign Up and get access to all the features of JobsStorm
+                        Sign Up and get access to all the features of Jobstorms
                       </p>
                     </div>
                     <form action="#" className="auth-form">
@@ -1159,7 +1159,7 @@ const CandidateDetailsPage = () => {
                             <div className="ms-4">
                               <h6 className="fs-16 mb-1">Project Manager</h6>
                               <p className="mb-2 text-muted">
-                                JobsStorm Technology Pvt.Ltd - (Pressent)
+                                Jobstorms Technology Pvt.Ltd - (Pressent)
                               </p>
                               <p className="text-muted mb-0">
                                 There are many variations of passages of
@@ -1460,7 +1460,7 @@ const CandidateDetailsPage = () => {
               <div className="row">
                 <div className="col-lg-4">
                   <div className="footer-item mt-4 mt-lg-0 me-lg-5">
-                    <h4 className="text-white mb-4">JobsStorm </h4>
+                    <h4 className="text-white mb-4">Jobstorms </h4>
                     <p className="text-white-50">
                       It is a long established fact that a reader will be of a
                       page reader will be of at its layout.
@@ -1617,7 +1617,7 @@ const CandidateDetailsPage = () => {
               <div className="row">
                 <div className="col-lg-12">
                   <p className="text-white-50 text-center mb-0">
-                    © JobsStorm - Job Listing Page Template by{" "}
+                    © Jobstorms - Job Listing Page Template by{" "}
                     <a
                       href="https://themeforest.net/search/themesdesign"
                       target="_blank"
@@ -1706,3 +1706,4 @@ const CandidateDetailsPage = () => {
 };
 
 export default CandidateDetailsPage;
+

@@ -1,6 +1,6 @@
 import React from "react";
 import "./HowItWorks.css";
-import jonsStomMeetingImage from "./../../../assets/images/WhatsApp Image 2026-01-13 at 7.38.20 PM.jpeg";
+import jonsStomMeetingImage from "./../../../assets/images/cenfereneceimage.jfif";
 
 const HowItWorks = () => {
   return (
@@ -13,7 +13,7 @@ const HowItWorks = () => {
               How It Works
             </h6>
             <h2 className="title fw-bold mb-4">
-              A Step-by-Step <br /> Guide to Jobsstorm
+              A Step-by-Step <br /> Guide to Jobstorms
             </h2>
             <p className="description text-muted mb-5">
               Sed placerat convallis aenean fermentum. Aliquet, eget feugiat sed
@@ -65,7 +65,7 @@ const HowItWorks = () => {
           <div className="col-lg-6 position-relative">
             <img
               src={jonsStomMeetingImage}
-              alt="How Jobsstorm Works"
+              alt="How Jobstorms Works"
               className="how-it-works-img img-fluid rounded"
             />
 
@@ -84,3 +84,4 @@ const HowItWorks = () => {
 };
 
 export default HowItWorks;
+

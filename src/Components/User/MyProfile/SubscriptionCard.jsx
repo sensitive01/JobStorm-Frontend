@@ -73,7 +73,7 @@ const SubscriptionCard = () => {
           <div style={styles.blurredContent}>
             <div style={styles.cardHeader}>
               <span style={styles.sparkle}>✨</span>
-              <span style={styles.brandName}>JOBSSTORM</span>
+              <span style={styles.brandName}>Jobstorms</span>
             </div>
             <p style={styles.cardSubtitle}>GLOBAL IDENTITY ACCESS</p>
 
@@ -126,7 +126,7 @@ const SubscriptionCard = () => {
           <div style={styles.cardHeaderWithData}>
             <div style={styles.brandInfo}>
               <img src={logoImg} alt="Logo" style={styles.logoImage} />
-              <span style={styles.brandName}>JOBSSTORM</span>
+              <span style={styles.brandName}>Jobstorms</span>
             </div>
             <div style={styles.statusIndicator}>
               <span
@@ -591,3 +591,4 @@ styleSheet.textContent = `
 document.head.appendChild(styleSheet);
 
 export default SubscriptionCard;
+

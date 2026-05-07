@@ -29,7 +29,7 @@ const TopBar = ({ toggleSidebar }) => {
               <span className="text-white font-bold text-xs">JS</span>
             </div>
             <span className="text-lg font-semibold text-gray-800">
-              JobsStorm
+              Jobstorms
             </span>
             <span className="text-xs text-gray-400 hidden md:inline">
               Admin
@@ -185,3 +185,4 @@ const MainLayoutAdmin = ({ children, activeMenu, setActiveMenu }) => {
 };
 
 export default MainLayoutAdmin;
+

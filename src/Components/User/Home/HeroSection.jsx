@@ -7,7 +7,7 @@ import germanyImage from "../../../assets/images/germany.jpg";
 import polandImage from "../../../assets/images/poland.jpg";
 import euImage from "../../../assets/images/Europe.jpg";
 import netherlandsImage from "../../../assets/images/Netherlands.jpg"; // Fixed casing
-const jobsstormLogo = "/assets/images/favicon.ico";
+const JobstormsLogo = "/assets/images/favicon.ico";
 import asiaImage from "../../../assets/images/Asia.png";
 
 import { useNavigate } from "react-router-dom";
@@ -170,7 +170,7 @@ const HeroSection = () => {
               >
                 {/* User can replace this src with their logo */}
                 <img
-                  src={jobsstormLogo}
+                  src={JobstormsLogo}
                   alt="Center Logo"
                   className="w-100 h-100 rounded-4 object-fit-cover"
                 />
@@ -275,3 +275,4 @@ const HeroSection = () => {
   );
 };
 export default HeroSection;
+

@@ -1,4 +1,5 @@
 import React from "react";
+import newLogo from "../../../assets/images/newLogo.png";
 
 const Footer = () => {
   return (
@@ -11,22 +12,22 @@ const Footer = () => {
               <div className="footer-item mt-4 mt-lg-0 me-lg-5">
                 <a className="navbar-brand text-dark fw-bold me-auto" href="#">
                   <img
-                    src="assets/images/logo-light.png"
+                    src={newLogo}
                     height={60}
-                    alt=""
+                    alt="Logo"
                     className="logo-dark"
                   />
                   <img
-                    src="assets/images/logo-dark.png"
+                    src={newLogo}
                     height={60}
-                    alt=""
+                    alt="Logo Dark"
                     className="logo-light"
                   />
                 </a>
                 <hr />
-                <h4 className="text-white mb-4">JobsStorm</h4>
+                <h4 className="text-white mb-4">Jobstorms</h4>
                 <p className="text-white-50">
-                  At Jobsstorm, we are committed to helping you unlock your full
+                  At Jobstorms, we are committed to helping you unlock your full
                   career potential. As a global career partner, we provide
                   personalized support and resources for job seekers and
                   professionals worldwide.
@@ -222,7 +223,7 @@ const Footer = () => {
       {/* END layout-wrapper */}
       <br />
       <p align="center">
-        Copyright © 2025 JobsStorm. All Rights Reserved. Designed and Developed
+        Copyright © 2025 Jobstorms. All Rights Reserved. Designed and Developed
         by <a href="https://sensitive.co.in">Sensitive Technologies</a>.
       </p>
       {/* JAVASCRIPT */}
@@ -235,3 +236,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

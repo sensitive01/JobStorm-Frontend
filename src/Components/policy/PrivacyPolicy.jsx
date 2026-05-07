@@ -10,9 +10,9 @@ const PrivacyPolicyContent = () => {
             title: "DEFINITIONS",
             content: `For the purposes of this Privacy Policy:
 
-"Company", "We", "Us", "Our" refers to S2K Cloud Technologies (OPC) Private Limited, the owner and operator of the JobsStorm platform.
+"Company", "We", "Us", "Our" refers to S2K Cloud Technologies (OPC) Private Limited, the owner and operator of the Jobstorms platform.
 
-"Platform" or "JobsStorm" refers to the website www.jobsstorm.com, mobile applications, recruiter dashboard, and all related services.
+"Platform" or "Jobstorms" refers to the website www.Jobstorms.com, mobile applications, recruiter dashboard, and all related services.
 
 "User", "You", "Your" refers to job-seekers, freelancers, recruiters, employers, businesses, and any individual or entity accessing or using the Platform.
 
@@ -206,7 +206,7 @@ Users may request deletion earlier, subject to legal exceptions.`
 • Restrict or object to processing
 • Opt-out of marketing communication
 
-Requests may be submitted to: support@jobsstorm.com`
+Requests may be submitted to: support@Jobstorms.com`
         },
         {
             id: 11,
@@ -239,8 +239,8 @@ Revisions will be posted with the updated date. Continued use of the Platform af
             content: `For questions, concerns, or rights requests, contact:
 
 S2K Cloud Technologies (OPC) Private Limited
-Email: support@jobsstorm.com
-Website: www.jobsstorm.com`
+Email: support@Jobstorms.com
+Website: www.Jobstorms.com`
         }
     ];
 
@@ -282,7 +282,7 @@ Website: www.jobsstorm.com`
                         <p className="pp-company-details">
                             <strong>Last Updated:</strong> 15 November 2025<br />
                             <strong>Issued By:</strong> S2K Cloud Technologies (OPC) Private Limited<br />
-                            <strong>Owner and Operator of JobsStorm</strong>
+                            <strong>Owner and Operator of Jobstorms</strong>
                         </p>
                     </div>
 

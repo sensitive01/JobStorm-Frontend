@@ -80,7 +80,7 @@ const About = () => {
                 </h1>
 
                 <p className="lead">
-                  JobsStorm is a professionally managed overseas career support
+                  Jobstorms is a professionally managed overseas career support
                   platform helping candidates access verified international
                   opportunities.
                 </p>
@@ -546,3 +546,4 @@ const About = () => {
 };
 
 export default About;
+

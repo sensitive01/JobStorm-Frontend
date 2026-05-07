@@ -634,7 +634,7 @@ const LearningPage = () => {
                     : moduleDetails[0].desc}
                 </p>
                 <p className="highlight-text">
-                  At <span className="text-purple">JobsStorm</span>, by the end
+                  At <span className="text-purple">Jobstorms</span>, by the end
                   of the program, you will:
                 </p>
                 <ul className="core-benefits-list">
@@ -1270,3 +1270,4 @@ const LearningPage = () => {
 };
 
 export default LearningPage;
+

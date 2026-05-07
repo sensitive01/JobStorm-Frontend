@@ -27,7 +27,7 @@ const JobDetailsPage = () => {
                     <div className="text-center mb-4">
                       <h5>Sign Up</h5>
                       <p className="text-muted">
-                        Sign Up and get access to all the features of JobsStorm
+                        Sign Up and get access to all the features of Jobstorms
                       </p>
                     </div>
                     <form action="#" className="auth-form">
@@ -448,7 +448,7 @@ const JobDetailsPage = () => {
                                 <ul className="list-inline mb-0">
                                   <li className="list-inline-item">
                                     <p className="text-muted fs-14 mb-0">
-                                      JobsStorm Technology Pvt.Ltd
+                                      Jobstorms Technology Pvt.Ltd
                                     </p>
                                   </li>
                                   <li className="list-inline-item">
@@ -667,7 +667,7 @@ const JobDetailsPage = () => {
                                 <ul className="list-inline mb-0">
                                   <li className="list-inline-item">
                                     <p className="text-muted fs-14 mb-0">
-                                      JobsStorm Technology Pvt.Ltd
+                                      Jobstorms Technology Pvt.Ltd
                                     </p>
                                   </li>
                                   <li className="list-inline-item">
@@ -865,7 +865,7 @@ const JobDetailsPage = () => {
                             />
                             <div className="mt-4">
                               <h6 className="fs-17 mb-1">
-                                JobsStorm Technology Pvt.Ltd
+                                Jobstorms Technology Pvt.Ltd
                               </h6>
                               <p className="text-muted">Since July 2017</p>
                             </div>
@@ -1084,7 +1084,7 @@ const JobDetailsPage = () => {
               <div className="row">
                 <div className="col-lg-4">
                   <div className="footer-item mt-4 mt-lg-0 me-lg-5">
-                    <h4 className="text-white mb-4">JobsStorm </h4>
+                    <h4 className="text-white mb-4">Jobstorms </h4>
                     <p className="text-white-50">
                       It is a long established fact that a reader will be of a
                       page reader will be of at its layout.
@@ -1241,7 +1241,7 @@ const JobDetailsPage = () => {
               <div className="row">
                 <div className="col-lg-12">
                   <p className="text-white-50 text-center mb-0">
-                    © JobsStorm - Job Listing Page Template by{" "}
+                    © Jobstorms - Job Listing Page Template by{" "}
                     <a
                       href="https://themeforest.net/search/themesdesign"
                       target="_blank"
@@ -1329,3 +1329,4 @@ const JobDetailsPage = () => {
 };
 
 export default JobDetailsPage;
+

@@ -42,7 +42,7 @@ const FaqPage = () => {
                     <div className="text-center mb-4">
                       <h5>Sign Up</h5>
                       <p className="text-muted">
-                        Sign Up and get access to all the features of JobsStorm
+                        Sign Up and get access to all the features of Jobstorms
                       </p>
                     </div>
                     <form action="#" className="auth-form">
@@ -279,7 +279,7 @@ const FaqPage = () => {
                                     aria-expanded="false"
                                     aria-controls="general-two"
                                   >
-                                    How JobsStorm Work ?
+                                    How Jobstorms Work ?
                                   </button>
                                 </h2>
                                 <div
@@ -498,7 +498,7 @@ const FaqPage = () => {
                                     aria-expanded="false"
                                     aria-controls="buying-two"
                                   >
-                                    How JobsStorm Work ?
+                                    How Jobstorms Work ?
                                   </button>
                                 </h2>
                                 <div
@@ -720,7 +720,7 @@ const FaqPage = () => {
                                     aria-expanded="false"
                                     aria-controls="payment-two"
                                   >
-                                    How JobsStorm Work ?
+                                    How Jobstorms Work ?
                                   </button>
                                 </h2>
                                 <div
@@ -945,7 +945,7 @@ const FaqPage = () => {
                                     aria-expanded="false"
                                     aria-controls="support-two"
                                   >
-                                    How JobsStorm Work ?
+                                    How Jobstorms Work ?
                                   </button>
                                 </h2>
                                 <div
@@ -1145,3 +1145,4 @@ const FaqPage = () => {
 };
 
 export default FaqPage;
+

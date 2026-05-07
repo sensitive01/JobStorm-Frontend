@@ -91,7 +91,7 @@ const HeaderAuthButtons = () => {
         <div className="auth-divider"></div>
 
         <button
-          onClick={() => handleNavigation("https://employer.jobsstorm.com")}
+          onClick={() => handleNavigation("https://employer.jobstorms.com")}
           className="auth-btn auth-btn-employer"
         >
           <span>For Employers</span>
@@ -102,3 +102,4 @@ const HeaderAuthButtons = () => {
 };
 
 export default HeaderAuthButtons;
+

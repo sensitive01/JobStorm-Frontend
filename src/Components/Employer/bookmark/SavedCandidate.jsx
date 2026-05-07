@@ -42,7 +42,7 @@ const SavedCandidate = () => {
                     <div className="text-center mb-4">
                       <h5>Sign Up</h5>
                       <p className="text-muted">
-                        Sign Up and get access to all the features of JobsStorm
+                        Sign Up and get access to all the features of Jobstorms
                       </p>
                     </div>
                     <form action="#" className="auth-form">
@@ -268,7 +268,7 @@ const SavedCandidate = () => {
                               <ul className="list-inline mb-0">
                                 <li className="list-inline-item">
                                   <p className="text-muted fs-14 mb-0">
-                                    JobsStorm Technology Pvt.Ltd
+                                    Jobstorms Technology Pvt.Ltd
                                   </p>
                                 </li>
                                 <li className="list-inline-item">
@@ -453,7 +453,7 @@ const SavedCandidate = () => {
                               <ul className="list-inline mb-0">
                                 <li className="list-inline-item">
                                   <p className="text-muted fs-14 mb-0">
-                                    JobsStorm Technology Pvt.Ltd
+                                    Jobstorms Technology Pvt.Ltd
                                   </p>
                                 </li>
                                 <li className="list-inline-item">
@@ -546,7 +546,7 @@ const SavedCandidate = () => {
                               <ul className="list-inline mb-0">
                                 <li className="list-inline-item">
                                   <p className="text-muted fs-14 mb-0">
-                                    JobsStorm Technology Pvt.Ltd
+                                    Jobstorms Technology Pvt.Ltd
                                   </p>
                                 </li>
                                 <li className="list-inline-item">
@@ -727,7 +727,7 @@ const SavedCandidate = () => {
                               <ul className="list-inline mb-0">
                                 <li className="list-inline-item">
                                   <p className="text-muted fs-14 mb-0">
-                                    JobsStorm Technology Pvt.Ltd
+                                    Jobstorms Technology Pvt.Ltd
                                   </p>
                                 </li>
                                 <li className="list-inline-item">
@@ -909,3 +909,4 @@ const SavedCandidate = () => {
 };
 
 export default SavedCandidate;
+

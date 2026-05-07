@@ -17,7 +17,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 // Gallery Images
-import buildingImg from "../../../assets/images/buildingImage.jpeg";
+import buildingImg from "../../../assets/images/buildingImage.png";
 import profileImg from "../../../assets/images/profileImage.png";
 import courseImg1 from "../../../assets/images/courseimage.jpg";
 import courseImg2 from "../../../assets/images/couseImage2.jpg";
@@ -41,7 +41,7 @@ const InternshipPage = () => {
       name: "James Olson",
       role: "Developer",
       quote:
-        "JobsStorm didn’t treat this as just an internship—they focused on career readiness. From communication training to interview coordination, every step was clear. The internship experience helped me gain confidence.",
+        "Jobstorms didn’t treat this as just an internship—they focused on career readiness. From communication training to interview coordination, every step was clear. The internship experience helped me gain confidence.",
       image: image24, // Using image24 (Man?)
     },
     {
@@ -49,7 +49,7 @@ const InternshipPage = () => {
       name: "Sudhakar",
       role: "HR Manager",
       quote:
-        "As a fresher, I was unsure about overseas opportunities. JobsStorm helped me start with an internship, understand industry expectations, and prepare professionally. The process was genuine and service-based.",
+        "As a fresher, I was unsure about overseas opportunities. Jobstorms helped me start with an internship, understand industry expectations, and prepare professionally. The process was genuine and service-based.",
       image: image22, // Using image22 (Man?)
     },
     {
@@ -57,7 +57,7 @@ const InternshipPage = () => {
       name: "Akshayan",
       role: "Project Manager",
       quote:
-        "The internship through JobsStorm was practical and industry-aligned. More than training, they focused on how to present ourselves to international employers. The structured follow-ups made a big difference.",
+        "The internship through Jobstorms was practical and industry-aligned. More than training, they focused on how to present ourselves to international employers. The structured follow-ups made a big difference.",
       image: image25, // Using image25 (Tall?)
     },
     {
@@ -94,7 +94,7 @@ const InternshipPage = () => {
               <span style={{ color: "#7c3aed" }}>Real Careers</span>
             </h1>
             <p className="subtitle text-muted fs-5">
-              Never Miss a Opportunity, Go Global with Jobsstorm
+              Never Miss a Opportunity, Go Global with Jobstorms
             </p>
           </div>
 
@@ -491,7 +491,7 @@ const InternshipPage = () => {
       {/* 5. Gallery Section */}
       <section className="gallery-section">
         <div className="container">
-          <h2>Take a peep at what goes on at Jobsstorm!</h2>
+          <h2>Take a peep at what goes on at Jobstorms!</h2>
 
           <div className="gallery-grid-bento">
             {/* LEFT COLUMN (40%) */}
@@ -637,3 +637,4 @@ const InternshipPage = () => {
 };
 
 export default InternshipPage;
+

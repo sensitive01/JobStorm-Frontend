@@ -59,7 +59,7 @@ const LogoutPage = () => {
                               <div className="text-center mb-4">
                                 <h5>You are Logged Out</h5>
                                 <p className="text-white-70">
-                                  Thank you for using JobsStorm
+                                  Thank you for using Jobstorms
                                 </p>
                               </div>
                               <a
@@ -163,3 +163,4 @@ const LogoutPage = () => {
 };
 
 export default LogoutPage;
+

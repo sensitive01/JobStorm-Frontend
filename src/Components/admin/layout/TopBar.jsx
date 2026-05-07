@@ -21,7 +21,7 @@ const TopBar = ({ toggleSidebar }) => {
             </div>
             <div className="flex items-center space-x-2">
               <span className="text-lg font-semibold text-gray-800">
-                JobsStorm
+                Jobstorms
               </span>
               <span className="text-xs text-gray-400 hidden md:inline">
                 Admin
@@ -77,3 +77,4 @@ const TopBar = ({ toggleSidebar }) => {
 };
 
 export default TopBar;
+

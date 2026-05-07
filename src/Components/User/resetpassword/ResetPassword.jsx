@@ -212,7 +212,7 @@ const ResetPassword = () => {
                                 <div className="text-center mb-4">
                                   <h5>Reset Password</h5>
                                   <p className="text-white-50">
-                                    Reset your password with JobsStorm.
+                                    Reset your password with Jobstorms.
                                   </p>
                                 </div>
                                 <form
@@ -407,3 +407,4 @@ const ResetPassword = () => {
 };
 
 export default ResetPassword;
+

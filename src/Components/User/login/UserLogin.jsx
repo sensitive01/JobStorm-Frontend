@@ -154,7 +154,7 @@ const UserLogin = () => {
                               <div className="text-center mb-4">
                                 <h5>Welcome Back !</h5>
                                 <p className="text-white-70">
-                                  Sign in to continue to JobsStorm.
+                                  Sign in to continue to Jobstorms.
                                 </p>
                               </div>
                               <form
@@ -307,3 +307,4 @@ const UserLogin = () => {
 };
 
 export default UserLogin;
+

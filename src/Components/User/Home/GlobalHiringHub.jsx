@@ -1,6 +1,6 @@
 import React from "react";
 import "./GlobalHiringHub.css";
-import jobsStormBuildingimage from "../../../assets/images/buildingImage.jpeg";
+import JobstormsBuildingimage from "../../../assets/images/buildingImage.png";
 
 const GlobalHiringHub = () => {
   const links = [
@@ -28,7 +28,7 @@ const GlobalHiringHub = () => {
                 International Recruitment
               </h3>
               <p className="description mt-3 text-muted">
-                JobsStorm functions within a globally connected hiring
+                Jobstorms functions within a globally connected hiring
                 ecosystem, enabling professionals to access overseas
                 opportunities
               </p>
@@ -39,8 +39,8 @@ const GlobalHiringHub = () => {
           <div className="col-lg-5 mb-4 mb-lg-0 text-center">
             <div className="image-container">
               <img
-                src={jobsStormBuildingimage}
-                alt="JobsStorm Global Hub"
+                src={JobstormsBuildingimage}
+                alt="Jobstorms Global Hub"
                 className="img-fluid rounded-4 hub-image"
               />
             </div>
@@ -66,3 +66,4 @@ const GlobalHiringHub = () => {
 };
 
 export default GlobalHiringHub;
+

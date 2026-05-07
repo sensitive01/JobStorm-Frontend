@@ -8,7 +8,7 @@ const TermsAndConditionsContent = () => {
         {
             id: 1,
             title: "ACCEPTANCE OF TERMS",
-            content: `These Terms and Conditions ("Terms") govern the access and use of JobsStorm, including all content, features, products, and services available at www.jobsstorm.com, our mobile applications, recruiter dashboards, freelancer modules, and B2B features (collectively, "Platform").
+            content: `These Terms and Conditions ("Terms") govern the access and use of Jobstorms, including all content, features, products, and services available at www.Jobstorms.com, our mobile applications, recruiter dashboards, freelancer modules, and B2B features (collectively, "Platform").
 
 By accessing, registering, or using the Platform, You agree to be legally bound by these Terms. If You do not agree, You must discontinue use immediately.`
         },
@@ -89,7 +89,7 @@ Violation may lead to immediate account suspension and legal action.`
 • You have authority to post on behalf of the organisation
 • You will comply with employment and commercial laws applicable in Your region
 
-JobsStorm reserves the right to edit, refuse, or remove any posting that violates our policies or law.`
+Jobstorms reserves the right to edit, refuse, or remove any posting that violates our policies or law.`
         },
         {
             id: 6,
@@ -115,7 +115,7 @@ All communication may be monitored for safety and compliance.`
 • Fees are non-refundable unless otherwise stated.
 • Payments are processed via secure, third-party gateways.
 • We do not store full credit/debit card details.
-• JobsStorm reserves the right to modify pricing, features, or subscription terms with advance notice.`
+• Jobstorms reserves the right to modify pricing, features, or subscription terms with advance notice.`
         },
         {
             id: 8,
@@ -128,7 +128,7 @@ All communication may be monitored for safety and compliance.`
 • Projects
 • Company information
 
-By uploading, you grant JobsStorm a worldwide, royalty-free license to:
+By uploading, you grant Jobstorms a worldwide, royalty-free license to:
 • Use
 • Display
 • Store
@@ -153,7 +153,7 @@ of Your Personal Data as outlined in the Privacy Policy.`
         {
             id: 10,
             title: "INTELLECTUAL PROPERTY RIGHTS",
-            content: `All content owned by JobsStorm including:
+            content: `All content owned by Jobstorms including:
 • Logos
 • Branding
 • Designs
@@ -170,7 +170,7 @@ Users may not copy, modify, distribute, or reverse-engineer the Platform.`
         {
             id: 11,
             title: "THIRD-PARTY LINKS & SERVICES",
-            content: `• JobsStorm may include links to third-party websites.
+            content: `• Jobstorms may include links to third-party websites.
 • We do not control or endorse their content or practices.
 • You access such links at your own risk.`
         },
@@ -189,7 +189,7 @@ Termination does not require explanation if deemed necessary for Platform safety
         {
             id: 13,
             title: "DISCLAIMER OF WARRANTIES",
-            content: `JobsStorm is provided "as is" and "as available", without warranties of any kind.
+            content: `Jobstorms is provided "as is" and "as available", without warranties of any kind.
 
 We do NOT guarantee:
 • Job placement
@@ -203,7 +203,7 @@ Users engage at their own responsibility and discretion.`
         {
             id: 14,
             title: "LIMITATION OF LIABILITY",
-            content: `To the maximum extent permitted by law, JobsStorm and S2K Cloud Technologies (OPC) Private Limited are not liable for:
+            content: `To the maximum extent permitted by law, Jobstorms and S2K Cloud Technologies (OPC) Private Limited are not liable for:
 • Loss of data
 • Financial loss
 • Loss of employment opportunity
@@ -217,7 +217,7 @@ Our total liability shall not exceed the amount paid by the user, if any, for th
         {
             id: 15,
             title: "INDEMNIFICATION",
-            content: `You agree to indemnify and hold harmless JobsStorm and S2K Cloud Technologies (OPC) Private Limited from any claims, damages, liabilities, and expenses arising out of:
+            content: `You agree to indemnify and hold harmless Jobstorms and S2K Cloud Technologies (OPC) Private Limited from any claims, damages, liabilities, and expenses arising out of:
 • Your use of the Platform
 • Violations of these Terms
 • Posting false or illegal content
@@ -234,7 +234,7 @@ International users waive rights to dispute jurisdiction.`
         {
             id: 17,
             title: "CHANGES TO TERMS",
-            content: `• JobsStorm may update these Terms periodically.
+            content: `• Jobstorms may update these Terms periodically.
 • Revised Terms become effective upon posting.
 • Continued use after changes signifies acceptance.`
         },
@@ -244,8 +244,8 @@ International users waive rights to dispute jurisdiction.`
             content: `For inquiries, complaints, or legal notices, contact:
 
 S2K Cloud Technologies (OPC) Private Limited
-Email: support@jobsstorm.com
-Website: www.jobsstorm.com`
+Email: support@Jobstorms.com
+Website: www.Jobstorms.com`
         }
     ];
 
@@ -287,7 +287,7 @@ Website: www.jobsstorm.com`
                         <p className="tc-company-details">
                             <strong>Last Updated:</strong> 15 November 2025<br />
                             <strong>Issued By:</strong> S2K Cloud Technologies (OPC) Private Limited<br />
-                            <strong>Owner and Operator of JobsStorm</strong>
+                            <strong>Owner and Operator of Jobstorms</strong>
                         </p>
                     </div>
 

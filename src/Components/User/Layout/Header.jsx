@@ -9,6 +9,7 @@ import {
   markNotificationRead,
 } from "../../../api/service/axiosService";
 import accountImage from "../../../../public/assets/images/account.jpg";
+import newLogo from "../../../assets/images/newLogo.png";
 import HeaderAuthButtons from "./HeaderAuthButtons";
 
 const Header = () => {
@@ -511,15 +512,17 @@ const Header = () => {
             <div className="container-fluid custom-container">
               <Link className="navbar-brand text-dark fw-bold" to="/">
                 <img
-                  src="assets/images/logo-dark.png"
-                  alt=""
+                  src={newLogo}
+                  alt="Jobstorms Logo"
                   className="logo-dark"
+                  width={200}
+                  height={150}
                 />
-                <img
+                {/* <img
                   src="assets/images/logo-light.png"
                   alt=""
                   className="logo-light"
-                />
+                /> */}
               </Link>
 
               <div
@@ -548,7 +551,7 @@ const Header = () => {
                     >
                       <li>
                         <Link className="dropdown-item" to="/about-us">
-                          About JobsStorm
+                          About Jobstorms
                         </Link>
                       </li>
                       <li>
